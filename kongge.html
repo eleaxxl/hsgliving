@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>空格</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+  const ENDPOINT = "https://script.google.com/macros/s/AKfycbxTZvcSvcnn7uE2g7Dn8ElXr89yTNGFO6_ss4xJ4Bnw3EhF2ISniHkTC7JYMQd5P5JDrw/exec";
+  const STORY = "空格（遊戲）";
+</script>
+<style>
+  :root{
+    --ink0:#17120e; --paper:#f1e7d9; --soft:#b7a899; --faint:#7c6f61;
+    --clay:#c98a63; --clay-d:#a86f5e; --line:#3a2f26;
+    --sheet:#f4ece0; --sink:#2c2620; --ssoft:#6f6656; --grid:rgba(168,111,94,.32); --mark:#ead3bf;
+    --cjk:'Noto Serif TC',serif; --sans:'Noto Sans TC',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{background:var(--ink0);color:var(--paper);font-family:var(--cjk);line-height:1.9;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    padding:calc(env(safe-area-inset-top,0px) + 48px) max(16px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 64px) max(16px,env(safe-area-inset-left,0px))}
+  main{max-width:680px;margin:0 auto}
+  section{display:flex;flex-direction:column;gap:22px}
+  .kicker{font-family:var(--sans);font-size:13px;letter-spacing:.5em;color:var(--clay);text-indent:.5em;text-align:center}
+  h1{font-size:clamp(44px,11vw,80px);font-weight:500;letter-spacing:.4em;text-indent:.4em;text-align:center;line-height:1.2}
+  p{font-size:clamp(16px,2.3vw,19px);line-height:2.05}
+  .say{max-width:30ch;margin:0 auto;text-align:center}
+  .em{color:var(--clay)}
+  .small{font-family:var(--sans);font-size:14px;color:var(--faint);letter-spacing:.08em;line-height:1.9;text-align:center}
+  .btnrow{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;align-items:center}
+  button.b{font-family:var(--sans);font-size:16px;letter-spacing:.3em;text-indent:.3em;color:var(--ink0);background:var(--clay);
+    border:none;border-radius:999px;padding:14px 40px;cursor:pointer;transition:opacity .2s,transform .1s}
+  button.b:hover{opacity:.9} button.b:active{transform:scale(.97)} button.b:disabled{opacity:.4}
+  button.ghost{background:transparent;color:var(--soft);border:1px solid var(--line)}
+  button.ghost:hover{color:var(--clay);border-color:var(--clay-d)}
+  button.quiet{background:transparent;color:var(--ssoft);padding:14px 16px;letter-spacing:.2em}
+  button:focus-visible,input:focus-visible{outline:2px solid var(--clay);outline-offset:3px}
+  .back{display:block;text-align:center;margin-top:28px;font-family:var(--sans);font-size:13px;letter-spacing:3px;color:var(--faint);text-decoration:none}
+  .back:hover{color:var(--clay)}
+  hr.rule{border:none;border-top:1px solid var(--line);width:110px;margin:12px auto}
+
+  /* 稿紙：暗底上的一張紙 */
+  .sheet{background:var(--sheet);color:var(--sink);border-radius:6px;padding:clamp(22px,5vw,42px);display:flex;flex-direction:column;gap:20px;
+    background-image:repeating-linear-gradient(to bottom,transparent 0 47px,var(--grid) 47px 48px);background-position:0 22px;
+    box-shadow:0 24px 60px rgba(0,0,0,.45)}
+  .sheet .kicker{color:var(--clay-d)}
+  .prog{display:flex;gap:6px;flex-wrap:wrap}
+  .prog i{width:13px;height:13px;border:1px solid var(--clay-d);display:block}
+  .prog i.done{background:var(--clay-d)}
+  .count{font-family:var(--sans);font-size:13px;letter-spacing:.2em;color:var(--ssoft)}
+  .sentence{font-size:clamp(22px,5.4vw,32px);line-height:1.75;letter-spacing:.06em;min-height:3.4em;text-wrap:balance}
+  #answer{font-family:var(--cjk);font-size:clamp(20px,4.8vw,28px);color:var(--sink);width:100%;border:0;border-bottom:2px solid var(--clay-d);border-radius:0;
+    background:repeating-linear-gradient(to right,transparent 0 calc(1.15em - 1px),var(--grid) calc(1.15em - 1px) 1.15em);padding:6px 2px;letter-spacing:.15em;outline:none}
+  #answer::placeholder{color:#b3a593;letter-spacing:.08em}
+  .fill{background:var(--mark);padding:0 .15em;border-radius:2px;font-weight:600}
+  .fill.empty{background:transparent;border-bottom:2px dotted var(--clay-d);font-weight:400;color:var(--ssoft)}
+  .prose{font-size:clamp(17px,3.9vw,21px);line-height:2.25;display:flex;flex-direction:column}
+  .lines{display:flex;flex-direction:column;gap:4px}
+  .line{font-family:var(--cjk);font-size:clamp(16px,3.8vw,20px);line-height:1.85;text-align:left;cursor:pointer;background:transparent;color:var(--sink);
+    border:1px solid transparent;border-radius:8px;padding:8px 10px;display:flex;gap:12px;align-items:baseline;transition:background .25s,border-color .25s}
+  .line:hover{background:rgba(168,111,94,.07)}
+  .line .box{flex:none;width:1em;height:1em;border:1.5px solid var(--clay-d);border-radius:3px;translate:0 .15em}
+  .line[aria-pressed="true"]{border-color:var(--clay-d)}
+  .line[aria-pressed="true"] .box{background:var(--clay-d)}
+  .line .orig{display:block;font-family:var(--sans);font-size:12px;color:var(--ssoft);letter-spacing:.06em}
+  .swap{animation:swap .7s both}
+  @keyframes swap{from{opacity:0;translate:0 6px}to{opacity:1;translate:0 0}}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+  .big{font-size:clamp(21px,4.8vw,30px);font-weight:500;line-height:1.75;letter-spacing:.06em;text-align:center}
+  .note{font-family:var(--sans);font-size:14px;color:var(--soft);line-height:1.95;text-align:center}
+  .qs{list-style:none;counter-reset:q;display:flex;flex-direction:column;gap:12px}
+  .qs li{counter-increment:q;position:relative;padding-left:2.2em;font-size:17px;line-height:1.95}
+  .qs li::before{content:counter(q);position:absolute;left:0;top:.35em;width:1.5em;height:1.5em;border:1px solid var(--clay-d);border-radius:50%;color:var(--clay);font-family:var(--sans);font-size:.72em;display:flex;align-items:center;justify-content:center}
+  .kept{display:flex;flex-direction:column;gap:6px;border-left:2px solid var(--clay-d);padding-left:16px}
+  .kept div{font-size:17px;line-height:1.9}
+  .kept .fill{background:transparent;color:var(--clay);font-weight:500;padding:0}
+
+  .field{display:flex;flex-direction:column;gap:8px}
+  .field label{font-family:var(--sans);font-size:13px;letter-spacing:.14em;color:var(--soft)}
+  .field input,.field textarea{width:100%;background:rgba(241,231,217,.04);border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-family:var(--cjk);font-size:17px;color:var(--paper);line-height:1.8;outline:none}
+  .field input::placeholder,.field textarea::placeholder{color:#6a5e51}
+  .field input:focus,.field textarea:focus{border-color:var(--clay-d);background:rgba(241,231,217,.06)}
+  .field textarea{min-height:120px;resize:vertical}
+  .check{display:flex;gap:10px;align-items:flex-start;font-family:var(--sans);font-size:14px;color:var(--soft);line-height:1.8;cursor:pointer}
+  .check input{margin-top:.4em;accent-color:var(--clay)}
+  .hint{text-align:center;font-family:var(--sans);font-size:13px;color:var(--faint);min-height:1.3em}
+  [hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main>
+
+  <section id="intro" style="padding-top:8vh">
+    <div class="kicker">不 只 讀 書 的 讀 書 會</div>
+    <h1>空格</h1>
+    <p class="say">十二個沒寫完的句子，<br>每次從六十句裡隨機抽出。</p>
+    <p class="say">每一句，填上<span class="em">第一個浮現的字</span>。<br>不用想太久，也沒有對錯。</p>
+    <p class="small">寫得越快，越接近你。</p>
+    <div class="btnrow" style="margin-top:12px"><button class="b" id="startBtn">開始填寫</button></div>
+    <a class="back" href="jing.html">← 回金剛經選單</a>
+  </section>
+
+  <section id="write" hidden>
+    <div class="sheet">
+      <div class="btnrow" style="justify-content:space-between">
+        <div class="prog" id="prog" aria-hidden="true"></div>
+        <div class="count" id="count"></div>
+      </div>
+      <div class="sentence" id="sentence"></div>
+      <form id="answerForm" style="display:flex;flex-direction:column;gap:18px">
+        <input id="answer" autocomplete="off" maxlength="40" placeholder="第一個念頭" aria-label="填入空格">
+        <div class="btnrow" style="justify-content:flex-start"><button class="b" type="submit">下一句</button><button class="b quiet" type="button" id="skipBtn">跳過</button></div>
+      </form>
+    </div>
+  </section>
+
+  <section id="world" hidden>
+    <div class="sheet">
+      <div class="kicker">第 一 頁</div>
+      <p class="big" style="color:var(--sink)">這是你描述的世界</p>
+      <div class="prose" id="prose"></div>
+    </div>
+    <div class="btnrow"><button class="b" id="swapBtn">把主詞換成「我」</button></div>
+  </section>
+
+  <section id="mirror" hidden>
+    <div class="sheet">
+      <div class="kicker">第 二 頁</div>
+      <p class="big" style="color:var(--sink)">同樣的字，換一個主詞</p>
+      <p style="text-align:center;color:var(--ssoft);font-size:16px">慢慢讀。哪幾句讀起來，其實也在說你？<br>點一下，把它勾起來。</p>
+      <div class="lines" id="lines"></div>
+    </div>
+    <div class="btnrow"><button class="b" id="doneBtn">看我勾了什麼</button></div>
+  </section>
+
+  <section id="end" hidden>
+    <div class="kicker">第 三 頁</div>
+    <p class="big" id="verdict"></p>
+    <div class="kept" id="kept"></div>
+    <p class="note" id="slow"></p>
+    <hr class="rule">
+    <ol class="qs">
+      <li>寫的時候，你以為在描述別人。現在讀，你認出了什麼？</li>
+      <li>有沒有哪一句，你很想說「這句不是我」？那份抗拒，本身在說什麼？</li>
+      <li>遲疑最久的那幾句，碰到的是什麼？</li>
+      <li>如果這些就是你看世界的眼鏡，你最想先擦亮哪一片？</li>
+    </ol>
+    <div class="btnrow">
+      <button class="b ghost" id="againBtn">重新填寫</button>
+      <button class="b" id="toFormBtn">寫下感想</button>
+    </div>
+  </section>
+
+  <section id="form" hidden>
+    <div class="kicker">感 想</div>
+    <p class="say">哪一句，<br>讓你<span class="em">停了一下</span>？</p>
+    <div class="field"><label for="nick">你的暱稱</label>
+      <input id="nick" type="text" maxlength="60" placeholder="寫個名字，讓引導人認得你"></div>
+    <div class="field"><label for="reflect">你的感想</label>
+      <textarea id="reflect" maxlength="2000" placeholder="換成「我」的那一刻……"></textarea></div>
+    <label class="check"><input type="checkbox" id="attach">一併送出我勾起來的句子（不勾，就只送感想）</label>
+    <div class="btnrow"><button class="b" id="sendBtn">送　出</button></div>
+    <div class="hint" id="hint"></div>
+  </section>
+
+  <section id="done" hidden style="padding-top:18vh">
+    <div class="kicker">○</div>
+    <p class="say">收到了。<br>就放下——<span class="em">我們見面再談。</span></p>
+    <a class="back" href="jing.html">← 回金剛經選單</a>
+  </section>
+
+</main>
+
+<script>
+(function(){
+// 六個主題各十句；每次每個主題抽兩句，共十二句
+var POOL={
+  '他人':[
+    ['她打開門，看見','。','我打開門，看見','。'],
+    ['他從不說出口的是','。','我從不說出口的是','。'],
+    ['大部分的人，其實很','。','我其實很','。'],
+    ['她最怕被別人發現','。','我最怕被別人發現','。'],
+    ['如果大家真的了解他，就會','。','如果大家真的了解我，就會','。'],
+    ['陌生人看著她的時候，心裡在想','。','別人看著我的時候，心裡在想','。'],
+    ['他對每個人都很客氣，因為','。','我對每個人都很客氣，因為','。'],
+    ['她笑得那麼用力，是因為','。','我笑得那麼用力，是因為','。'],
+    ['那個總是遲到的人，其實','。','我遲到的時候，其實','。'],
+    ['他在人群裡總是','。','我在人群裡總是','。']
+  ],
+  '關係':[
+    ['愛一個人，到最後總是','。','我愛一個人，到最後總是','。'],
+    ['他離開的時候，心裡想的是','。','我離開的時候，心裡想的是','。'],
+    ['她不回訊息，是因為','。','我不回訊息，是因為','。'],
+    ['他們吵架之後，誰也不想先','。','吵架之後，我不想先','。'],
+    ['一段關係真正結束，是在','的時候。','對我來說，一段關係真正結束，是在','的時候。'],
+    ['她從伴侶身上最想得到的是','。','我從伴侶身上最想得到的是','。'],
+    ['他說「我沒事」的時候，意思是','。','我說「我沒事」的時候，意思是','。'],
+    ['朋友之間最不能原諒的是','。','我最不能原諒朋友的是','。'],
+    ['被愛的人通常會','。','被愛的時候，我通常會','。'],
+    ['她留下來，是因為','。','我留下來，是因為','。']
+  ],
+  '家':[
+    ['那個小孩一直在等','。','我一直在等','。'],
+    ['那位母親最常說的一句話是','。','我最常對自己說的一句話是','。'],
+    ['父親沉默的時候，家裡的人','。','我沉默的時候，身邊的人','。'],
+    ['那個乖小孩很早就學會了','。','我很早就學會了','。'],
+    ['他小時候以為，只要','。','我小時候以為，只要','。'],
+    ['那個家裡最不能提的是','。','我心裡最不能提的是','。'],
+    ['那個哭泣的孩子需要的是','。','我哭的時候需要的是','。'],
+    ['她長大以後，終於','。','我長大以後，終於','。'],
+    ['每個家都有一個人負責','。','在家裡，我負責','。'],
+    ['那個孩子被稱讚的時候，','。','我被稱讚的時候，','。']
+  ],
+  '情緒':[
+    ['她生氣的時候，其實是','。','我生氣的時候，其實是','。'],
+    ['他一個人的時候，會','。','我一個人的時候，會','。'],
+    ['她累了，卻還是','。','我累了，卻還是','。'],
+    ['他哭不出來，因為','。','我哭不出來的時候，是因為','。'],
+    ['那個人的身體一直在說','。','我的身體一直在說','。'],
+    ['她半夜醒來，想到的是','。','我半夜醒來，想到的是','。'],
+    ['他嫉妒的其實是','。','我嫉妒的其實是','。'],
+    ['她害怕安靜，因為','。','我害怕安靜的時候，是因為','。'],
+    ['他覺得羞愧的時候，就會','。','我覺得羞愧的時候，就會','。'],
+    ['那個焦慮的人以為','。','我焦慮的時候以為','。']
+  ],
+  '世界':[
+    ['這個世界對認真的人','。','這個世界對我','。'],
+    ['每個人最後都會','。','我最後會','。'],
+    ['好人通常','。','我當好人的時候，通常','。'],
+    ['成功的人都','。','我想要成功，是因為','。'],
+    ['錢可以讓人','。','錢可以讓我','。'],
+    ['這個社會最看不起','。','我最看不起','。'],
+    ['命運對他','。','命運對我','。'],
+    ['有權力的人總是','。','我有權力的時候會','。'],
+    ['規則存在，是為了','。','我守規矩，是為了','。'],
+    ['運氣好的人，','。','我運氣好的時候，','。']
+  ],
+  '意義':[
+    ['那位老人回頭看自己的一生，覺得','。','我回頭看自己的一生，覺得','。'],
+    ['他一直在找的是','。','我一直在找的是','。'],
+    ['她不敢開始，是因為','。','我不敢開始，是因為','。'],
+    ['那個修行的人最放不下的是','。','我最放不下的是','。'],
+    ['他向神祈求的是','。','我祈求的是','。'],
+    ['她以為自己不夠','。','我以為自己不夠','。'],
+    ['如果明天就要死去，他會','。','如果明天就要死去，我會','。'],
+    ['他原諒不了的人，其實是','。','我原諒不了的人，其實是','。'],
+    ['她最想被看見的是','。','我最想被看見的是','。'],
+    ['那個人說「我已經放下了」，其實','。','我說「我已經放下了」，其實','。']
+  ]
+};
+var shuffle=a=>{a=a.slice();for(let k=a.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[a[k],a[j]]=[a[j],a[k]];}return a;};
+var S=[];
+var draw=()=>shuffle(Object.values(POOL).flatMap(list=>shuffle(list).slice(0,2)));
+
+  function $(id){return document.getElementById(id);}
+  var i, answers, times, shownAt, marks;
+  function esc(s){return s.replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function fill(a){return a?'<span class="fill">'+esc(a)+'</span>':'<span class="fill empty">（空著）</span>';}
+  function show(id){['intro','write','world','mirror','end','form','done'].forEach(function(k){$(k).hidden=(k!==id);});window.scrollTo(0,0);}
+
+  function start(){ S=draw(); i=0; answers=[]; times=[]; marks={}; show('write'); ask(); }
+  function ask(){
+    $('prog').innerHTML=S.map(function(_,k){return '<i class="'+(k<i?'done':'')+'"></i>';}).join('');
+    $('count').textContent=(i+1)+' / '+S.length;
+    $('sentence').innerHTML=S[i][0]+'<span class="fill empty">＿＿＿</span>'+S[i][1];
+    $('answer').value=''; $('answer').focus();
+    shownAt=performance.now();
+  }
+  function record(a){
+    answers.push(a.trim()); times.push((performance.now()-shownAt)/1000);
+    i++; if(i<S.length) ask(); else showWorld();
+  }
+  $('answerForm').addEventListener('submit',function(e){e.preventDefault();record($('answer').value);});
+  $('skipBtn').onclick=function(){record('');};
+
+  function showWorld(){
+    $('prose').innerHTML=S.map(function(s,k){return '<span>'+s[0]+fill(answers[k])+s[1]+'</span>';}).join('');
+    show('world');
+  }
+  function showMirror(){
+    $('lines').innerHTML=S.map(function(s,k){
+      return '<button class="line swap" style="animation-delay:'+(k*90)+'ms" aria-pressed="false" data-k="'+k+'"><span class="box"></span><span>'+s[2]+fill(answers[k])+s[3]+'<span class="orig">原本：'+s[0]+'…</span></span></button>';
+    }).join('');
+    [].forEach.call($('lines').querySelectorAll('.line'),function(b){
+      b.onclick=function(){var k=b.getAttribute('data-k');marks[k]=!marks[k];b.setAttribute('aria-pressed',String(!!marks[k]));};
+    });
+    show('mirror');
+  }
+  function marked(){return Object.keys(marks).filter(function(k){return marks[k];}).map(Number).sort(function(a,b){return a-b;});}
+  function showEnd(){
+    var ks=marked(), n=ks.length, filled=answers.filter(Boolean).length;
+    $('verdict').innerHTML = n===0
+      ? '你一句也沒有勾。<br>也許它們真的不是你，<br>也許有些句子，<span class="em">還不想被認出來</span>。'
+      : '十二句裡，你認出了 <span class="em">'+n+'</span> 句。<br>寫下它們的時候，你以為自己在寫別人。';
+    $('kept').hidden = n===0;
+    $('kept').innerHTML=ks.map(function(k){return '<div>'+S[k][2]+fill(answers[k])+S[k][3]+'</div>';}).join('');
+    var order=times.map(function(t,k){return [t,k];}).sort(function(a,b){return b[0]-a[0];}).slice(0,2);
+    var skipped=answers.filter(function(a){return !a;}).length;
+    var note='你停留最久的是「'+S[order[0][1]][0]+'…」（'+Math.round(order[0][0])+' 秒）<br>和「'+S[order[1][1]][0]+'…」（'+Math.round(order[1][0])+' 秒）。';
+    if(skipped) note+='<br>你空下了 '+skipped+' 句——空白，也是一種回答。';
+    if(filled===0) note='你一格也沒有填。下次，試著讓第一個念頭直接落在紙上。';
+    $('slow').innerHTML=note;
+    show('end');
+  }
+  $('startBtn').onclick=start;
+  $('swapBtn').onclick=showMirror;
+  $('doneBtn').onclick=showEnd;
+  $('againBtn').onclick=start;
+  $('toFormBtn').onclick=function(){show('form');};
+  $('sendBtn').onclick=function(){
+    var nick=$('nick').value.trim(), reflect=$('reflect').value.trim(), hint=$('hint');
+    if(!nick){hint.textContent='請填一下你的暱稱。';return;}
+    if(!reflect){hint.textContent='寫一句也好。';return;}
+    this.disabled=true; hint.textContent='送出中……';
+    var ks=marked();
+    if($('attach').checked && ks.length){
+      reflect+='\n\n【我勾起來的句子】\n'+ks.map(function(k){return S[k][2]+(answers[k]||'（空著）')+S[k][3];}).join('\n');
+    }
+    fetch(ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify({story:STORY,nickname:nick,choice:'認出'+ks.length+'/'+S.length+'句',reason:reflect})
+    }).then(function(){show('done');}).catch(function(){show('done');});
+  };
+})();
+</script>
+</body>
+</html>

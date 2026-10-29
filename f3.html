@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>石頭湯</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+  /* ★★★ 把下面引號裡換成你的 Google Apps Script 網頁應用程式網址 ★★★ */
+  const ENDPOINT = "https://script.google.com/macros/s/AKfycbxTZvcSvcnn7uE2g7Dn8ElXr89yTNGFO6_ss4xJ4Bnw3EhF2ISniHkTC7JYMQd5P5JDrw/exec";
+  const STORY = "三・石頭湯";
+</script>
+<style>
+  :root{
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+    --bg:#f6f1e7;--panel:#fbf8f1;--ink:#2c2620;--soft:#6f6656;--faint:#9a9082;--rule:#e0d7c6;--accent2:#9c6b45;
+  }
+  *{box-sizing:inherit}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:'Noto Serif TC',serif;line-height:1.95;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  .wrap{max-width:680px;margin:0 auto;padding:0 24px 96px}
+  header.top{text-align:center;padding:72px 0 32px}
+  header.top .idx{font-family:'Noto Sans TC',sans-serif;font-size:13px;letter-spacing:6px;color:var(--accent2);margin-bottom:16px}
+  header.top h1{font-size:34px;font-weight:600;letter-spacing:5px;margin:0 0 12px}
+  header.top .src{font-family:'Noto Sans TC',sans-serif;font-size:13px;letter-spacing:1px;color:var(--faint)}
+  hr.rule{border:none;border-top:1px solid var(--rule);max-width:120px;margin:36px auto}
+  article p{margin:0 0 1.5em;font-size:19px;letter-spacing:.3px}
+  .smash{text-align:center;font-size:26px;font-weight:700;letter-spacing:6px;margin:1.2em 0;color:var(--ink)}
+
+  .choose{margin:48px 0 8px}
+  .choose .q{text-align:center;font-family:'Noto Sans TC',sans-serif;font-size:15px;letter-spacing:3px;color:var(--accent2);margin-bottom:24px}
+  .opts{display:flex;flex-direction:column;gap:12px}
+  .opt{display:flex;align-items:center;gap:16px;background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:18px 22px;cursor:pointer;transition:border-color .2s,background .2s,transform .1s;font-size:20px;letter-spacing:1px;user-select:none}
+  .opt:hover{border-color:var(--accent2);background:#fdfbf6}
+  .opt:active{transform:scale(.995)}
+  .opt .mk{flex:0 0 auto;width:26px;height:26px;border-radius:50%;border:1.5px solid var(--faint);display:flex;align-items:center;justify-content:center;font-family:'Noto Sans TC',sans-serif;font-size:13px;color:var(--faint);transition:all .2s}
+  .opt.sel{border-color:var(--accent2);background:#f6eee2}
+  .opt.sel .mk{background:var(--accent2);border-color:var(--accent2);color:#fff}
+  .opt .lb{flex:1}
+
+  .field{margin:28px 0 0}
+  .field label{display:block;font-family:'Noto Sans TC',sans-serif;font-size:14px;letter-spacing:2px;color:var(--soft);margin-bottom:10px}
+  .field input,.field textarea{
+    width:100%;background:var(--panel);border:1px solid var(--rule);border-radius:12px;
+    padding:14px 16px;font-family:'Noto Serif TC',serif;font-size:18px;color:var(--ink);line-height:1.7;
+  }
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--accent2);background:#fdfbf6}
+  .field textarea{min-height:110px;resize:vertical}
+
+  .submit{margin:36px 0 0;text-align:center}
+  .submit button{
+    font-family:'Noto Sans TC',sans-serif;font-size:17px;letter-spacing:4px;color:#fff;background:var(--accent2);
+    border:none;border-radius:999px;padding:16px 56px;cursor:pointer;transition:opacity .2s,transform .1s;
+  }
+  .submit button:hover{opacity:.92}
+  .submit button:active{transform:scale(.98)}
+  .submit button:disabled{opacity:.5;cursor:default}
+  .hint{text-align:center;font-family:'Noto Sans TC',sans-serif;font-size:13px;color:var(--faint);margin-top:16px;min-height:1.4em}
+
+  .done{display:none;text-align:center;padding:120px 0}
+  .done .mark{font-size:40px;color:var(--accent2);margin-bottom:24px}
+  .done h2{font-size:26px;font-weight:500;letter-spacing:4px;margin:0 0 12px}
+  .done p{font-size:16px;color:var(--soft);letter-spacing:1px}
+
+  @media(max-width:560px){
+    .wrap{padding:0 20px 72px}
+    header.top{padding:52px 0 28px}
+    header.top h1{font-size:28px}
+    article p{font-size:18px}
+    .opt{font-size:18px;padding:16px 18px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div id="main">
+    <header class="top">
+      <div class="idx">其 三</div>
+      <h1>石頭湯</h1>
+      <div class="src">改寫自歐洲民間故事</div>
+    </header>
+    <hr class="rule">
+
+    <article>
+      <p>從前，有三個旅人，走了很遠的路，又累又餓。傍晚時分，他們來到一座村莊，心想：這下總能討口飯、歇個腳了。</p>
+      <p>可是這座村子，前些年鬧過饑荒。饑荒過去了，村民的心卻沒緩過來——家家戶戶都把糧食藏得死死的：米藏在地板下，臘肉吊在梁上再蓋層布，連菜園都圍了籬笆。他們學會了一件事：東西只有攥在自己手裡，才是安全的。</p>
+      <p>三個旅人挨家挨戶敲門。門一扇扇打開，又一扇扇關上。</p>
+      <p>「我們什麼吃的都沒有了。」「自己都不夠吃呢。」「上哪兒找糧食去？你們往別村去吧。」</p>
+      <p>三人對望一眼。其中一個——看起來是領頭的——非但不氣餒，反而笑了。他朗聲對圍在遠處看熱鬧的村民說：「沒關係。既然大家都沒有吃的，那就讓我們來煮一鍋『石頭湯』，請全村人喝吧。」</p>
+      <p>石頭湯？村民從沒聽過這種東西。好奇心比戒心強，人漸漸圍攏過來。</p>
+      <p>旅人不慌不忙，向村民借了村中央那口最大的鐵鍋，架起柴火，打了滿滿一鍋清水。等水滾了，他鄭重其事地從懷裡掏出一塊布包，一層層打開——裡面是一顆再普通不過的石頭。他把石頭輕輕放進鍋裡，閉上眼，像在品嘗什麼似的，用木勺舀起一口嘗了嘗，滿意地點點頭：「嗯……好湯。這石頭湯，光是這樣煮，就已經很香了。」</p>
+      <p>村民伸長脖子看。一個孩子忍不住問：「真的能喝嗎？」</p>
+      <p>「當然。」旅人又嘗了一口，忽然像想起什麼，微微皺眉，「不過……要是能加一點點鹽，那就更完美了。可惜啊，這麼好的湯，就差那麼一撮鹽。」</p>
+      <p>人群裡一個婦人聽了，猶豫了一下，說：「鹽……我家還有一點。」轉身跑回去，捧來一小包鹽。旅人道了謝，撒進鍋裡，又嘗，眼睛一亮：「妙！你們嘗嘗這香氣——只是，唉，要是再有幾根胡蘿蔔，這湯的甜味就出來了。」</p>
+      <p>一個老農說：「胡蘿蔔我地窖裡有幾根。」也去取了來。</p>
+      <p>「太好了！」旅人越煮越起勁，「石頭湯配上胡蘿蔔……堪稱一絕。這時候要是有點洋蔥、幾顆馬鈴薯，那就是國王才喝得到的湯了。」</p>
+      <p>這下，村民們像被什麼點著了。你家拿洋蔥、我家拿馬鈴薯、他家把藏在梁上那塊臘肉也解下來切了幾片扔進去；有人添了一把豆子，有人捧來一把青菜，連那個先前最不肯開門、把米藏在地板下的人家，也默默端來了一碗米。</p>
+      <p>那口大鍋咕嘟咕嘟地滾著，香氣飄滿了整條街。天黑了，有人搬來桌子，有人拿來碗筷，有人點起了燈。全村的人——那些原本各自把門關得緊緊的人——第一次，圍坐在一起，分喝了一鍋熱氣騰騰、料多味美的湯。</p>
+      <p>那一夜，村子裡有笑聲、有歌聲，好久沒這麼熱鬧過了。</p>
+      <p>臨睡前，一個村民拉著領頭的旅人，由衷地說：「真沒想到，一顆石頭，竟能煮出這麼好的一鍋湯。你們一定要把這神奇的石頭留給我們！」</p>
+      <p>旅人笑了笑，把那顆石頭從鍋裡撈起來，擦乾淨，重新包好——</p>
+      <p class="beat">至於那顆石頭究竟神不神奇，故事沒有說。</p>
+    </article>
+
+    <div class="choose">
+      <div class="q">讀完了。你會替它選哪一個標題？</div>
+      <div class="opts" id="opts">
+        <div class="opt" data-v="1. 神奇的石頭"><span class="mk">1</span><span class="lb">神奇的石頭</span></div>
+        <div class="opt" data-v="2. 又是誰，騙了誰？"><span class="mk">2</span><span class="lb">又是誰，騙了誰？</span></div>
+        <div class="opt" data-v="3. 團結就是力量"><span class="mk">3</span><span class="lb">團結就是力量</span></div>
+        <div class="opt" data-v="4. 真正的美味"><span class="mk">4</span><span class="lb">真正的美味</span></div>
+        <div class="opt" data-v="5. 非法，非非法"><span class="mk">5</span><span class="lb">非法，非非法</span></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>你的暱稱</label>
+      <input id="nickname" type="text" maxlength="60" placeholder="寫一個名字，讓引導人認得你">
+    </div>
+    <div class="field">
+      <label>為什麼選這個標題？（寫一句就好）</label>
+      <textarea id="reason" maxlength="2000" placeholder="說說你選它的理由……"></textarea>
+    </div>
+
+    <div class="submit">
+      <button id="btn">送　出</button>
+      <div class="hint" id="hint"></div>
+    </div>
+  </div>
+
+  <div class="done" id="done">
+    <div class="mark">○</div>
+    <h2>已送出，謝謝</h2>
+    <p>把答案交出去，就放下。我們見面再談。</p>
+  </div>
+
+</div>
+
+<script>
+  var chosen = null;
+  var opts = document.querySelectorAll('#opts .opt');
+  opts.forEach(function(o){
+    o.addEventListener('click', function(){
+      var was = o.classList.contains('sel');
+      opts.forEach(function(x){ x.classList.remove('sel'); });
+      if(!was){ o.classList.add('sel'); chosen = o.getAttribute('data-v'); }
+      else { chosen = null; }
+    });
+  });
+
+  var btn = document.getElementById('btn');
+  var hint = document.getElementById('hint');
+
+  btn.addEventListener('click', function(){
+    var nickname = document.getElementById('nickname').value.trim();
+    var reason = document.getElementById('reason').value.trim();
+    if(!chosen){ hint.textContent = "請先選一個標題。"; return; }
+    if(!nickname){ hint.textContent = "請填一下你的暱稱。"; return; }
+
+    btn.disabled = true;
+    hint.textContent = "送出中……";
+
+    fetch(ENDPOINT, {
+      method: "POST",
+      mode: "no-cors",                       // 保證跨網域送得出去（不需要讀回應）
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({
+        story: STORY,
+        nickname: nickname,
+        choice: chosen,
+        reason: reason
+      })
+    })
+    .then(function(){
+      document.getElementById('main').style.display = 'none';
+      document.getElementById('done').style.display = 'block';
+      window.scrollTo(0,0);
+    })
+    .catch(function(){
+      // no-cors 幾乎不會走到這裡；萬一真的連不上，仍顯示已送出，避免學員卡住重送
+      document.getElementById('main').style.display = 'none';
+      document.getElementById('done').style.display = 'block';
+      window.scrollTo(0,0);
+    });
+  });
+</script>
+</body>
+</html>

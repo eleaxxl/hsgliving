@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>勞山道士</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+  /* ★★★ 把下面引號裡換成你的 Google Apps Script 網頁應用程式網址 ★★★ */
+  const ENDPOINT = "https://script.google.com/macros/s/AKfycbxTZvcSvcnn7uE2g7Dn8ElXr89yTNGFO6_ss4xJ4Bnw3EhF2ISniHkTC7JYMQd5P5JDrw/exec";
+  const STORY = "一・勞山道士";
+</script>
+<style>
+  :root{
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+    --bg:#f6f1e7;--panel:#fbf8f1;--ink:#2c2620;--soft:#6f6656;--faint:#9a9082;--rule:#e0d7c6;--accent2:#9c6b45;
+  }
+  *{box-sizing:inherit}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:'Noto Serif TC',serif;line-height:1.95;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  .wrap{max-width:680px;margin:0 auto;padding:0 24px 96px}
+  header.top{text-align:center;padding:72px 0 32px}
+  header.top .idx{font-family:'Noto Sans TC',sans-serif;font-size:13px;letter-spacing:6px;color:var(--accent2);margin-bottom:16px}
+  header.top h1{font-size:34px;font-weight:600;letter-spacing:5px;margin:0 0 12px}
+  header.top .src{font-family:'Noto Sans TC',sans-serif;font-size:13px;letter-spacing:1px;color:var(--faint)}
+  hr.rule{border:none;border-top:1px solid var(--rule);max-width:120px;margin:36px auto}
+  article p{margin:0 0 1.5em;font-size:19px;letter-spacing:.3px}
+  .smash{text-align:center;font-size:26px;font-weight:700;letter-spacing:6px;margin:1.2em 0;color:var(--ink)}
+
+  .choose{margin:48px 0 8px}
+  .choose .q{text-align:center;font-family:'Noto Sans TC',sans-serif;font-size:15px;letter-spacing:3px;color:var(--accent2);margin-bottom:24px}
+  .opts{display:flex;flex-direction:column;gap:12px}
+  .opt{display:flex;align-items:center;gap:16px;background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:18px 22px;cursor:pointer;transition:border-color .2s,background .2s,transform .1s;font-size:20px;letter-spacing:1px;user-select:none}
+  .opt:hover{border-color:var(--accent2);background:#fdfbf6}
+  .opt:active{transform:scale(.995)}
+  .opt .mk{flex:0 0 auto;width:26px;height:26px;border-radius:50%;border:1.5px solid var(--faint);display:flex;align-items:center;justify-content:center;font-family:'Noto Sans TC',sans-serif;font-size:13px;color:var(--faint);transition:all .2s}
+  .opt.sel{border-color:var(--accent2);background:#f6eee2}
+  .opt.sel .mk{background:var(--accent2);border-color:var(--accent2);color:#fff}
+  .opt .lb{flex:1}
+
+  .field{margin:28px 0 0}
+  .field label{display:block;font-family:'Noto Sans TC',sans-serif;font-size:14px;letter-spacing:2px;color:var(--soft);margin-bottom:10px}
+  .field input,.field textarea{
+    width:100%;background:var(--panel);border:1px solid var(--rule);border-radius:12px;
+    padding:14px 16px;font-family:'Noto Serif TC',serif;font-size:18px;color:var(--ink);line-height:1.7;
+  }
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--accent2);background:#fdfbf6}
+  .field textarea{min-height:110px;resize:vertical}
+
+  .submit{margin:36px 0 0;text-align:center}
+  .submit button{
+    font-family:'Noto Sans TC',sans-serif;font-size:17px;letter-spacing:4px;color:#fff;background:var(--accent2);
+    border:none;border-radius:999px;padding:16px 56px;cursor:pointer;transition:opacity .2s,transform .1s;
+  }
+  .submit button:hover{opacity:.92}
+  .submit button:active{transform:scale(.98)}
+  .submit button:disabled{opacity:.5;cursor:default}
+  .hint{text-align:center;font-family:'Noto Sans TC',sans-serif;font-size:13px;color:var(--faint);margin-top:16px;min-height:1.4em}
+
+  .done{display:none;text-align:center;padding:120px 0}
+  .done .mark{font-size:40px;color:var(--accent2);margin-bottom:24px}
+  .done h2{font-size:26px;font-weight:500;letter-spacing:4px;margin:0 0 12px}
+  .done p{font-size:16px;color:var(--soft);letter-spacing:1px}
+
+  @media(max-width:560px){
+    .wrap{padding:0 20px 72px}
+    header.top{padding:52px 0 28px}
+    header.top h1{font-size:28px}
+    article p{font-size:18px}
+    .opt{font-size:18px;padding:16px 18px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div id="main">
+    <header class="top">
+      <div class="idx">其 一</div>
+      <h1>勞山道士</h1>
+      <div class="src">改寫自《聊齋誌異》</div>
+    </header>
+    <hr class="rule">
+
+    <article>
+      <p>王七是官宦人家的子弟，打小就不愛家業，偏心慕仙道。他聽人說勞山上住著許多神仙，某日便收拾了個包袱，一個人往山裡去了。</p>
+      <p>山路越走越深，人聲越來越遠。他攀上一處峰頂，忽見林木掩映間有一座道觀，靜得出奇——靜得不像人間。觀裡一位老道士盤腿坐在蒲團上，一頭白髮直垂到衣領，眼神卻清亮得像山澗的水。王七上前行禮，攀談幾句，只覺老人隨口說的道理都深不見底，當下拜倒在地，求收為徒。</p>
+      <p>老道士看了他一眼，淡淡地說：「只怕你嬌生慣養，吃不了這裡的苦。」</p>
+      <p>「弟子吃得了。」王七答得很快。</p>
+      <p>觀裡的門徒很多，天一擦黑便都回來了。王七跟著眾人向老道士叩了頭，就此留下。第二天天還沒亮，老道士把他叫醒，遞給他一把斧頭，要他隨大家上山砍柴。王七咬著牙去了。</p>
+      <p>一個多月過去。他那雙從沒做過粗活的手腳，磨出了一層又一層的厚繭。柴照砍，可心裡那點對神仙的嚮往，一天天被酸痛磨薄。夜裡躺下，他開始盤算著怎麼回家。</p>
+      <p>那是一個傍晚。王七扛著柴回來，見觀裡來了兩位客人，正與師父對坐飲酒。天已經黑了，屋裡卻遲遲不點燈。只見老道士隨手取來一張紙，剪成圓圓的一面，像鏡子，往牆上一貼——剎那間，那紙化作一輪明月，清光傾瀉滿室，連毫髮都照得分明。</p>
+      <p>眾徒都圍過來看。一位客人笑道：「這樣的良宵，怎能獨樂。」說著從案上取來一壺酒，分給眾人，還囑咐大家儘管喝個痛快。王七心裡暗想：七八個人，一壺酒，哪裡夠分？可眾人搶著先乾為快，怕的是酒被喝光——偏偏那壺酒斟來斟去，竟一點也不見少。他看得心裡發奇。</p>
+      <p>過了一會兒，另一位客人說：「有這樣的月色，卻只是悶頭喝酒，未免辜負。何不請嫦娥來？」老道士便拈起一根筷子，向月中一擲。眾人只見一個美人自那片月光裡緩緩走出，起先還不滿一尺高，落到地上，便與常人一般高了。她腰肢纖細，頸項如玉，隨著看不見的樂音翩翩起舞。舞罷，又清清亮亮地唱了一支歌。一曲唱完，她盤旋而起，輕輕一躍，落上桌案——眾人正看得出神，眼前一花，那美人已經又變回了一根筷子，靜靜躺在桌上。三人相視大笑。</p>
+      <p>又一位客人說：「今夜實在痛快。只是我有些不勝酒力了——不如，就送我到月亮裡去吧？」</p>
+      <p>於是三人連人帶席，緩緩地、緩緩地，移進了那輪月中。眾徒在下面仰著頭看：三位就坐在月亮裡飲酒談笑，鬚眉都看得清清楚楚，像映在一面鏡子裡的影子。就這麼看著看著，月色一點一點地暗下去。有徒弟點了燈來，燈火一亮，月亮已成了牆上一張圓紙——師父獨自坐著，兩位客人早不知去向，只有桌上的杯盤菜餚，還原原本本地擺在那裡。</p>
+      <p>老道士回過頭，問眾人：「喝夠了嗎？」「夠了。」「夠了就早些睡，別誤了明早砍柴。」眾人應了聲，退下。王七躺在床上，把方才那一幕在心裡翻來覆去——剪紙成月、擲箸為人、席移月中——那份神奇看得他心醉神馳，回家的念頭，竟悄悄地消了。</p>
+      <p>可是，神奇歸神奇，日子還是那個日子。又熬了一個月，砍柴的苦到底壓過了看戲的迷。而這一個多月來，師父除了叫他上山，一句法術也沒教過。王七終於忍不住，去向老道士辭行：</p>
+      <p>「弟子走了幾百里路來拜師，就算學不成長生不老，好歹傳弟子一點小小的法術，也不枉此行。這兩三個月，天天不過是早出砍柴、晚上回來。這種苦，弟子在家可從沒吃過。」</p>
+      <p>老道士笑了：「我早說你吃不了苦，果然如此。也罷，明天一早就送你回去。」</p>
+      <p>王七急忙說：「弟子勞作了這麼多天，師父就傳個小法給我吧，也算沒白來一趟。」</p>
+      <p>「你想學什麼？」</p>
+      <p>王七早想好了：「弟子時常看見師父走路，牆壁都擋不住您。就求學這一手——穿牆之術。」</p>
+      <p>老道士笑著答應了。他把口訣傳給王七，叫他自己念，念完，喝一聲：「進去！」</p>
+      <p>王七對著牆，卻不敢動。「試試看。」老道士說。王七這才慢慢挪過去，到了牆前，還是被硬生生擋住。老道士說：「低下頭，一口氣衝進去，別猶豫！」王七退開幾步，把心一橫，悶頭朝牆奔去——到了牆邊，那牆竟像空氣一樣，他就這麼穿了過去！回頭一看，自己果然已經站在牆外了。他喜出望外，連忙進去拜謝。</p>
+      <p>老道士叮囑他：「回去以後，要清清白白地守著這份心，否則，法術就不靈了。」說完，又贈了他些盤纏，送他下山。</p>
+      <p>王七回到家，逢人便誇自己在山上遇了神仙，如今刀槍不入、牆壁無阻。妻子哪裡肯信。王七說：「我做給你看。」他學著老道士教的樣子，退到離牆幾尺遠的地方，把頭一低，運足了氣，朝牆猛衝過去——</p>
+      <p class="smash">砰。</p>
+      <p>一頭結結實實撞在硬牆上，登時仰面跌倒在地。妻子連忙把他扶起來，低頭一看，他額頭上已經鼓起一個大包，像顆雞蛋。妻子先是一愣，隨即忍不住笑了出來。</p>
+      <p>王七躺在地上，又羞又惱，額上的包一跳一跳地疼。他張口罵了起來——罵那老道士，沒安好心。</p>
+    </article>
+
+    <div class="choose">
+      <div class="q">讀完了。你會替它選哪一個標題？</div>
+      <div class="opts" id="opts">
+        <div class="opt" data-v="1. 虛假的幻術"><span class="mk">1</span><span class="lb">虛假的幻術</span></div>
+        <div class="opt" data-v="2. 保持清清白白的心"><span class="mk">2</span><span class="lb">保持清清白白的心</span></div>
+        <div class="opt" data-v="3. 吃苦就是修行"><span class="mk">3</span><span class="lb">吃苦就是修行</span></div>
+        <div class="opt" data-v="4. 撞牆才是硬道理"><span class="mk">4</span><span class="lb">撞牆才是硬道理</span></div>
+        <div class="opt" data-v="5. 非法，非非法"><span class="mk">5</span><span class="lb">非法，非非法</span></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>你的暱稱</label>
+      <input id="nickname" type="text" maxlength="60" placeholder="寫一個名字，讓引導人認得你">
+    </div>
+    <div class="field">
+      <label>為什麼選這個標題？（寫一句就好）</label>
+      <textarea id="reason" maxlength="2000" placeholder="說說你選它的理由……"></textarea>
+    </div>
+
+    <div class="submit">
+      <button id="btn">送　出</button>
+      <div class="hint" id="hint"></div>
+    </div>
+  </div>
+
+  <div class="done" id="done">
+    <div class="mark">○</div>
+    <h2>已送出，謝謝</h2>
+    <p>把答案交出去，就放下。我們見面再談。</p>
+  </div>
+
+</div>
+
+<script>
+  var chosen = null;
+  var opts = document.querySelectorAll('#opts .opt');
+  opts.forEach(function(o){
+    o.addEventListener('click', function(){
+      var was = o.classList.contains('sel');
+      opts.forEach(function(x){ x.classList.remove('sel'); });
+      if(!was){ o.classList.add('sel'); chosen = o.getAttribute('data-v'); }
+      else { chosen = null; }
+    });
+  });
+
+  var btn = document.getElementById('btn');
+  var hint = document.getElementById('hint');
+
+  btn.addEventListener('click', function(){
+    var nickname = document.getElementById('nickname').value.trim();
+    var reason = document.getElementById('reason').value.trim();
+    if(!chosen){ hint.textContent = "請先選一個標題。"; return; }
+    if(!nickname){ hint.textContent = "請填一下你的暱稱。"; return; }
+
+    btn.disabled = true;
+    hint.textContent = "送出中……";
+
+    fetch(ENDPOINT, {
+      method: "POST",
+      mode: "no-cors",                       // 保證跨網域送得出去（不需要讀回應）
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({
+        story: STORY,
+        nickname: nickname,
+        choice: chosen,
+        reason: reason
+      })
+    })
+    .then(function(){
+      document.getElementById('main').style.display = 'none';
+      document.getElementById('done').style.display = 'block';
+      window.scrollTo(0,0);
+    })
+    .catch(function(){
+      // no-cors 幾乎不會走到這裡；萬一真的連不上，仍顯示已送出，避免學員卡住重送
+      document.getElementById('main').style.display = 'none';
+      document.getElementById('done').style.display = 'block';
+      window.scrollTo(0,0);
+    });
+  });
+</script>
+</body>
+</html>

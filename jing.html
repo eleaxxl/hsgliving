@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>金剛經讀書會</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+    --bg:#f6f1e7;--panel:#fbf8f1;--ink:#2c2620;--soft:#6f6656;--faint:#9a9082;--rule:#e0d7c6;--accent:#9c6b45;}
+  *{box-sizing:inherit}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:'Noto Serif TC',serif;line-height:1.9;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;min-height:100%}
+  .wrap{max-width:640px;margin:0 auto;padding:0 24px 96px}
+  header.top{text-align:center;padding:86px 0 26px}
+  header.top .kicker{font-family:'Noto Sans TC',sans-serif;font-size:14px;letter-spacing:8px;color:var(--accent);margin-bottom:22px}
+  header.top h1{font-size:40px;font-weight:600;letter-spacing:6px;margin:0 0 18px}
+  header.top .sub{font-size:16px;color:var(--soft);letter-spacing:1px;line-height:1.9}
+  hr.rule{border:none;border-top:1px solid var(--rule);max-width:110px;margin:38px auto}
+  .menu{display:flex;flex-direction:column;gap:18px;margin-top:20px}
+  .sec{font-family:'Noto Sans TC',sans-serif;font-size:13px;letter-spacing:.42em;color:var(--accent);text-indent:.42em;
+    display:flex;align-items:center;gap:16px;margin:24px 2px 0}
+  .sec::after{content:"";flex:1;height:1px;background:var(--rule)}
+  .menu > .sec:first-child{margin-top:2px}
+  a.card,div.card{display:block;text-decoration:none;color:var(--ink);background:var(--panel);border:1px solid var(--rule);border-radius:18px;padding:30px 30px;transition:border-color .2s,background .2s,transform .1s}
+  a.card:hover{border-color:var(--accent);background:#fdfbf6}
+  a.card:active{transform:scale(.995)}
+  .card .n{font-family:'Noto Sans TC',sans-serif;font-size:13px;letter-spacing:4px;color:var(--accent);margin-bottom:12px}
+  .card .t{font-size:26px;font-weight:600;letter-spacing:3px;margin-bottom:8px}
+  .card .d{font-size:15px;color:var(--soft);letter-spacing:.5px;line-height:1.8}
+  .card .go{margin-top:16px;font-family:'Noto Sans TC',sans-serif;font-size:13px;letter-spacing:3px;color:var(--accent)}
+  div.card.soon{opacity:.55;cursor:default}
+  div.card.soon .n,div.card.soon .go{color:var(--faint)}
+  .backhome{text-align:center;margin-top:40px}
+  .backhome a{font-family:'Noto Sans TC',sans-serif;font-size:13px;letter-spacing:3px;color:var(--faint);text-decoration:none}
+  .backhome a:hover{color:var(--accent)}
+  footer{text-align:center;padding-top:60px;color:var(--faint);font-family:'Noto Sans TC',sans-serif;font-size:13px;letter-spacing:3px}
+  @media(max-width:560px){.wrap{padding:0 20px 72px}header.top{padding:60px 0 22px}header.top h1{font-size:32px;letter-spacing:4px}.card{padding:26px 24px}.card .t{font-size:23px}}
+</style>
+</head>
+<body>
+
+<div id="gate" style="position:fixed;inset:0;z-index:9999;background:#f5ece6;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Noto Sans TC',sans-serif;padding:24px">
+  <div style="font-size:15px;letter-spacing:.5em;color:#a86f5e;margin-bottom:28px;text-indent:.5em">不 只 讀 書 的 讀 書 會</div>
+  <input id="gatepw" type="password" inputmode="numeric" placeholder="請輸入密碼"
+    style="font-family:'Noto Serif TC',serif;font-size:20px;text-align:center;letter-spacing:.3em;color:#3b302b;background:#fcf8f4;border:1px solid #e7d9cf;border-radius:12px;padding:14px 20px;width:min(260px,80vw);outline:none">
+  <button id="gatebtn"
+    style="margin-top:18px;font-family:'Noto Sans TC',sans-serif;font-size:16px;letter-spacing:.3em;color:#fff;background:#a86f5e;border:none;border-radius:999px;padding:12px 44px;cursor:pointer;text-indent:.3em">進　入</button>
+  <div id="gatemsg" style="margin-top:16px;font-size:13px;letter-spacing:.1em;color:#b9a89d;min-height:1.2em"></div>
+</div>
+<script>
+(function(){
+  var PW="8888";
+  var g=document.getElementById('gate'), inp=document.getElementById('gatepw'),
+      btn=document.getElementById('gatebtn'), msg=document.getElementById('gatemsg');
+  function tryOpen(){
+    if(inp.value===PW){ g.style.display='none'; }
+    else { msg.textContent='密碼不對，再試一次。'; inp.value=''; inp.focus(); }
+  }
+  btn.addEventListener('click',tryOpen);
+  inp.addEventListener('keydown',function(e){ if(e.key==='Enter') tryOpen(); });
+  inp.focus();
+})();
+</script>
+
+<div class="wrap">
+  <header class="top">
+    <div class="kicker">金 剛 經 讀 書 會</div>
+    <h1>金剛經・練習</h1>
+    <div class="sub">選一個進去。</div>
+  </header>
+  <hr class="rule">
+  <div class="menu">
+  <div class="sec">經 ・ 講 義</div>
+  <a class="card" href="jingang-full.html">
+    <div class="n">經 本</div>
+    <div class="t">金剛般若波羅蜜經　全文</div>
+    <div class="d">一鍵翻開，隨時可讀；無分段，一氣呵成。</div>
+    <div class="go">進入 →</div>
+  </a>
+  <a class="card" href="VCPS_reading_5_6.html">
+    <div class="n">講 義</div>
+    <div class="t">金剛經斷疑　第五分第六分</div>
+    <div class="d">本次讀書會的斷疑講義簡報。</div>
+    <div class="go">進入 →</div>
+  </a>
+  <a class="card" href="review_1_6.html">
+    <div class="n">複 習</div>
+    <div class="t">金剛經複習　第一分～第六分</div>
+    <div class="d">六分一覽：每一分的關鍵字、原文與重點。</div>
+    <div class="go">進入 →</div>
+  </a>
+  <a class="card" href="fuxi-1-9.html">
+    <div class="n">測 驗</div>
+    <div class="t">金剛經複習測驗　第一分～第九分</div>
+    <div class="d">十道題，陪你把前九分再走一遍；隨時可翻經對照，答完留下紀錄。</div>
+    <div class="go">進入 →</div>
+  </a>
+  <div class="sec">練 習</div>
+  <a class="card" href="nianhua.html">
+    <div class="n">其 一</div>
+    <div class="t">拈花</div>
+    <div class="d">畫一朵花——那個在心裡打分數的，是誰？</div>
+    <div class="go">進入 →</div>
+  </a>
+  <a class="card" href="shouchi.html">
+    <div class="n">其 二</div>
+    <div class="t">受持</div>
+    <div class="d">抄一句，隨身——為什麼，偏偏是這一句？</div>
+    <div class="go">進入 →</div>
+  </a>
+  <a class="card" href="zixing.html">
+    <div class="n">其 三</div>
+    <div class="t">自性</div>
+    <div class="d">那個「神」，是在外面，還是你始終懷疑的自己？</div>
+    <div class="go">進入 →</div>
+  </a>
+  <a class="card" href="bushi.html">
+    <div class="n">其 四</div>
+    <div class="t">佈施</div>
+    <div class="d">這句話，你第一個想送給誰？</div>
+    <div class="go">進入 →</div>
+  </a>
+  <a class="card" href="diandao.html">
+    <div class="n">其 五</div>
+    <div class="t">顛倒</div>
+    <div class="d">把花顛倒過來——花者，即非花，是名花。</div>
+    <div class="go">進入 →</div>
+  </a>
+  <div class="sec">遊 戲</div>
+  <a class="card" href="shou-guang.html">
+    <div class="n">體 驗</div>
+    <div class="t">守光</div>
+    <div class="d">一盞要你守著、卻會被你「守」死的光。</div>
+    <div class="go">進入 →</div>
+  </a>
+  <a class="card" href="zhongdao.html">
+    <div class="n">體 驗</div>
+    <div class="t">中道</div>
+    <div class="d">點高、點低都繞遠路；最快是中間——可中間一直在移。</div>
+    <div class="go">進入 →</div>
+  </a>
+  <a class="card" href="jieguang.html">
+    <div class="n">體 驗</div>
+    <div class="t">接光</div>
+    <div class="d">接住落下的光：籃子，從不在你以為的地方。</div>
+    <div class="go">進入 →</div>
+  </a>
+  <a class="card" href="mixin.html">
+    <div class="n">體 驗</div>
+    <div class="t">覓心</div>
+    <div class="d">把散落的字拼回句子；五句之後，只剩下一個——心。</div>
+    <div class="go">進入 →</div>
+  </a>
+  <a class="card" href="shefa.html">
+    <div class="n">體 驗</div>
+    <div class="t">捨筏</div>
+    <div class="d">把那一槽接到圓滿——可要怎樣，才算圓滿？</div>
+    <div class="go">進入 →</div>
+  </a>
+  <a class="card" href="chuandeng.html">
+    <div class="n">體 驗</div>
+    <div class="t">傳燈</div>
+    <div class="d">運一盞燈、穩穩疊上去；手一抖，整座就倒。</div>
+    <div class="go">進入 →</div>
+  </a>
+  <a class="card" href="kongge.html">
+    <div class="n">體 驗</div>
+    <div class="t">空格</div>
+    <div class="d">替別人寫完的句子，換一個主詞，再讀一次。</div>
+    <div class="go">進入 →</div>
+  </a>
+  <a class="card" href="zisi.html">
+    <div class="n">體 驗</div>
+    <div class="t">他們都很自私</div>
+    <div class="d">十回合，分硬幣。你看見的那些人，是誰？</div>
+    <div class="go">進入 →</div>
+  </a>
+  <a class="card" href="wuguize.html">
+    <div class="n">體 驗</div>
+    <div class="t">沒有規則的遊戲</div>
+    <div class="d">一個什麼也沒說的畫面。</div>
+    <div class="go">進入 →</div>
+  </a>
+  <div class="sec">故 事</div>
+  <a class="card" href="5-stories-thinking.html">
+    <div class="n">其 一</div>
+    <div class="t">五則故事</div>
+    <div class="d">先靜靜地讀。五則故事，讀完我們見面再談。</div>
+    <div class="go">進入 →</div>
+  </a>
+  <a class="card" href="3-stories-title.html">
+    <div class="n">其 二</div>
+    <div class="t">三個故事，選一個標題</div>
+    <div class="d">讀完每一則，替它選一個你覺得最適合的標題。</div>
+    <div class="go">進入 →</div>
+  </a>
+  </div>
+  <div class="backhome"><a href="index.html">← 回首頁</a></div>
+  <footer>不 只 讀 書 的 讀 書 會</footer>
+</div>
+</body>
+</html>

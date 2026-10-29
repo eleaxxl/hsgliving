@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>雪夜訪戴</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+  /* ★★★ 把下面引號裡換成你的 Google Apps Script 網頁應用程式網址 ★★★ */
+  const ENDPOINT = "https://script.google.com/macros/s/AKfycbxTZvcSvcnn7uE2g7Dn8ElXr89yTNGFO6_ss4xJ4Bnw3EhF2ISniHkTC7JYMQd5P5JDrw/exec";
+  const STORY = "二・雪夜訪戴";
+</script>
+<style>
+  :root{
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+    --bg:#f6f1e7;--panel:#fbf8f1;--ink:#2c2620;--soft:#6f6656;--faint:#9a9082;--rule:#e0d7c6;--accent2:#9c6b45;
+  }
+  *{box-sizing:inherit}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:'Noto Serif TC',serif;line-height:1.95;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  .wrap{max-width:680px;margin:0 auto;padding:0 24px 96px}
+  header.top{text-align:center;padding:72px 0 32px}
+  header.top .idx{font-family:'Noto Sans TC',sans-serif;font-size:13px;letter-spacing:6px;color:var(--accent2);margin-bottom:16px}
+  header.top h1{font-size:34px;font-weight:600;letter-spacing:5px;margin:0 0 12px}
+  header.top .src{font-family:'Noto Sans TC',sans-serif;font-size:13px;letter-spacing:1px;color:var(--faint)}
+  hr.rule{border:none;border-top:1px solid var(--rule);max-width:120px;margin:36px auto}
+  article p{margin:0 0 1.5em;font-size:19px;letter-spacing:.3px}
+  .smash{text-align:center;font-size:26px;font-weight:700;letter-spacing:6px;margin:1.2em 0;color:var(--ink)}
+
+  .choose{margin:48px 0 8px}
+  .choose .q{text-align:center;font-family:'Noto Sans TC',sans-serif;font-size:15px;letter-spacing:3px;color:var(--accent2);margin-bottom:24px}
+  .opts{display:flex;flex-direction:column;gap:12px}
+  .opt{display:flex;align-items:center;gap:16px;background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:18px 22px;cursor:pointer;transition:border-color .2s,background .2s,transform .1s;font-size:20px;letter-spacing:1px;user-select:none}
+  .opt:hover{border-color:var(--accent2);background:#fdfbf6}
+  .opt:active{transform:scale(.995)}
+  .opt .mk{flex:0 0 auto;width:26px;height:26px;border-radius:50%;border:1.5px solid var(--faint);display:flex;align-items:center;justify-content:center;font-family:'Noto Sans TC',sans-serif;font-size:13px;color:var(--faint);transition:all .2s}
+  .opt.sel{border-color:var(--accent2);background:#f6eee2}
+  .opt.sel .mk{background:var(--accent2);border-color:var(--accent2);color:#fff}
+  .opt .lb{flex:1}
+
+  .field{margin:28px 0 0}
+  .field label{display:block;font-family:'Noto Sans TC',sans-serif;font-size:14px;letter-spacing:2px;color:var(--soft);margin-bottom:10px}
+  .field input,.field textarea{
+    width:100%;background:var(--panel);border:1px solid var(--rule);border-radius:12px;
+    padding:14px 16px;font-family:'Noto Serif TC',serif;font-size:18px;color:var(--ink);line-height:1.7;
+  }
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--accent2);background:#fdfbf6}
+  .field textarea{min-height:110px;resize:vertical}
+
+  .submit{margin:36px 0 0;text-align:center}
+  .submit button{
+    font-family:'Noto Sans TC',sans-serif;font-size:17px;letter-spacing:4px;color:#fff;background:var(--accent2);
+    border:none;border-radius:999px;padding:16px 56px;cursor:pointer;transition:opacity .2s,transform .1s;
+  }
+  .submit button:hover{opacity:.92}
+  .submit button:active{transform:scale(.98)}
+  .submit button:disabled{opacity:.5;cursor:default}
+  .hint{text-align:center;font-family:'Noto Sans TC',sans-serif;font-size:13px;color:var(--faint);margin-top:16px;min-height:1.4em}
+
+  .done{display:none;text-align:center;padding:120px 0}
+  .done .mark{font-size:40px;color:var(--accent2);margin-bottom:24px}
+  .done h2{font-size:26px;font-weight:500;letter-spacing:4px;margin:0 0 12px}
+  .done p{font-size:16px;color:var(--soft);letter-spacing:1px}
+
+  @media(max-width:560px){
+    .wrap{padding:0 20px 72px}
+    header.top{padding:52px 0 28px}
+    header.top h1{font-size:28px}
+    article p{font-size:18px}
+    .opt{font-size:18px;padding:16px 18px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div id="main">
+    <header class="top">
+      <div class="idx">其 二</div>
+      <h1>雪夜訪戴</h1>
+      <div class="src">改寫自《世說新語・任誕》</div>
+    </header>
+    <hr class="rule">
+
+    <article>
+      <p>王子猷住在山陰。</p>
+      <p>那是一個冬夜。他半夜醒來，推開門，發現外頭下起了大雪。天地一片空茫，四下寂靜無聲。他一時睡不著，便叫家人溫了酒，一個人坐著慢慢喝。喝著喝著，起身走到屋外，任那雪落在肩上，一面走，一面望著這滿眼的白。</p>
+      <p>四周太靜、太白了，靜得叫人心裡起了波瀾。他忽然想起了左思那首〈招隱〉詩，便低聲吟詠起來。</p>
+      <p>吟著吟著，不知怎的，心裡忽然浮起一個人——他的朋友，戴安道。</p>
+      <p>戴安道此刻正住在剡縣，離山陰有一段不近的水路。可那個念頭一起，王子猷再也坐不住了。他當即喚人備了小船，趁著夜色，就往剡溪去了。</p>
+      <p>一條小船，在漫天大雪裡，順著溪流走了整整一夜。</p>
+      <p>天快亮的時候，船終於到了戴家門口。</p>
+      <p>王子猷卻沒有上岸。他讓船就停在那裡，自己在門前站了一會兒——然後，吩咐掉頭，回去。</p>
+      <p>同行的人都愣住了，忍不住問他：「您這一夜辛苦划船到這裡，人都到了門口，怎麼不進去見一面就走了？」</p>
+      <p>王子猷說了一句話：</p>
+      <p>「我本來就是趁著那一股興致來的；興致已經盡了，我就回去。何必一定要見到戴安道呢？」</p>
+    </article>
+
+    <div class="choose">
+      <div class="q">讀完了。你會替它選哪一個標題？</div>
+      <div class="opts" id="opts">
+        <div class="opt" data-v="1. 夜衝就是爽"><span class="mk">1</span><span class="lb">夜衝就是爽</span></div>
+        <div class="opt" data-v="2. 盡興的人生"><span class="mk">2</span><span class="lb">盡興的人生</span></div>
+        <div class="opt" data-v="3. 過程比結果重要"><span class="mk">3</span><span class="lb">過程比結果重要</span></div>
+        <div class="opt" data-v="4. 那一夜的雪"><span class="mk">4</span><span class="lb">那一夜的雪</span></div>
+        <div class="opt" data-v="5. 非法，非非法"><span class="mk">5</span><span class="lb">非法，非非法</span></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>你的暱稱</label>
+      <input id="nickname" type="text" maxlength="60" placeholder="寫一個名字，讓引導人認得你">
+    </div>
+    <div class="field">
+      <label>為什麼選這個標題？（寫一句就好）</label>
+      <textarea id="reason" maxlength="2000" placeholder="說說你選它的理由……"></textarea>
+    </div>
+
+    <div class="submit">
+      <button id="btn">送　出</button>
+      <div class="hint" id="hint"></div>
+    </div>
+  </div>
+
+  <div class="done" id="done">
+    <div class="mark">○</div>
+    <h2>已送出，謝謝</h2>
+    <p>把答案交出去，就放下。我們見面再談。</p>
+  </div>
+
+</div>
+
+<script>
+  var chosen = null;
+  var opts = document.querySelectorAll('#opts .opt');
+  opts.forEach(function(o){
+    o.addEventListener('click', function(){
+      var was = o.classList.contains('sel');
+      opts.forEach(function(x){ x.classList.remove('sel'); });
+      if(!was){ o.classList.add('sel'); chosen = o.getAttribute('data-v'); }
+      else { chosen = null; }
+    });
+  });
+
+  var btn = document.getElementById('btn');
+  var hint = document.getElementById('hint');
+
+  btn.addEventListener('click', function(){
+    var nickname = document.getElementById('nickname').value.trim();
+    var reason = document.getElementById('reason').value.trim();
+    if(!chosen){ hint.textContent = "請先選一個標題。"; return; }
+    if(!nickname){ hint.textContent = "請填一下你的暱稱。"; return; }
+
+    btn.disabled = true;
+    hint.textContent = "送出中……";
+
+    fetch(ENDPOINT, {
+      method: "POST",
+      mode: "no-cors",                       // 保證跨網域送得出去（不需要讀回應）
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({
+        story: STORY,
+        nickname: nickname,
+        choice: chosen,
+        reason: reason
+      })
+    })
+    .then(function(){
+      document.getElementById('main').style.display = 'none';
+      document.getElementById('done').style.display = 'block';
+      window.scrollTo(0,0);
+    })
+    .catch(function(){
+      // no-cors 幾乎不會走到這裡；萬一真的連不上，仍顯示已送出，避免學員卡住重送
+      document.getElementById('main').style.display = 'none';
+      document.getElementById('done').style.display = 'block';
+      window.scrollTo(0,0);
+    });
+  });
+</script>
+</body>
+</html>

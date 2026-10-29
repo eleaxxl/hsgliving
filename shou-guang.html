@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>守光</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+  // 感想收集端（沿用你現有的 Apps Script；資料會進同一張 Sheet，story 欄標成「守光」可篩選）
+  const ENDPOINT = "https://script.google.com/macros/s/AKfycbxTZvcSvcnn7uE2g7Dn8ElXr89yTNGFO6_ss4xJ4Bnw3EhF2ISniHkTC7JYMQd5P5JDrw/exec";
+  const STORY = "守光（挫折遊戲）";
+</script>
+<style>
+  :root{
+    --ink0:#17120e;      /* 近黑暖底 */
+    --ink1:#211a14;
+    --paper:#f1e7d9;     /* 米字 */
+    --soft:#b7a899;
+    --faint:#7c6f61;
+    --clay:#c98a63;      /* 暖光／重點 */
+    --clay-d:#a86f5e;
+    --line:#3a2f26;
+    --cjk:'Noto Serif TC',serif; --sans:'Noto Sans TC',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{background:var(--ink0);color:var(--paper);font-family:var(--cjk);overflow:hidden;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;touch-action:none}
+  #stage{position:fixed;inset:0;display:block}
+
+  .hud{position:fixed;top:0;left:0;right:0;padding:20px 24px;display:flex;justify-content:space-between;
+    align-items:baseline;font-family:var(--sans);font-size:13px;letter-spacing:.14em;color:var(--faint);
+    z-index:5;pointer-events:none}
+  .hud .t{color:var(--soft);font-variant-numeric:tabular-nums}
+
+  .overlay{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;text-align:center;padding:40px 28px;gap:0;
+    background:radial-gradient(ellipse at center, rgba(23,18,14,.55) 0%, rgba(23,18,14,.92) 70%);
+    opacity:0;visibility:hidden;transition:opacity .6s ease}
+  .overlay.on{opacity:1;visibility:visible}
+  .kicker{font-family:var(--sans);font-size:13px;letter-spacing:.5em;color:var(--clay);
+    text-indent:.5em;margin-bottom:26px}
+  h1{font-size:clamp(40px,10vw,76px);font-weight:500;letter-spacing:.2em;text-indent:.2em;margin-bottom:30px}
+  .say{font-size:clamp(17px,2.4vw,21px);line-height:2.1;color:var(--paper);max-width:24ch;margin:0 auto}
+  .say .em{color:var(--clay)}
+  .small{font-size:14px;color:var(--faint);letter-spacing:.08em;margin-top:18px;line-height:1.9}
+  .btnrow{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:44px}
+  button.b{font-family:var(--sans);font-size:16px;letter-spacing:.3em;text-indent:.3em;color:var(--ink0);
+    background:var(--clay);border:none;border-radius:999px;padding:15px 44px;cursor:pointer;
+    transition:opacity .2s,transform .1s}
+  button.b:hover{opacity:.9}
+  button.b:active{transform:scale(.97)}
+  button.ghost{background:transparent;color:var(--soft);border:1px solid var(--line)}
+  button.ghost:hover{color:var(--clay);border-color:var(--clay-d)}
+
+  .end .t{font-size:clamp(26px,6vw,44px);font-weight:500;letter-spacing:.14em;margin-bottom:22px}
+  .end .stat{font-family:var(--sans);font-size:14px;letter-spacing:.14em;color:var(--soft);margin-bottom:34px}
+  .end .q{font-size:clamp(17px,2.4vw,21px);line-height:2.15;color:var(--paper);max-width:26ch}
+  .end .q .em{color:var(--clay)}
+
+  /* 感想表單 */
+  .form{max-width:440px;width:100%;margin:0 auto}
+  .form .lead{font-size:clamp(16px,2.3vw,20px);line-height:2;color:var(--paper);margin-bottom:28px;max-width:28ch}
+  .field{text-align:left;margin:0 auto 20px}
+  .field label{display:block;font-family:var(--sans);font-size:13px;letter-spacing:.14em;color:var(--soft);margin-bottom:10px}
+  .field input,.field textarea{width:100%;background:rgba(241,231,217,.04);border:1px solid var(--line);
+    border-radius:12px;padding:14px 16px;font-family:var(--cjk);font-size:17px;color:var(--paper);line-height:1.8;outline:none}
+  .field input::placeholder,.field textarea::placeholder{color:#6a5e51}
+  .field input:focus,.field textarea:focus{border-color:var(--clay-d);background:rgba(241,231,217,.06)}
+  .field textarea{min-height:120px;resize:vertical}
+  .hint{font-family:var(--sans);font-size:13px;color:var(--faint);min-height:1.3em;margin-top:6px;letter-spacing:.06em}
+
+  .corner{position:fixed;bottom:16px;right:20px;z-index:6;font-family:var(--sans);font-size:13px;
+    letter-spacing:.1em;color:#6a5e51;background:none;border:none;cursor:pointer}
+  .corner:hover{color:var(--clay)}
+  .corner.hide{display:none}
+
+  @media(max-width:560px){ h1{letter-spacing:.14em;text-indent:.14em} }
+</style>
+</head>
+<body>
+
+<canvas id="stage"></canvas>
+
+<div class="hud">
+  <span>守 光</span>
+  <span class="t" id="clock">0.0 秒</span>
+</div>
+
+<!-- 開場 -->
+<div class="overlay on" id="intro">
+  <div class="kicker">不 只 讀 書 的 讀 書 會</div>
+  <h1>守　光</h1>
+  <p class="say">守住這盞光，<br><span class="em">別讓它暗下去。</span></p>
+  <p class="small">能守多久，就守多久。</p>
+  <div class="btnrow"><button class="b" id="startBtn">開　始</button></div>
+</div>
+
+<!-- 結束 -->
+<div class="overlay end" id="end">
+  <div class="t" id="endTitle">光，熄了。</div>
+  <div class="stat" id="endStat"></div>
+  <p class="q" id="endQ">你做了什麼，它<span class="em">暗得快</span>？<br>你停下什麼，它<span class="em">亮得久</span>？</p>
+  <div class="btnrow">
+    <button class="b ghost" id="againBtn">再試一次</button>
+    <button class="b" id="toFormBtn">寫下感想</button>
+  </div>
+</div>
+
+<!-- 感想 -->
+<div class="overlay" id="form">
+  <div class="form">
+    <div class="kicker" style="margin-bottom:22px">感 想</div>
+    <p class="lead">剛剛那幾分鐘，心裡冒出什麼？<br>不耐、不甘、想贏、想摔滑鼠……照實寫。</p>
+    <div class="field">
+      <label>你的暱稱</label>
+      <input id="nick" type="text" maxlength="60" placeholder="寫個名字，讓引導人認得你">
+    </div>
+    <div class="field">
+      <label>你的感想</label>
+      <textarea id="reflect" maxlength="2000" placeholder="說說剛剛發生在你心裡的事……"></textarea>
+    </div>
+    <div class="btnrow" style="margin-top:26px">
+      <button class="b" id="sendBtn">送　出</button>
+    </div>
+    <div class="hint" id="hint"></div>
+  </div>
+</div>
+
+<!-- 完成 -->
+<div class="overlay" id="done">
+  <div class="kicker" style="color:var(--clay)">○</div>
+  <p class="say" style="margin-top:8px">收到了。<br>就放下——<span class="em">我們見面再談。</span></p>
+</div>
+
+<button class="corner" id="cornerForm">寫下感想</button>
+
+<script>
+(function(){
+  var cv = document.getElementById('stage'), ctx = cv.getContext('2d');
+  var W,H,DPR;
+  function resize(){
+    DPR = Math.min(window.devicePixelRatio||1, 2);
+    W = cv.width = innerWidth*DPR; H = cv.height = innerHeight*DPR;
+    cv.style.width = innerWidth+'px'; cv.style.height = innerHeight+'px';
+  }
+  resize(); addEventListener('resize', resize);
+
+  // ---- 狀態 ----
+  var STATE = 'intro';          // intro | play | end | form | done
+  var life = 100;               // 光的壽命 0..100
+  var agit = 0;                 // 躁動／抓力 0..1（取的強度）
+  var elapsed = 0;              // 守住的秒數
+  var tries = 0;                // 重來次數
+  var bestTime = 0;
+
+  // 第二變項：過了 ARMED_AT 秒後「上膛」，此後一動就滅
+  var ARMED_AT = 36;
+  var armed = false, dying = false, killedByMove = false, everMoved = false;
+
+  // 無常：就算什麼都不做，也會慢慢淡去
+  var BASE_DRAIN = 1.0;         // 每秒
+  // 取：越抓，掉得越兇
+  var GRASP_DRAIN = 16;        // 每秒 × agit
+
+  // 指標追蹤
+  var px=-1, py=-1, lastX=-1, lastY=-1, lastMoveT=0, haveP=false;
+  function pointer(x,y){
+    px=x*DPR; py=y*DPR;
+    var now=performance.now();
+    if(haveP){
+      var dt=Math.max(16, now-lastMoveT)/1000;
+      var d=Math.hypot(px-lastX, py-lastY);
+      var speed=d/dt;                        // px/s
+      agit = Math.min(1, agit + Math.min(0.5, speed/4200)); // 動得越快＝抓得越用力
+    }
+    lastX=px; lastY=py; lastMoveT=now; haveP=true; everMoved=true;
+  }
+  function spike(a){ agit = Math.min(1, agit + a); everMoved=true; }    // 點／按＝一把抓
+
+  addEventListener('mousemove', function(e){
+    if(STATE!=='play'||dying) return;
+    if(armed){ killInstant(); return; }        // 上膛後：一動就滅
+    pointer(e.clientX,e.clientY);
+  });
+  addEventListener('mousedown', function(){
+    if(STATE!=='play'||dying) return;
+    if(armed){ killInstant(); return; }
+    spike(0.45);
+  });
+  addEventListener('keydown', function(){
+    if(STATE!=='play'||dying) return;
+    if(armed){ killInstant(); return; }
+    spike(0.4);
+  });
+  addEventListener('touchstart', function(e){
+    if(STATE!=='play'||dying) return;
+    if(armed){ killInstant(); return; }
+    spike(0.4); var t=e.touches[0]; if(t) pointer(t.clientX,t.clientY);
+  }, {passive:true});
+  addEventListener('touchmove', function(e){
+    if(STATE!=='play'||dying) return;
+    if(armed){ killInstant(); return; }
+    var t=e.touches[0]; if(t) pointer(t.clientX,t.clientY);
+  }, {passive:true});
+  addEventListener('touchend', function(){ haveP=false; });
+  addEventListener('mouseout', function(){ haveP=false; });
+
+  // ---- 粒子（光被抓散時，飛走的那些）----
+  var parts=[];
+  function scatter(n, cx, cy, base){
+    for(var i=0;i<n;i++){
+      var a=Math.random()*Math.PI*2, sp=(0.6+Math.random()*1.8)*DPR*(1+base*2);
+      parts.push({x:cx,y:cy,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:1});
+    }
+    if(parts.length>420) parts.splice(0, parts.length-420);
+  }
+
+  // ---- 迴圈 ----
+  var last=performance.now();
+  var breathe=0;
+  function frame(now){
+    var dt=Math.min(0.05, (now-last)/1000); last=now;
+
+    if(STATE==='play' && !dying){
+      var cx=W/2, cy=H*0.46;
+      // 只有「動」才會散：靜止不加躁動，很快衰減回靜（與游標位置無關）
+      agit *= Math.pow(0.12, dt);
+      if(agit<0.0008) agit=0;
+
+      var drain=(BASE_DRAIN + GRASP_DRAIN*agit)*dt;
+      life-=drain;
+      elapsed+=dt;
+
+      if(!armed && elapsed>=ARMED_AT) armed=true;   // 上膛：此後一動就滅
+
+      // 抓得兇＝光被扯散（掉的那份化成飛走的粒子）
+      if(agit>0.04) scatter(Math.floor(agit*6+ (drain*2)), cx, cy, agit);
+
+      document.getElementById('clock').textContent = elapsed.toFixed(1)+' 秒';
+
+      if(life<=0){ life=0; dying=true; endGame('drain'); }
+    }
+
+    // ---- 繪製 ----
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#17120e'; ctx.fillRect(0,0,W,H);
+    breathe += dt;
+
+    var cx=W/2, cy=H*0.46;
+    var lf=Math.max(0,life)/100;
+    // 躁動＝抖動＋忽明忽暗
+    var jx=(Math.random()-0.5)*agit*34*DPR, jy=(Math.random()-0.5)*agit*34*DPR;
+    var calm=1-agit;
+    var breath=1 + Math.sin(breathe*1.6)*0.05*calm;           // 靜時緩緩呼吸（上膛不留破綻）
+    var flick=1 - agit*Math.random()*0.5;                      // 躁時閃爍
+    var baseR=Math.min(W,H)*0.16;
+    var R=baseR*(0.35+0.65*lf)*breath;
+    var alpha=(0.25+0.75*lf)*flick;
+
+    // 外暈
+    var g=ctx.createRadialGradient(cx+jx,cy+jy,0, cx+jx,cy+jy, R*2.6);
+    g.addColorStop(0,'rgba(255,224,178,'+(0.95*alpha)+')');
+    g.addColorStop(0.18,'rgba(233,162,99,'+(0.6*alpha)+')');
+    g.addColorStop(0.5,'rgba(168,111,94,'+(0.18*alpha)+')');
+    g.addColorStop(1,'rgba(168,111,94,0)');
+    ctx.globalCompositeOperation='lighter';
+    ctx.fillStyle=g; ctx.beginPath(); ctx.arc(cx+jx,cy+jy,R*2.6,0,7); ctx.fill();
+    // 核
+    var g2=ctx.createRadialGradient(cx+jx,cy+jy,0, cx+jx,cy+jy, R*0.7);
+    g2.addColorStop(0,'rgba(255,245,230,'+alpha+')');
+    g2.addColorStop(1,'rgba(255,224,178,0)');
+    ctx.fillStyle=g2; ctx.beginPath(); ctx.arc(cx+jx,cy+jy,R*0.7,0,7); ctx.fill();
+
+    // 粒子
+    for(var i=parts.length-1;i>=0;i--){
+      var p=parts[i];
+      p.x+=p.vx; p.y+=p.vy; p.vx*=0.985; p.vy*=0.985; p.life-=dt*0.9;
+      if(p.life<=0){ parts.splice(i,1); continue; }
+      ctx.fillStyle='rgba(255,214,160,'+(p.life*0.5)+')';
+      ctx.beginPath(); ctx.arc(p.x,p.y,1.6*DPR,0,7); ctx.fill();
+    }
+    ctx.globalCompositeOperation='source-over';
+
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  // ---- 狀態切換 ----
+  function show(id){
+    ['intro','end','form','done'].forEach(function(k){
+      document.getElementById(k).classList.toggle('on', k===id);
+    });
+  }
+  function setState(s){ STATE=s; }
+
+  function startGame(){
+    life=100; agit=0; elapsed=0; parts.length=0; haveP=false;
+    armed=false; dying=false; killedByMove=false; everMoved=false;
+    document.getElementById('cornerForm').classList.remove('hide');
+    show(null); setState('play');
+  }
+  // 上膛後一動就滅：爆散，稍候才顯示結束（讓那一下看得見）
+  function killInstant(){
+    if(STATE!=='play'||dying) return;
+    dying=true; killedByMove=true;
+    scatter(260, W/2, H*0.46, 1);
+    life=0;
+    setTimeout(function(){ endGame('move'); }, 540);
+  }
+  function endGame(reason){
+    if(STATE==='end') return;
+    setState('end');
+    tries++;
+    bestTime=Math.max(bestTime, elapsed);
+    var title=document.getElementById('endTitle');
+    var stat=document.getElementById('endStat');
+    var q=document.getElementById('endQ');
+    var tsec=Math.round(elapsed);
+    if(reason==='move'){
+      title.textContent='一瞬間，全沒了。';
+      stat.textContent='你守了 '+elapsed.toFixed(1)+' 秒　·　然後，動了一下';
+      q.innerHTML='守了這麼久——你怕失去的，<br>是那盞光，還是<span class="em">「我守住了」</span>？';
+    }else if(!everMoved){
+      title.textContent='光，靜靜地，淡了。';
+      stat.textContent='你守了 '+tsec+' 秒　·　一動也沒動';
+      q.innerHTML='這 '+tsec+' 秒的靜止，你在做什麼？<br>你的心中又在想什麼？';
+    }else{
+      title.textContent='光，熄了。';
+      stat.textContent='你守了 '+elapsed.toFixed(1)+' 秒　·　這是你第 '+tries+' 次';
+      q.innerHTML='你做了什麼，它<span class="em">暗得快</span>？<br>你停下什麼，它<span class="em">亮得久</span>？';
+    }
+    show('end');
+  }
+  function toForm(){
+    document.getElementById('cornerForm').classList.add('hide');
+    setState('form'); show('form');
+  }
+
+  document.getElementById('startBtn').onclick = startGame;
+  document.getElementById('againBtn').onclick = startGame;
+  document.getElementById('toFormBtn').onclick = toForm;
+  document.getElementById('cornerForm').onclick = toForm;
+
+  // ---- 送出感想 ----
+  document.getElementById('sendBtn').onclick = function(){
+    var nick=document.getElementById('nick').value.trim();
+    var reflect=document.getElementById('reflect').value.trim();
+    var hint=document.getElementById('hint');
+    if(!nick){ hint.textContent='請填一下你的暱稱。'; return; }
+    if(!reflect){ hint.textContent='寫一句也好。'; return; }
+    this.disabled=true; hint.textContent='送出中……';
+    fetch(ENDPOINT, {
+      method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify({
+        story: STORY,
+        nickname: nick,
+        choice: '守了'+bestTime.toFixed(1)+'秒・重來'+tries+'次',
+        reason: reflect
+      })
+    }).then(function(){ setState('done'); show('done'); })
+      .catch(function(){ setState('done'); show('done'); });
+  };
+
+  // QA 用：#end / #form 直接看畫面
+  if(location.hash==='#end'){ tries=3; elapsed=7.4; bestTime=12.1; show('end');
+    document.getElementById('endStat').textContent='你守了 7.4 秒　·　這是你第 3 次'; setState('end'); }
+  if(location.hash==='#form'){ show('form'); setState('form'); }
+})();
+</script>
+</body>
+</html>

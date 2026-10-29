@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>沒有規則的遊戲</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+  const ENDPOINT = "https://script.google.com/macros/s/AKfycbxTZvcSvcnn7uE2g7Dn8ElXr89yTNGFO6_ss4xJ4Bnw3EhF2ISniHkTC7JYMQd5P5JDrw/exec";
+  const STORY = "沒有規則的遊戲（遊戲）";
+</script>
+<style>
+  :root{
+    --ink0:#17120e; --ink1:#211a14; --paper:#f1e7d9; --soft:#b7a899; --faint:#7c6f61;
+    --clay:#c98a63; --clay-d:#a86f5e; --line:#3a2f26;
+    --red:#cf5a4a; --blue:#6489c6; --yellow:#e3b952; --green:#72a37c; --grey:#8f857b;
+    --cjk:'Noto Serif TC',serif; --sans:'Noto Sans TC',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{background:var(--ink0);color:var(--paper);font-family:var(--cjk);line-height:1.9;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    padding:calc(env(safe-area-inset-top,0px) + 40px) max(16px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 56px) max(16px,env(safe-area-inset-left,0px))}
+  main{max-width:760px;margin:0 auto}
+  section{display:flex;flex-direction:column;gap:22px}
+  #intro{min-height:70vh;justify-content:center;align-items:center;text-align:center}
+  .kicker{font-family:var(--sans);font-size:13px;letter-spacing:.5em;color:var(--clay);text-indent:.5em;text-align:center}
+  h1{font-size:clamp(34px,8.5vw,64px);font-weight:500;letter-spacing:.18em;text-indent:.18em;line-height:1.3;text-align:center}
+  p{font-size:clamp(16px,2.3vw,19px);line-height:2.05}
+  .say{max-width:30ch;margin:0 auto;text-align:center}
+  .em{color:var(--clay)}
+  .small{font-family:var(--sans);font-size:14px;color:var(--faint);letter-spacing:.08em;line-height:1.9;text-align:center}
+  .btnrow{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+  button.b{font-family:var(--sans);font-size:16px;letter-spacing:.3em;text-indent:.3em;color:var(--ink0);background:var(--clay);
+    border:none;border-radius:999px;padding:14px 40px;cursor:pointer;transition:opacity .2s,transform .1s}
+  button.b:hover{opacity:.9} button.b:active{transform:scale(.97)} button.b:disabled{opacity:.4}
+  button.ghost{background:transparent;color:var(--soft);border:1px solid var(--line)}
+  button.ghost:hover{color:var(--clay);border-color:var(--clay-d)}
+  button:focus-visible{outline:2px solid var(--clay);outline-offset:3px}
+  .back{display:block;text-align:center;margin-top:36px;font-family:var(--sans);font-size:13px;letter-spacing:3px;color:var(--faint);text-decoration:none}
+  .back:hover{color:var(--clay)}
+
+  #field{position:relative;background:var(--ink1);border:1px solid var(--line);border-radius:16px;height:min(70vh,580px);min-height:380px;overflow:hidden}
+  #counter{position:absolute;top:12px;left:16px;font-family:var(--sans);font-size:17px;color:var(--faint);font-variant-numeric:tabular-nums;pointer-events:none}
+  .shape{position:absolute;border:0;padding:0;cursor:pointer;transform:translate(-50%,-50%);transition:opacity .45s,transform .45s}
+  .shape.circle{border-radius:50%} .shape.square{border-radius:3px}
+  .shape.triangle{clip-path:polygon(50% 4%,96% 94%,4% 94%)}
+  .shape.gone{opacity:0;transform:translate(-50%,-50%) scale(.4)}
+  .shape.new{opacity:0;transform:translate(-50%,-50%) scale(.6)}
+  #redBtn{position:absolute;right:18px;bottom:18px;width:56px;height:56px;border-radius:50%;border:4px solid #8e3a2f;background:var(--red);cursor:pointer;box-shadow:0 3px 0 #6d2c24}
+  #redBtn:active{transform:translateY(2px);box-shadow:0 1px 0 #6d2c24}
+  #redBtn.shake{animation:shake .3s}
+  @keyframes shake{25%{translate:-3px 0}75%{translate:3px 0}}
+  .foot{display:flex;justify-content:flex-end;min-height:52px}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+  .obs{list-style:none;display:flex;flex-direction:column;gap:16px}
+  .obs li{border-left:2px solid var(--clay-d);padding:2px 0 2px 16px;font-size:17px;line-height:1.95}
+  .obs b{color:var(--clay);font-weight:600}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+  @media(max-width:560px){.cols{grid-template-columns:1fr}}
+  .cols>div{display:flex;flex-direction:column;gap:10px;min-width:0}
+  .lbl{font-family:var(--sans);font-size:12px;letter-spacing:.3em;color:var(--clay)}
+  .bar{display:grid;grid-template-columns:4em 1fr 4.2em;align-items:center;gap:10px;font-family:var(--sans);font-size:13px;font-variant-numeric:tabular-nums}
+  .bar .track{height:10px;background:rgba(241,231,217,.06);border-radius:6px;overflow:hidden}
+  .bar .fill{height:100%;border-radius:6px}
+  .bar .n{color:var(--faint);text-align:right}
+  .big{font-size:clamp(24px,5.4vw,36px);font-weight:500;letter-spacing:.1em;text-align:center;line-height:1.6}
+  .qs{list-style:none;counter-reset:q;display:flex;flex-direction:column;gap:12px}
+  .qs li{counter-increment:q;position:relative;padding-left:2.2em;font-size:17px;line-height:1.95}
+  .qs li::before{content:counter(q);position:absolute;left:0;top:.35em;width:1.5em;height:1.5em;border:1px solid var(--clay-d);border-radius:50%;color:var(--clay);font-family:var(--sans);font-size:.72em;display:flex;align-items:center;justify-content:center}
+  hr.rule{border:none;border-top:1px solid var(--line);width:110px;margin:14px auto}
+
+  .field{display:flex;flex-direction:column;gap:8px}
+  .field label{font-family:var(--sans);font-size:13px;letter-spacing:.14em;color:var(--soft)}
+  .field input,.field textarea{width:100%;background:rgba(241,231,217,.04);border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-family:var(--cjk);font-size:17px;color:var(--paper);line-height:1.8;outline:none}
+  .field input::placeholder,.field textarea::placeholder{color:#6a5e51}
+  .field input:focus,.field textarea:focus{border-color:var(--clay-d);background:rgba(241,231,217,.06)}
+  .field textarea{min-height:120px;resize:vertical}
+  .hint{text-align:center;font-family:var(--sans);font-size:13px;color:var(--faint);min-height:1.3em}
+  [hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main>
+
+  <section id="intro">
+    <div class="kicker">不 只 讀 書 的 讀 書 會</div>
+    <h1>沒有規則的遊戲</h1>
+    <p class="say">準備好了，就開始。</p>
+    <div class="btnrow"><button class="b" id="startBtn">開　始</button></div>
+    <a class="back" href="jing.html">← 回金剛經選單</a>
+  </section>
+
+  <section id="play" hidden>
+    <div id="field">
+      <div id="counter">0</div>
+      <button id="redBtn" aria-label="按鈕"></button>
+    </div>
+    <div class="foot"><button class="b ghost" id="endBtn" hidden>我玩完了</button></div>
+  </section>
+
+  <section id="result" hidden>
+    <div class="kicker">這 個 遊 戲 沒 有 規 則</div>
+    <p class="say">點什麼都不加分，也不扣分。<br>不點，也沒有關係。</p>
+    <p class="small">以下，是你在沒有任何要求的時候，自己做出的選擇。</p>
+    <ul class="obs" id="obs"></ul>
+    <hr class="rule">
+    <div class="cols">
+      <div><div class="lbl">顏 色</div><div id="colorBars"></div></div>
+      <div><div class="lbl">形 狀</div><div id="shapeBars"></div></div>
+    </div>
+    <p class="small">右邊的數字是：你點的次數 / 畫面上出現過的次數。<br>每一種顏色、每一種形狀，出現的機率都一樣。</p>
+    <hr class="rule">
+    <p class="big">這些規則，<br><span class="em">是誰告訴你的？</span></p>
+    <ol class="qs">
+      <li>剛才心裡有沒有一個「應該」？應該點什麼、避開什麼、做到什麼程度才算好。</li>
+      <li>左上角那個數字，讓你在意嗎？它只是在數你點了幾下。</li>
+      <li>生活裡，你什麼時候也會在沒人要求的地方，替自己立規矩？</li>
+    </ol>
+    <div class="btnrow">
+      <button class="b ghost" id="againBtn">再玩一次</button>
+      <button class="b" id="toFormBtn">寫下感想</button>
+    </div>
+  </section>
+
+  <section id="form" hidden>
+    <div class="kicker">感 想</div>
+    <p class="say">剛剛，你替自己<br>定了什麼<span class="em">沒人給的規則</span>？</p>
+    <div class="field"><label for="nick">你的暱稱</label>
+      <input id="nick" type="text" maxlength="60" placeholder="寫個名字，讓引導人認得你"></div>
+    <div class="field"><label for="reflect">你的感想</label>
+      <textarea id="reflect" maxlength="2000" placeholder="我一直不敢按那顆紅色的……"></textarea></div>
+    <div class="btnrow"><button class="b" id="sendBtn">送　出</button></div>
+    <div class="hint" id="hint"></div>
+  </section>
+
+  <section id="done" hidden style="padding-top:18vh">
+    <div class="kicker">○</div>
+    <p class="say">收到了。<br>就放下——<span class="em">我們見面再談。</span></p>
+    <a class="back" href="jing.html">← 回金剛經選單</a>
+  </section>
+
+</main>
+
+<script>
+(function(){
+  var COLORS=['red','blue','yellow','green','grey'];
+  var CNAME={red:'紅色',blue:'藍色',yellow:'黃色',green:'綠色',grey:'灰色'};
+  var SHAPES=['circle','square','triangle'];
+  var SNAME={circle:'圓形',square:'方形',triangle:'三角形'};
+  var COUNT=16, END_AFTER=25, MAX_TIME=180;
+  function $(id){return document.getElementById(id);}
+  var field=$('field');
+  var t0, clicks, emptyClicks, redClicks, spawned, timers=[], firstClick, ended, duration;
+
+  function now(){return (performance.now()-t0)/1000;}
+  function pick(a){return a[Math.floor(Math.random()*a.length)];}
+  function show(id){['intro','play','result','form','done'].forEach(function(k){$(k).hidden=(k!==id);});window.scrollTo(0,0);}
+
+  function freePos(){
+    var shapes=[].slice.call(field.querySelectorAll('.shape:not(.gone)'));
+    for(var k=0;k<40;k++){
+      var x=8+Math.random()*84, y=12+Math.random()*78;
+      if(x>78&&y>72) continue;
+      var ok=shapes.every(function(s){return Math.hypot(parseFloat(s.style.left)-x,(parseFloat(s.style.top)-y)*0.7)>11;});
+      if(ok) return [x,y];
+    }
+    return [10+Math.random()*60,15+Math.random()*50];
+  }
+  function spawn(){
+    if(ended) return;
+    var color=pick(COLORS), shape=pick(SHAPES), size=34+Math.round(Math.random()*30);
+    spawned.color[color]++; spawned.shape[shape]++;
+    var b=document.createElement('button');
+    b.className='shape '+shape+' new';
+    b.style.background='var(--'+color+')';
+    b.style.width=b.style.height=size+'px';
+    var p=freePos(); b.style.left=p[0]+'%'; b.style.top=p[1]+'%';
+    b.setAttribute('data-color',color); b.setAttribute('data-shape',shape);
+    b.setAttribute('aria-label',CNAME[color]+SNAME[shape]);
+    field.appendChild(b);
+    requestAnimationFrame(function(){requestAnimationFrame(function(){b.classList.remove('new');});});
+  }
+
+  function start(){
+    [].forEach.call(field.querySelectorAll('.shape'),function(s){s.remove();});
+    clicks=[]; emptyClicks=0; redClicks=0; firstClick=null; ended=false;
+    spawned={color:{},shape:{}};
+    COLORS.forEach(function(c){spawned.color[c]=0;}); SHAPES.forEach(function(s){spawned.shape[s]=0;});
+    $('counter').textContent='0'; $('endBtn').hidden=true;
+    show('play');
+    for(var i=0;i<COUNT;i++) spawn();
+    t0=performance.now();
+    timers.forEach(clearTimeout);
+    timers=[setTimeout(function(){$('endBtn').hidden=false;},END_AFTER*1000), setTimeout(finish,MAX_TIME*1000)];
+  }
+
+  function bump(){ if(firstClick===null) firstClick=now(); $('counter').textContent=String(clicks.length+redClicks+emptyClicks); }
+
+  field.addEventListener('click',function(e){
+    if(ended) return;
+    var s=e.target.closest('.shape');
+    if(s){
+      if(s.classList.contains('gone')) return;
+      clicks.push({color:s.getAttribute('data-color'),shape:s.getAttribute('data-shape')});
+      s.classList.add('gone');
+      setTimeout(function(){s.remove();},500);
+      setTimeout(spawn,700);
+      bump(); return;
+    }
+    if(e.target.id==='redBtn'){
+      redClicks++;
+      var r=$('redBtn'); r.classList.remove('shake'); void r.offsetWidth; r.classList.add('shake');
+      bump(); return;
+    }
+    emptyClicks++; bump();
+  });
+
+  function shares(counts,base){
+    var total=0,bt=0,k;
+    for(k in counts) total+=counts[k];
+    for(k in base) bt+=base[k];
+    return Object.keys(base).map(function(k){return [k,total?counts[k]/total:0,bt?base[k]/bt:0];});
+  }
+
+  function finish(){
+    if(ended) return; ended=true;
+    timers.forEach(clearTimeout);
+    duration=now();
+    var cc={},sc={};
+    COLORS.forEach(function(c){cc[c]=0;}); SHAPES.forEach(function(s){sc[s]=0;});
+    clicks.forEach(function(c){cc[c.color]++;sc[c.shape]++;});
+    var n=clicks.length, obs=[];
+
+    if(firstClick===null) obs.push('你一下也沒有點。你停留了 <b>'+Math.round(duration)+' 秒</b>，等著什麼發生，或等著被告知可以做什麼。');
+    else if(firstClick>6) obs.push('你等了 <b>'+Math.round(firstClick)+' 秒</b>才第一次動手。那段時間，你也許在等一個說明。');
+    else obs.push('你在 <b>'+firstClick.toFixed(1)+' 秒</b>內就開始點。沒有人說過可以點——你預設了這裡要你「做點什麼」。');
+
+    if(n>=6){
+      var cs=shares(cc,spawned.color).sort(function(a,b){return (b[1]-b[2])-(a[1]-a[2]);});
+      if(cs[0][1]-cs[0][2]>0.1) obs.push('你點的東西裡，<b>'+CNAME[cs[0][0]]+'</b>佔了 '+Math.round(cs[0][1]*100)+'%，但它在畫面上只佔 '+Math.round(cs[0][2]*100)+'%。');
+      var avoid=cs.filter(function(x){return x[2]>0.12&&x[1]<0.06;}).map(function(x){return CNAME[x[0]];});
+      if(avoid.length) obs.push('你幾乎沒碰過<b>'+avoid.join('、')+'</b>。是什麼讓你覺得，它們不該碰？');
+      var ss=shares(sc,spawned.shape).sort(function(a,b){return (b[1]-b[2])-(a[1]-a[2]);});
+      if(ss[0][1]-ss[0][2]>0.12) obs.push('你特別常點<b>'+SNAME[ss[0][0]]+'</b>（'+Math.round(ss[0][1]*100)+'%，畫面上只佔 '+Math.round(ss[0][2]*100)+'%）。');
+      var best={len:1,label:''},cur=1;
+      for(var i=1;i<n;i++){
+        var sameC=clicks[i].color===clicks[i-1].color, sameS=clicks[i].shape===clicks[i-1].shape;
+        if(sameC||sameS){ cur++; if(cur>best.len) best={len:cur,label:sameC?CNAME[clicks[i].color]:SNAME[clicks[i].shape]}; }
+        else cur=1;
+      }
+      if(best.len>=4) obs.push('你曾經連續 <b>'+best.len+' 次</b>只點'+best.label+'。那一刻，你可能以為自己找到了規律。');
+    }
+    if(redClicks>0) obs.push('你按了那顆紅色按鈕 <b>'+redClicks+' 次</b>。它什麼也不做，從頭到尾都是。');
+    else obs.push('你一次也沒按那顆紅色按鈕。沒有人禁止過——是什麼讓你停手？');
+    if(emptyClicks>=3) obs.push('你點了空白處 <b>'+emptyClicks+' 次</b>，像是在試探這個世界的邊界。');
+    var total=n+redClicks+emptyClicks;
+    if(total>0) obs.push('左上角的數字最後是 <b>'+total+'</b>。它只是在數你點了幾下，不代表任何成績。你有沒有為它努力過？');
+    if(duration>=MAX_TIME-1) obs.push('你一直玩到時間用完。「我玩完了」在第 '+END_AFTER+' 秒就出現了。');
+    else if(duration>END_AFTER+5) obs.push('你停留了 <b>'+Math.round(duration)+' 秒</b>。結束鍵在第 '+END_AFTER+' 秒就出現了，你又多待了 '+Math.round(duration-END_AFTER)+' 秒。');
+    else obs.push('結束鍵一出現，你就離開了。你停留了 <b>'+Math.round(duration)+' 秒</b>。');
+
+    $('obs').innerHTML=obs.map(function(o){return '<li>'+o+'</li>';}).join('');
+    var max=1,k;
+    for(k in cc) max=Math.max(max,cc[k]); for(k in sc) max=Math.max(max,sc[k]);
+    $('colorBars').innerHTML=COLORS.map(function(c){return '<div class="bar"><span>'+CNAME[c]+'</span><div class="track"><div class="fill" style="width:'+(cc[c]/max*100)+'%;background:var(--'+c+')"></div></div><span class="n">'+cc[c]+' / '+spawned.color[c]+'</span></div>';}).join('');
+    $('shapeBars').innerHTML=SHAPES.map(function(s){return '<div class="bar"><span>'+SNAME[s]+'</span><div class="track"><div class="fill" style="width:'+(sc[s]/max*100)+'%;background:var(--soft)"></div></div><span class="n">'+sc[s]+' / '+spawned.shape[s]+'</span></div>';}).join('');
+    finish.summary='點了'+total+'下・停留'+Math.round(duration)+'秒・紅鈕'+redClicks+'次';
+    show('result');
+  }
+
+  $('startBtn').onclick=start;
+  $('endBtn').onclick=finish;
+  $('againBtn').onclick=start;
+  $('toFormBtn').onclick=function(){show('form');};
+  $('sendBtn').onclick=function(){
+    var nick=$('nick').value.trim(), reflect=$('reflect').value.trim(), hint=$('hint');
+    if(!nick){hint.textContent='請填一下你的暱稱。';return;}
+    if(!reflect){hint.textContent='寫一句也好。';return;}
+    this.disabled=true; hint.textContent='送出中……';
+    fetch(ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify({story:STORY,nickname:nick,choice:finish.summary||'',reason:reflect})
+    }).then(function(){show('done');}).catch(function(){show('done');});
+  };
+})();
+</script>
+</body>
+</html>

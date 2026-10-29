@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>傳燈</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+  const ENDPOINT = "https://script.google.com/macros/s/AKfycbxTZvcSvcnn7uE2g7Dn8ElXr89yTNGFO6_ss4xJ4Bnw3EhF2ISniHkTC7JYMQd5P5JDrw/exec";
+  const STORY = "傳燈（遊戲）";
+</script>
+<style>
+  :root{
+    --ink0:#17120e; --paper:#f1e7d9; --soft:#b7a899; --faint:#7c6f61;
+    --clay:#c98a63; --clay-d:#a86f5e; --line:#3a2f26;
+    --cjk:'Noto Serif TC',serif; --sans:'Noto Sans TC',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{background:var(--ink0);color:var(--paper);font-family:var(--cjk);overflow:hidden;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;touch-action:none}
+  #stage{position:fixed;inset:0;display:block;cursor:pointer}
+
+  .hud{position:fixed;top:0;left:0;right:0;padding:20px 24px;display:flex;justify-content:space-between;
+    align-items:baseline;font-family:var(--sans);font-size:13px;letter-spacing:.14em;color:var(--faint);z-index:5;pointer-events:none}
+  .hud .t{color:var(--soft);font-variant-numeric:tabular-nums}
+
+  .overlay{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:40px 28px;
+    background:radial-gradient(ellipse at center, rgba(23,18,14,.5) 0%, rgba(23,18,14,.92) 72%);
+    opacity:0;visibility:hidden;transition:opacity .6s ease}
+  .overlay.on{opacity:1;visibility:visible}
+  .kicker{font-family:var(--sans);font-size:13px;letter-spacing:.5em;color:var(--clay);text-indent:.5em;margin-bottom:26px}
+  h1{font-size:clamp(40px,10vw,76px);font-weight:500;letter-spacing:.3em;text-indent:.3em;margin-bottom:28px}
+  .say{font-size:clamp(17px,2.4vw,21px);line-height:2.1;color:var(--paper);max-width:25ch}
+  .say .em{color:var(--clay)}
+  .small{font-size:14px;color:var(--faint);letter-spacing:.08em;margin-top:18px}
+  .btnrow{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:44px}
+  button.b{font-family:var(--sans);font-size:16px;letter-spacing:.3em;text-indent:.3em;color:var(--ink0);
+    background:var(--clay);border:none;border-radius:999px;padding:15px 44px;cursor:pointer;transition:opacity .2s,transform .1s}
+  button.b:hover{opacity:.9}
+  button.b:active{transform:scale(.97)}
+  button.ghost{background:transparent;color:var(--soft);border:1px solid var(--line)}
+  button.ghost:hover{color:var(--clay);border-color:var(--clay-d)}
+
+  .end .t{font-size:clamp(26px,6vw,44px);font-weight:500;letter-spacing:.14em;margin-bottom:22px}
+  .end .stat{font-family:var(--sans);font-size:14px;letter-spacing:.14em;color:var(--soft);margin-bottom:34px}
+  .end .q{font-size:clamp(18px,2.8vw,24px);line-height:2;color:var(--paper);max-width:26ch}
+  .end .q .em{color:var(--clay)}
+
+  .form{max-width:440px;width:100%}
+  .form .lead{font-size:clamp(16px,2.3vw,20px);line-height:2;color:var(--paper);margin-bottom:26px;max-width:28ch;margin-left:auto;margin-right:auto}
+  .field{text-align:left;margin:0 auto 20px}
+  .field label{display:block;font-family:var(--sans);font-size:13px;letter-spacing:.14em;color:var(--soft);margin-bottom:10px}
+  .field input,.field textarea{width:100%;background:rgba(241,231,217,.04);border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;font-family:var(--cjk);font-size:17px;color:var(--paper);line-height:1.8;outline:none}
+  .field input::placeholder,.field textarea::placeholder{color:#6a5e51}
+  .field input:focus,.field textarea:focus{border-color:var(--clay-d);background:rgba(241,231,217,.06)}
+  .field textarea{min-height:110px;resize:vertical}
+  .hint{font-family:var(--sans);font-size:13px;color:var(--faint);min-height:1.3em;margin-top:6px}
+
+  @media(max-width:560px){ h1{letter-spacing:.18em;text-indent:.18em} }
+</style>
+</head>
+<body>
+
+<canvas id="stage"></canvas>
+
+<div class="hud">
+  <span id="count">第 1 / 7 盞</span>
+  <span class="t" id="tip"></span>
+</div>
+
+<!-- 開場 -->
+<div class="overlay on" id="intro">
+  <div class="kicker">不 只 讀 書 的 讀 書 會</div>
+  <h1>傳　燈</h1>
+  <p class="say">把燈從左邊，運到右邊。<br><span class="em">它會晃——移動滑鼠，扶正它。</span></p>
+  <p class="small">到了，五秒內選位置、點一下放下；放偏整座就倒，拖過五秒燈就熄。七盞不倒，就成了。</p>
+  <div class="btnrow"><button class="b" id="startBtn">開　始</button></div>
+</div>
+
+<!-- 結束 -->
+<div class="overlay end" id="end">
+  <div class="t" id="endTitle">十盞都亮了。</div>
+  <div class="stat" id="endStat"></div>
+  <p class="q" id="endQ"></p>
+  <div class="btnrow">
+    <button class="b ghost" id="againBtn">再玩一次</button>
+    <button class="b" id="toFormBtn">寫下感想</button>
+  </div>
+</div>
+
+<!-- 感想 -->
+<div class="overlay" id="form">
+  <div class="form">
+    <div class="kicker" style="margin-bottom:22px">感 想</div>
+    <p class="lead">剛剛那股「緊」——<br>是興奮，還是焦慮？</p>
+    <div class="field"><label>你的暱稱</label>
+      <input id="nick" type="text" maxlength="60" placeholder="寫個名字，讓引導人認得你"></div>
+    <div class="field"><label>你的感想</label>
+      <textarea id="reflect" maxlength="2000" placeholder="運燈、疊燈的時候，我的心……"></textarea></div>
+    <div class="btnrow" style="margin-top:26px"><button class="b" id="sendBtn">送　出</button></div>
+    <div class="hint" id="hint"></div>
+  </div>
+</div>
+
+<!-- 完成 -->
+<div class="overlay" id="done">
+  <div class="kicker" style="color:var(--clay)">○</div>
+  <p class="say" style="margin-top:8px">收到了。<br>就放下——<span class="em">我們見面再談。</span></p>
+</div>
+
+<script>
+(function(){
+  var cv=document.getElementById('stage'), ctx=cv.getContext('2d');
+  var W,H,DPR;
+  function resize(){
+    DPR=Math.min(window.devicePixelRatio||1,2);
+    W=cv.width=innerWidth*DPR; H=cv.height=innerHeight*DPR;
+    cv.style.width=innerWidth+'px'; cv.style.height=innerHeight+'px';
+    layout();
+  }
+
+  var TARGET=7;
+  var THMAX=0.92;
+  // phase: carry（運燈扶正）→ stack（疊上去）→ fall（掉落重運）→ burn（倒塌重來）→ win
+  var STATE='intro', phase='carry';
+  var groundY, startX, destX, baseW, lampW, lampH, carrySpeed, sweepR;
+  var carrier, th, ct, seedA, seedB, cursorX, dropX, dropY, overT, stackT, placeFlash;
+  var tower, count, drops, collapses, outs, anim, t0;
+
+  function layout(){
+    groundY=H*0.80; startX=W*0.12; destX=W*0.80;
+    lampW=Math.max(30,Math.min(46,W*0.07)); lampH=lampW*0.82; baseW=lampW*3.0;
+    carrySpeed=(destX-startX)/9.0; sweepR=baseW*0.6;
+  }
+  function reset(full){
+    layout();
+    if(full){ tower=[]; count=0; drops=0; collapses=0; outs=0; t0=performance.now(); cursorX=W/2; }
+    phase='carry'; carrier={x:startX}; th=0; ct=0; anim=0; overT=0; placeFlash=0;
+    seedA=Math.random()*6.28; seedB=Math.random()*6.28;
+    document.getElementById('count').textContent='第 '+(count+1)+' / '+TARGET+' 盞';
+    document.getElementById('tip').textContent='移動滑鼠，把它扶正';
+  }
+  resize(); addEventListener('resize', resize);
+
+  // 輸入：運燈時移動滑鼠平衡；疊燈時移動滑鼠選位置、點一下（或點畫面）放下
+  function setCursor(x){ cursorX=x*DPR; }
+  function curOff(){ return Math.max(-1,Math.min(1,(cursorX - W/2)/(W*0.42)))*sweepR; }
+  function release(){ if(STATE==='play' && phase==='stack') placeLamp(curOff()); }
+  cv.addEventListener('mousemove', function(e){ setCursor(e.clientX); });
+  cv.addEventListener('mousedown', function(e){ setCursor(e.clientX); release(); });
+  cv.addEventListener('touchmove', function(e){ var t=e.touches[0]; if(t){ e.preventDefault(); setCursor(t.clientX); } }, {passive:false});
+  cv.addEventListener('touchstart', function(e){ var t=e.touches[0]; if(t) setCursor(t.clientX); }, {passive:true});
+  cv.addEventListener('touchend', function(e){ e.preventDefault(); release(); }, {passive:false});
+
+  function comOffset(){ if(!tower.length) return 0; var s=0; for(var i=0;i<tower.length;i++) s+=tower[i].off; return s/tower.length; }
+
+  function stable(){
+    var n=tower.length, i, j, tot=0;
+    for(i=0;i<n;i++) tot+=tower[i].off;
+    if(Math.abs(tot/n) > baseW*0.5) return false;            // 整座重心掉出平台
+    var jit=0.9+Math.random()*0.2;
+    for(var k=0;k<n-1;k++){                                   // 上方那疊是否還壓在下面那盞上
+      var s=0,c=0; for(j=k+1;j<n;j++){ s+=tower[j].off; c++; }
+      if(Math.abs(s/c - tower[k].off) > lampW*0.55*jit) return false;
+    }
+    return true;
+  }
+  function placeLamp(off){
+    tower.push({off:off});
+    if(!stable()){ burn(); return; }     // 疊歪了（上方重心偏出下面那盞）→ 傾倒
+    placeFlash=0.6;           // 放好瞬間，燈閃一下
+    count++;
+    if(count>=TARGET){ phase='win'; anim=0; }
+    else { reset(false); }
+  }
+  function lampFall(){ drops++; phase='fall'; anim=0; }
+  function burn(){ collapses++; phase='burn'; anim=0; }
+  function lampOut(){ outs++; phase='out'; anim=0; }
+
+  var last=performance.now();
+  function frame(now){
+    var dt=Math.min(0.04,(now-last)/1000); last=now;
+
+    if(STATE==='play'){
+      if(placeFlash>0) placeFlash=Math.max(0,placeFlash-dt);
+      if(phase==='carry'){
+        ct+=dt;
+        carrier.x += carrySpeed*dt;
+        var pert = 0.62*Math.sin(ct*0.45+seedA) + 0.30*Math.sin(ct*0.95+seedB);
+        var control = Math.max(-1,Math.min(1,(cursorX - W/2)/(W*0.40)))*1.15;
+        th = pert - control;
+        if(Math.abs(th)>THMAX){ overT+=dt; if(overT>0.7){ lampFall(); } } else { overT=Math.max(0,overT-dt*2); }
+        if(carrier.x>=destX){ carrier.x=destX; phase='stack'; stackT=5;
+          document.getElementById('tip').textContent='五秒內，決定放哪裡'; }
+      }
+      else if(phase==='stack'){
+        dropX=destX + curOff();
+        stackT -= dt;
+        document.getElementById('tip').textContent='五秒內放下…　'+Math.max(0,Math.ceil(stackT));
+        if(stackT<=0){ lampOut(); }
+      }
+      else if(phase==='out'){ anim+=dt; if(anim>0.9){ reset(false); } }
+      else if(phase==='fall'){ anim+=dt; if(anim>1.1){ reset(false); } }
+      else if(phase==='burn'){ anim+=dt; if(anim>1.6){ reset(true); } }
+      else if(phase==='win'){ anim+=dt; if(anim>1.3){ winEnd(); } }
+    }
+
+    // ---- 繪製 ----
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#17120e'; ctx.fillRect(0,0,W,H);
+
+    if(STATE==='play'){
+      // 地面
+      ctx.strokeStyle='rgba(120,108,92,0.25)'; ctx.lineWidth=1.5*DPR;
+      ctx.beginPath(); ctx.moveTo(0,groundY+2*DPR); ctx.lineTo(W,groundY+2*DPR); ctx.stroke();
+      // 底座
+      ctx.fillStyle='rgba(120,100,84,0.5)';
+      rrect(destX-baseW/2, groundY, baseW, 10*DPR, 3*DPR); ctx.fill();
+
+      // 已疊好的塔（塔身由各盞偏移自然呈現；倒塌時整座翻倒）
+      var burning = (phase==='burn');
+      ctx.save();
+      ctx.translate(destX, groundY);
+      if(burning){ ctx.rotate(Math.min(1.1, anim*0.85)*(comOffset()>=0?1:-1)); }
+      for(var i=0;i<tower.length;i++){
+        var lx = tower[i].off, ly = -(i)*lampH - lampH*0.5;
+        var br = burning?Math.max(0,1-anim*0.6):1;
+        if(i===tower.length-1 && placeFlash>0) br = 1 + placeFlash*2.2;   // 放好瞬間閃一下
+        drawLamp(lx, ly, 0, 1, br);
+      }
+      ctx.restore();
+
+      // 運送中的燈
+      if(phase==='carry' || phase==='fall'){
+        // 托盤
+        ctx.fillStyle='rgba(200,170,140,0.6)';
+        rrect(carrier.x-lampW*0.7, groundY-6*DPR, lampW*1.4, 7*DPR, 3*DPR); ctx.fill();
+        var fth = phase==='fall'? th + anim*2.2*(th>=0?1:-1) : th;
+        var fy = phase==='fall'? -lampH*0.5 + anim*anim*H*0.4 : -lampH*0.5;
+        ctx.save(); ctx.translate(carrier.x, groundY-6*DPR); ctx.rotate(fth);
+        drawLamp(0, fy, 0, 1, 1); ctx.restore();
+      }
+
+      // 疊放：燈懸在塔頂，隨滑鼠選位置，五秒內點一下放下（燈會閃）
+      if(phase==='stack'){
+        var topY2=groundY - tower.length*lampH;
+        var dx2=destX + curOff();
+        ctx.strokeStyle='rgba(183,168,153,0.16)'; ctx.lineWidth=1*DPR;
+        ctx.beginPath(); ctx.moveTo(destX, topY2-lampH*3.0); ctx.lineTo(destX, topY2); ctx.stroke();
+        ctx.save();
+        ctx.strokeStyle='rgba(255,236,200,0.5)'; ctx.lineWidth=1.5*DPR; ctx.setLineDash([4*DPR,6*DPR]);
+        ctx.beginPath(); ctx.moveTo(dx2, topY2-lampH*2.3); ctx.lineTo(dx2, topY2); ctx.stroke(); ctx.setLineDash([]);
+        ctx.restore();
+        // 懸著的燈——會閃，剩越少閃越急
+        var urgent = stackT<2.2;
+        var blink = 0.42 + 0.58*Math.abs(Math.sin(now/(urgent?90:190)));
+        drawLamp(0, -lampH*0.5, 0, 1, blink, dx2, topY2-lampH*1.4);
+        // 倒數
+        ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.fillStyle = urgent? 'rgba(224,144,95,0.95)':'rgba(201,138,99,0.75)';
+        ctx.font='600 '+(22*DPR)+'px "Noto Sans TC",sans-serif';
+        ctx.fillText(Math.max(0,Math.ceil(stackT)), dx2, topY2-lampH*2.95);
+      }
+      // 熄掉：沒在五秒內放，燈慢慢暗去
+      else if(phase==='out'){
+        var topY3=groundY - tower.length*lampH;
+        var dx3=destX + curOff();
+        drawLamp(0, -lampH*0.5, 0, 1, Math.max(0,1-anim/0.9), dx3, topY3-lampH*1.4);
+      }
+
+      // 傾斜量表（運燈時）
+      if(phase==='carry'){
+        var gw=W*0.34, gx=W/2-gw/2, gy=H*0.12;
+        ctx.strokeStyle='rgba(183,168,153,0.3)'; ctx.lineWidth=2*DPR;
+        ctx.beginPath(); ctx.moveTo(gx,gy); ctx.lineTo(gx+gw,gy); ctx.stroke();
+        // 危險端
+        ctx.strokeStyle='rgba(181,107,83,0.5)'; ctx.lineWidth=3*DPR;
+        ctx.beginPath(); ctx.moveTo(gx,gy); ctx.lineTo(gx+gw*0.14,gy); ctx.moveTo(gx+gw*0.86,gy); ctx.lineTo(gx+gw,gy); ctx.stroke();
+        var mxp=Math.max(gx,Math.min(gx+gw, gx+gw*(0.5 + th/(THMAX*2.2))));
+        ctx.fillStyle = Math.abs(th)>THMAX*0.65? '#e0905f':'#f1e7d9';
+        ctx.beginPath(); ctx.arc(mxp,gy,6*DPR,0,7); ctx.fill();
+      }
+      // 進度點
+      for(var d=0;d<TARGET;d++){
+        ctx.fillStyle = d<count? 'rgba(201,138,99,0.9)':'rgba(120,108,92,0.3)';
+        ctx.beginPath(); ctx.arc(W*0.5 - (TARGET-1)*7*DPR + d*14*DPR, H*0.93, 3.2*DPR, 0, 7); ctx.fill();
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  // 畫一盞燈（相對目前 transform；sx,sy 若給則自己定位）
+  function drawLamp(x, y, _r, alpha, bright, ox, oy){
+    ctx.save();
+    if(ox!==undefined){ ctx.translate(ox,oy); }
+    ctx.globalAlpha=alpha;
+    // 燈身
+    ctx.fillStyle='rgba(60,46,36,'+alpha+')';
+    rrect(x-lampW*0.42, y, lampW*0.84, lampH*0.9, 4*DPR); ctx.fill();
+    ctx.strokeStyle='rgba(201,138,99,'+(0.5*alpha)+')'; ctx.lineWidth=1.5*DPR; ctx.stroke();
+    // 火光
+    ctx.globalCompositeOperation='lighter';
+    var fy=y-6*DPR;
+    var g=ctx.createRadialGradient(x,fy,0,x,fy,lampW*0.9);
+    g.addColorStop(0,'rgba(255,240,205,'+(0.95*bright*alpha)+')');
+    g.addColorStop(0.4,'rgba(233,162,99,'+(0.5*bright*alpha)+')');
+    g.addColorStop(1,'rgba(233,162,99,0)');
+    ctx.fillStyle=g; ctx.beginPath(); ctx.arc(x,fy,lampW*0.9,0,7); ctx.fill();
+    ctx.restore();
+  }
+  function rrect(x,y,w,h,r){ r=Math.min(r,w/2,Math.abs(h)/2); ctx.beginPath();
+    ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r);
+    ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+  requestAnimationFrame(frame);
+
+  function show(id){ ['intro','end','form','done'].forEach(function(k){
+    document.getElementById(k).classList.toggle('on', k===id); }); }
+
+  function startGame(){ reset(true); STATE='play'; show(null); }
+
+  function winEnd(){
+    STATE='end';
+    var secs=((performance.now()-t0)/1000);
+    document.getElementById('endTitle').textContent='七盞都亮了。';
+    document.getElementById('endStat').textContent='掉了 '+drops+'　·　倒了 '+collapses+'　·　熄了 '+outs+'　·　'+secs.toFixed(0)+' 秒';
+    document.getElementById('endQ').innerHTML=
+      '剛剛在玩的時候，<br>你感受到的是<span class="em">興奮</span>，<br>還是<span class="em">焦慮</span>？';
+    show('end');
+  }
+
+  document.getElementById('startBtn').onclick=startGame;
+  document.getElementById('againBtn').onclick=startGame;
+  document.getElementById('toFormBtn').onclick=function(){ STATE='form'; show('form'); };
+
+  document.getElementById('sendBtn').onclick=function(){
+    var nick=document.getElementById('nick').value.trim();
+    var reflect=document.getElementById('reflect').value.trim();
+    var hint=document.getElementById('hint');
+    if(!nick){ hint.textContent='請填一下你的暱稱。'; return; }
+    if(!reflect){ hint.textContent='寫一句也好。'; return; }
+    this.disabled=true; hint.textContent='送出中……';
+    fetch(ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify({story:STORY,nickname:nick,choice:'完成・掉'+drops+'・倒'+collapses+'・熄'+outs,reason:reflect})
+    }).then(function(){ STATE='done'; show('done'); }).catch(function(){ STATE='done'; show('done'); });
+  };
+
+  // QA
+  if(location.hash==='#stack'){ reset(true); show(null); tower=[{off:-20},{off:16}]; count=2; STATE='play'; phase='stack'; document.getElementById('count').textContent='第 3 / 5 盞'; }
+  if(location.hash==='#win'){ reset(true); drops=3; collapses=1; STATE='end'; winEnd(); }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>五則故事</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+    --bg:#f6f1e7;
+    --panel:#fbf8f1;
+    --ink:#2c2620;
+    --soft:#6f6656;
+    --faint:#9a9082;
+    --rule:#e0d7c6;
+    --accent:#a2593f;
+    scroll-behavior:smooth;
+    scroll-padding-top:env(safe-area-inset-top,0px);
+  }
+  *{box-sizing:inherit}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Noto Serif TC',serif;
+    font-weight:400;
+    line-height:1.95;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  .wrap{
+    max-width:680px;
+    margin:0 auto;
+    padding:0 24px 96px;
+  }
+
+  /* masthead */
+  header.top{
+    text-align:center;
+    padding:80px 0 40px;
+  }
+  header.top .kicker{
+    font-family:'Noto Sans TC',sans-serif;
+    font-size:14px;
+    letter-spacing:8px;
+    color:var(--accent);
+    margin-bottom:22px;
+  }
+  header.top h1{
+    font-size:44px;
+    font-weight:600;
+    letter-spacing:6px;
+    margin:0 0 20px;
+  }
+  header.top .sub{
+    font-size:17px;
+    color:var(--soft);
+    letter-spacing:1px;
+    line-height:1.9;
+  }
+
+  hr.rule{
+    border:none;
+    border-top:1px solid var(--rule);
+    max-width:120px;
+    margin:44px auto;
+  }
+
+  /* table of contents */
+  nav.toc{
+    max-width:420px;
+    margin:0 auto 24px;
+  }
+  nav.toc ol{
+    list-style:none;
+    margin:0;
+    padding:0;
+  }
+  nav.toc li{
+    border-bottom:1px solid var(--rule);
+  }
+  nav.toc li:first-child{border-top:1px solid var(--rule)}
+  nav.toc a{
+    display:flex;
+    align-items:baseline;
+    gap:16px;
+    padding:16px 6px;
+    text-decoration:none;
+    color:var(--ink);
+    transition:color .2s,background .2s;
+  }
+  nav.toc a:hover{color:var(--accent);background:rgba(162,89,63,.05)}
+  nav.toc .num{
+    font-family:'Noto Sans TC',sans-serif;
+    font-size:14px;
+    letter-spacing:2px;
+    color:var(--accent);
+    min-width:2.2em;
+  }
+  nav.toc .name{font-size:19px;letter-spacing:1px}
+
+  /* story */
+  article{padding:60px 0 8px}
+  article .head{
+    text-align:center;
+    margin-bottom:48px;
+  }
+  article .head .idx{
+    font-family:'Noto Sans TC',sans-serif;
+    font-size:13px;
+    letter-spacing:6px;
+    color:var(--accent);
+    margin-bottom:16px;
+  }
+  article .head h2{
+    font-size:32px;
+    font-weight:600;
+    letter-spacing:4px;
+    margin:0 0 12px;
+  }
+  article .head .src{
+    font-family:'Noto Sans TC',sans-serif;
+    font-size:13px;
+    letter-spacing:1px;
+    color:var(--faint);
+  }
+  article p{
+    margin:0 0 1.5em;
+    font-size:19px;
+    letter-spacing:.3px;
+  }
+  article p.beat{                 /* short suspended line */
+    text-align:center;
+    color:var(--soft);
+    letter-spacing:2px;
+    margin:2em 0;
+  }
+
+  .endmark{
+    text-align:center;
+    color:var(--rule);
+    font-size:20px;
+    letter-spacing:10px;
+    margin:40px 0 8px;
+  }
+  .backtop{
+    text-align:center;
+    margin-bottom:20px;
+  }
+  .backtop a{
+    font-family:'Noto Sans TC',sans-serif;
+    font-size:13px;
+    letter-spacing:3px;
+    color:var(--faint);
+    text-decoration:none;
+  }
+  .backtop a:hover{color:var(--accent)}
+
+  article + article{border-top:1px solid var(--rule)}
+
+  footer{
+    text-align:center;
+    padding-top:56px;
+    color:var(--faint);
+    font-family:'Noto Sans TC',sans-serif;
+    font-size:13px;
+    letter-spacing:3px;
+  }
+
+  @media(max-width:560px){
+    .wrap{padding:0 20px 72px}
+    header.top{padding:56px 0 32px}
+    header.top h1{font-size:34px;letter-spacing:4px}
+    article p{font-size:18px}
+    article .head h2{font-size:26px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top" id="top">
+    <div class="kicker">閱 讀</div>
+    <h1>五則故事</h1>
+    <div class="sub">先靜靜地讀。<br>問題，我們見面再談。</div>
+  </header>
+
+  <hr class="rule">
+
+  <nav class="toc" aria-label="目錄">
+    <ol>
+      <li><a href="#s1"><span class="num">一</span><span class="name">美女，還是老虎？</span></a></li>
+      <li><a href="#s2"><span class="num">二</span><span class="name">趙氏孤兒</span></a></li>
+      <li><a href="#s3"><span class="num">三</span><span class="name">老人與海</span></a></li>
+      <li><a href="#s4"><span class="num">四</span><span class="name">鼓盆而歌</span></a></li>
+      <li><a href="#s5"><span class="num">五</span><span class="name">三個問題</span></a></li>
+    </ol>
+  </nav>
+
+  <hr class="rule">
+
+  <!-- 一 -->
+  <article id="s1">
+    <div class="head">
+      <div class="idx">其 一</div>
+      <h2>美女，還是老虎？</h2>
+      <div class="src">改寫自 Frank R. Stockton, “The Lady, or the Tiger?” (1882)</div>
+    </div>
+    <p>很久以前，有一個半開化的國王。他脾氣專斷，卻自有一套他認為最公正的審判法。</p>
+    <p>在他的國度裡，凡是被控有罪的人，都要被帶進一座巨大的競技場。場中相對的牆上，並排開著兩扇一模一樣的門。被告獨自站在場中，當著滿場觀眾，自己走向其中一扇、親手把它打開。</p>
+    <p>一扇門後，關著一頭最兇猛、最飢餓的老虎——門一開，猛虎撲出，當場把他撕碎。這代表他有罪，受到了天譴。</p>
+    <p>另一扇門後，站著一位由國王精心挑選、與他年貌相當的美麗女子——門一開，樂聲響起，他當場與她成婚，不論他原本是否已有妻室。這代表他無罪，受到了獎賞。</p>
+    <p>被告事先完全不知道哪扇門後是什麼。他的生死婚娶，全繫於他自己推開的那一扇——這，就是國王眼中「絕對公正」的審判：一切由命運與你自己的選擇決定。</p>
+    <p>國王有一個女兒，美麗而剛烈，愛他一如他愛權力。公主愛上了宮中一個地位低微、卻俊美勇敢的青年。這段戀情終究被國王發現。青年被投入牢中，擇日受審。</p>
+    <p>受審那天，全國的人都湧進了競技場。青年走進場中，先抬頭望向公主所在的看台——因為他知道，以公主的性情與能耐，她一定會不惜代價，查出今天這兩扇門後，各藏著什麼。</p>
+    <p>公主確實查出來了。不只如此——她甚至打聽到，那扇「美女之門」後站著的，是宮中一位她一向嫉恨、而那女子也早已對青年暗送秋波的絕色美人。這些天來，她日夜受著煎熬。</p>
+    <p>此刻，青年的目光投向她，用眼神問：哪一扇？</p>
+    <p>公主早已打定了主意。她不動聲色地，用右手極輕微地、向右一擺。</p>
+    <p>青年看懂了。他毫不遲疑，轉身走向右邊那扇門，伸手，推開——</p>
+    <p class="beat">那扇門後，是美女，還是老虎？</p>
+    <div class="endmark">○</div>
+    <div class="backtop"><a href="#top">回目錄 ↑</a></div>
+  </article>
+
+  <!-- 二 -->
+  <article id="s2">
+    <div class="head">
+      <div class="idx">其 二</div>
+      <h2>趙氏孤兒</h2>
+      <div class="src">改寫自《史記・趙世家》</div>
+    </div>
+    <p>晉國權臣屠岸賈誣陷趙氏一族謀反，發兵屠盡趙家滿門，上上下下三百餘口，無一倖免。</p>
+    <p>只有一個活口逃過了——趙家的媳婦當時懷著身孕，被藏進宮中。屠殺過後，她生下一個男嬰。這是趙氏唯一的血脈。屠岸賈聽說有遺腹子，下令全國搜捕，掘地三尺，非把這嬰兒找出來殺掉不可。</p>
+    <p>趙家有兩個忠僕，一個叫程嬰，一個叫公孫杵臼。兩人商量：要保住這孩子，只有一條路——用一個「假的嬰兒」去頂替，讓屠岸賈以為趙氏孤兒已死，真孩子才能活下來。可是，去頂替的那個嬰兒，是必死的。</p>
+    <p>到哪裡找一個嬰兒，去替趙氏孤兒死？</p>
+    <p>程嬰沒有說話。因為他心裡清楚——他自己，剛好也有一個親生的兒子，跟趙氏孤兒差不多大。</p>
+    <p>公孫杵臼看著他。</p>
+    <p>程嬰低下頭，看著懷裡自己的孩子——</p>
+    <div class="endmark">○</div>
+    <div class="backtop"><a href="#top">回目錄 ↑</a></div>
+  </article>
+
+  <!-- 三 -->
+  <article id="s3">
+    <div class="head">
+      <div class="idx">其 三</div>
+      <h2>老人與海</h2>
+      <div class="src">改寫自海明威《老人與海》的處境</div>
+    </div>
+    <p>有一個老漁夫。</p>
+    <p>他已經連續八十四天，一條魚也沒捕到。村裡的人都說他倒楣透了，連原先跟著他的小男孩，都被家人叫去別的船上。他還是每天獨自出海。</p>
+    <p>第八十五天，他把船划到很遠的外海。這一次，他釣上了一條大魚——一條比他的船還長、力氣大得驚人的馬林魚。魚拖著船在海上跑，老人死死拉著釣線，不肯鬆手。他一個人，跟這條魚搏鬥了整整三天三夜，手被繩子勒得血肉模糊，沒吃沒睡，幾乎賠上性命。最後，他終於制服了那條大魚，把牠綁在船邊，掉頭返航。</p>
+    <p>那是他這輩子見過最大的魚。他想：這下，一切都值得了。</p>
+    <p>可是血水引來了鯊魚。一批走了，一批又來，一路啃咬那條綁在船邊的大魚。老人拿槳、拿刀、拿一切能拿的東西拚命去打、去擋，打斷了、打丟了，還是擋不住。他知道自己輸了，卻還是打到最後一刻。</p>
+    <p>回到岸邊時，天已經黑了。船邊那條巨大的馬林魚，只剩下一副從頭到尾、白慘慘的骨架——肉，全被啃光了。</p>
+    <p>老人把桅杆扛上肩，一步一步走回他的小屋。他累到了極點，倒在床上，臉朝下，睡著了。</p>
+    <p class="beat">他出海八十五天，搏命三天三夜，<br>最後帶回來的，只是一副魚骨頭。</p>
+    <div class="endmark">○</div>
+    <div class="backtop"><a href="#top">回目錄 ↑</a></div>
+  </article>
+
+  <!-- 四 -->
+  <article id="s4">
+    <div class="head">
+      <div class="idx">其 四</div>
+      <h2>鼓盆而歌</h2>
+      <div class="src">改寫自《莊子・至樂》</div>
+    </div>
+    <p>莊子的妻子死了。</p>
+    <p>惠子聽說了，前來弔唁。他走進門，卻看見一幅怎麼也想不到的景象——莊子正席地而坐，兩腿隨意張開，面前擺著一只瓦盆，他一邊敲著那盆，一邊放聲唱歌。</p>
+    <p>惠子愣住了，忍不住責備他：</p>
+    <p>「她跟你一同生活了這麼多年，替你生兒育女，如今老死了。你不哭，也就罷了——竟然還敲著盆子唱起歌來，這，是不是太過分了？」</p>
+    <p>莊子放下手中的瓦盆，抬起頭，看著他——</p>
+    <div class="endmark">○</div>
+    <div class="backtop"><a href="#top">回目錄 ↑</a></div>
+  </article>
+
+  <!-- 五 -->
+  <article id="s5">
+    <div class="head">
+      <div class="idx">其 五</div>
+      <h2>三個問題</h2>
+      <div class="src">改寫自 Leo Tolstoy, “The Three Questions” (1885)</div>
+    </div>
+    <p>從前有一個國王，心裡一直被三個問題困擾著：</p>
+    <p>第一，做每一件事，最好的時機是什麼時候？第二，最應該親近、聽從的人是誰？第三，一生中最重要、最該去做的事是什麼？</p>
+    <p>他想，只要參透這三個問題，做任何事都不會失敗了。於是他昭告全國，重賞能解答的人。</p>
+    <p>許多有學問的人前來作答，答案卻五花八門、彼此矛盾。有人說最好的時機要事先規劃排定，有人說要看當下臨機應變；有人說最該聽的是大臣，有人說是祭司，有人說是醫生、是軍人；至於最重要的事，說法更是南轅北轍。國王對這些答案都不滿意。</p>
+    <p>於是他聽說山中有一位德高望重的隱士，便換上平民的衣服，獨自前去請教。他找到隱士時，那老人正在自己的菜園裡挖地。老人年邁體弱，每挖一鏟都氣喘吁吁。</p>
+    <p>國王問了他那三個問題。隱士只是看了他一眼，繼續挖地，不答。國王見他吃力，說：「你累了，讓我來吧。」便接過鏟子，替他挖了起來。</p>
+    <p>一個時辰過去，兩個時辰過去，天色漸暗。國王挖了一整天，一再追問，隱士始終不答，只說：「你也累了，歇歇吧。」</p>
+    <p>正在這時，一個陌生男子從林中踉蹌奔來——他捂著肚子，鮮血從指縫間湧出，跑到國王面前就昏倒了。國王替他解開衣服，見腹部有一道深深的傷口。他細心地清洗、包紮，一次又一次為他止血，直到血止住。傷者甦醒後要了水喝。國王又親自打水給他，扶他進屋、安頓他在隱士的床上過夜。國王也累極了，就靠在門檻上睡著了。</p>
+    <p>第二天早上，那受傷的男子醒來，望著國王，用微弱的聲音說：「請你原諒我。」</p>
+    <p>「我素不相識，何來原諒？」國王問。</p>
+    <p>那人說：「你不認識我，我卻認得你。我是你的仇敵——你處死了我的兄弟、奪走了我的財產，我發誓要殺你。我知道你獨自進山來見隱士，便埋伏在你回程的路上，要取你性命。可是等了一天，你都沒回來。我離開埋伏處去找你，卻撞見了你的侍衛，他們認出我、砍傷了我。我逃了出來，若不是你救我，我早已流血而死。我本要殺你，你卻救了我——從今以後，我與我的子孫，都願做你最忠實的人。請你饒恕我。」</p>
+    <p>國王沒想到這麼輕易就化解了一個死敵，又驚又喜，不但饒恕了他，還答應歸還他的財產、派御醫為他治傷。</p>
+    <p>安頓好那人，國王走到屋外，最後一次向隱士提出他那三個問題。隱士正跪在昨天挖好的地上播種。他直起身，望著國王，說：</p>
+    <p>「你的問題，其實你昨天已經自己回答了。」</p>
+    <div class="endmark">○</div>
+    <div class="backtop"><a href="#top">回目錄 ↑</a></div>
+  </article>
+
+  <div style="text-align:center;margin-top:40px">
+    <a href="jing.html" style="font-family:'Noto Sans TC',sans-serif;font-size:13px;letter-spacing:3px;color:#9a9082;text-decoration:none">← 回首頁</a>
+  </div>
+
+  <footer>不 只 讀 書 的 讀 書 會</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>複習・一至九分</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink0:#17120e; --paper:#f1e7d9; --soft:#b7a899; --faint:#7c6f61;
+    --clay:#c98a63; --clay-d:#a86f5e; --line:#3a2f26; --bad:#b56b53;
+    --cjk:'Noto Serif TC',serif; --sans:'Noto Sans TC',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{min-height:100%}
+  body{background:var(--ink0);color:var(--paper);font-family:var(--cjk);
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    background-image:radial-gradient(ellipse at 50% 20%, rgba(60,47,38,.5), rgba(23,18,14,0) 72%);
+    min-height:100vh}
+
+  .wrap{max-width:660px;margin:0 auto;padding:calc(env(safe-area-inset-top,0px) + 22px) 22px calc(env(safe-area-inset-bottom,0px) + 120px)}
+
+  /* HUD */
+  .hud{display:flex;justify-content:space-between;align-items:baseline;
+    font-family:var(--sans);font-size:12.5px;letter-spacing:.14em;color:var(--faint);margin-bottom:26px}
+  .hud .r{color:var(--soft);font-variant-numeric:tabular-nums}
+  .bar{height:2px;background:rgba(183,168,153,.14);border-radius:2px;margin-bottom:30px;overflow:hidden}
+  .bar i{display:block;height:100%;width:0;background:var(--clay);transition:width .4s ease}
+
+  /* intro / end */
+  .screen{text-align:center;padding:8vh 4px 0}
+  .kicker{font-family:var(--sans);font-size:13px;letter-spacing:.5em;color:var(--clay);text-indent:.5em;margin-bottom:24px}
+  h1{font-size:clamp(34px,8vw,56px);font-weight:500;letter-spacing:.26em;text-indent:.26em;margin-bottom:30px}
+  .say{font-size:clamp(16px,2.4vw,19px);line-height:2.05;color:var(--paper);max-width:30ch;margin:0 auto}
+  .say .em{color:var(--clay)}
+  .say + .say{margin-top:16px}
+  .small{font-size:13.5px;color:var(--faint);letter-spacing:.06em;margin-top:20px;line-height:1.9}
+  .namein{margin-top:30px}
+  .namein input{font-family:var(--cjk);font-size:16px;color:var(--paper);background:rgba(241,231,217,.05);
+    border:1px solid var(--line);border-radius:999px;padding:12px 22px;text-align:center;width:min(280px,80vw);outline:none}
+  .namein input:focus{border-color:var(--clay-d)}
+  .rec{margin-top:34px}
+  .recnote{font-size:14.5px;line-height:1.95;color:var(--soft);letter-spacing:.04em;margin-bottom:20px}
+  .ta{margin-top:16px}
+  .ta textarea{font-family:var(--cjk);font-size:15.5px;line-height:1.8;color:var(--paper);background:rgba(241,231,217,.05);
+    border:1px solid var(--line);border-radius:16px;padding:14px 18px;width:min(380px,86vw);outline:none;resize:none}
+  .ta textarea:focus{border-color:var(--clay-d)}
+  .rhint{font-family:var(--sans);font-size:12.5px;letter-spacing:.1em;color:var(--faint);margin-top:16px;min-height:1.2em}
+  .done{margin-top:20px}
+  .btnrow{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:40px}
+  button.b{font-family:var(--sans);font-size:15px;letter-spacing:.3em;text-indent:.3em;color:var(--ink0);
+    background:var(--clay);border:none;border-radius:999px;padding:14px 40px;cursor:pointer;transition:opacity .2s,transform .1s}
+  button.b:hover{opacity:.9}button.b:active{transform:scale(.97)}
+  button.b.ghost{background:transparent;color:var(--soft);border:1px solid var(--line)}
+
+  /* question */
+  .q .stem{font-size:clamp(18px,2.9vw,22px);line-height:1.95;letter-spacing:.02em;margin-bottom:8px}
+  .q .quote{font-size:clamp(15px,2.3vw,17px);line-height:1.9;color:var(--soft);letter-spacing:.04em;
+    border-left:2px solid var(--clay-d);padding:4px 0 4px 16px;margin:18px 0 24px;background:rgba(201,138,99,.05)}
+  .opts{display:flex;flex-direction:column;gap:12px;margin-top:22px}
+  .opt{font-family:var(--cjk);font-size:clamp(15px,2.4vw,17px);line-height:1.7;text-align:left;color:var(--paper);
+    background:rgba(241,231,217,.035);border:1px solid var(--line);border-radius:14px;padding:15px 18px;cursor:pointer;
+    display:flex;gap:13px;align-items:flex-start;transition:border-color .2s,background .2s}
+  .opt:hover{border-color:var(--clay-d)}
+  .opt .mk{font-family:var(--sans);font-size:12.5px;color:var(--faint);border:1px solid var(--line);border-radius:50%;
+    width:1.7em;height:1.7em;min-width:1.7em;display:flex;align-items:center;justify-content:center;margin-top:1px}
+  .opt.correct{border-color:var(--clay);background:rgba(201,138,99,.16)}
+  .opt.correct .mk{border-color:var(--clay);color:var(--clay);background:rgba(201,138,99,.14)}
+  .opt.wrong{border-color:var(--bad);background:rgba(181,107,83,.14)}
+  .opt.wrong .mk{border-color:var(--bad);color:var(--bad)}
+  .opt.dim{opacity:.4}
+  .opt.locked{cursor:default}
+  .opt.locked:hover{border-color:var(--line)}
+  .opt.correct.locked:hover{border-color:var(--clay)}
+  .opt.wrong.locked:hover{border-color:var(--bad)}
+
+  .explain{margin-top:24px;border-top:1px solid var(--line);padding-top:22px;opacity:0;max-height:0;overflow:hidden;
+    transition:opacity .4s ease}
+  .explain.show{opacity:1;max-height:none}
+  .explain .verdict{font-family:var(--sans);font-size:13px;letter-spacing:.3em;margin-bottom:14px}
+  .explain .verdict.ok{color:var(--clay)}
+  .explain .verdict.no{color:var(--bad)}
+  .explain .txt{font-size:clamp(15px,2.3vw,17px);line-height:1.95;color:var(--paper);letter-spacing:.02em}
+  .explain .src{font-family:var(--sans);font-size:12.5px;letter-spacing:.18em;color:var(--faint);margin-top:16px}
+  .explain .nextrow{display:flex;justify-content:flex-end;margin-top:26px}
+
+  /* 翻經 button + panel */
+  .flipbtn{position:fixed;left:0;right:0;bottom:0;padding:14px 22px calc(env(safe-area-inset-bottom,0px) + 14px);
+    display:flex;justify-content:center;background:linear-gradient(to top, var(--ink0) 60%, rgba(23,18,14,0));z-index:8}
+  .flipbtn button{font-family:var(--sans);font-size:14px;letter-spacing:.3em;text-indent:.3em;color:var(--paper);
+    background:rgba(241,231,217,.06);border:1px solid var(--clay-d);border-radius:999px;padding:12px 34px;cursor:pointer}
+  .flipbtn button:active{transform:scale(.97)}
+  .panel{position:fixed;inset:0;z-index:12;background:rgba(23,18,14,.97);display:flex;flex-direction:column;
+    opacity:0;visibility:hidden;transition:opacity .3s}
+  .panel.on{opacity:1;visibility:visible}
+  .panel .ptop{display:flex;justify-content:space-between;align-items:center;padding:20px 22px;border-bottom:1px solid var(--line);
+    font-family:var(--sans);letter-spacing:.3em;color:var(--clay);font-size:14px}
+  .panel .ptop button{font-family:var(--sans);font-size:14px;color:var(--soft);background:none;border:none;cursor:pointer;letter-spacing:.2em}
+  .panel .pbody{overflow-y:auto;padding:24px 22px calc(env(safe-area-inset-bottom,0px) + 40px);max-width:680px;margin:0 auto;width:100%}
+  .fen{margin-bottom:30px}
+  .fen h3{font-family:var(--sans);font-size:13px;letter-spacing:.26em;color:var(--clay-d);margin-bottom:12px;font-weight:500}
+  .fen p{font-size:16px;line-height:2.05;color:var(--paper);letter-spacing:.03em}
+  .hide{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- 進度 -->
+  <div id="top" class="hide">
+    <div class="hud"><span>複 習 ・ 一 至 九 分</span><span class="r" id="meta">第 1 題 / 10　・　得分 0</span></div>
+    <div class="bar"><i id="barfill"></i></div>
+  </div>
+
+  <!-- intro -->
+  <section id="intro" class="screen">
+    <div class="kicker">金 剛 般 若 波 羅 蜜 經</div>
+    <h1>複習・一至九分</h1>
+    <p class="say">十道題，陪你把前九分再走一遍。</p>
+    <p class="say">不是考你<span class="em">記不記得</span>，是看你<span class="em">看不看得懂</span>。</p>
+    <p class="small">答題中隨時可按「翻經」，把一到九分的經文打開對照——<br>回頭看經，正是這份測驗要你做的事。</p>
+    <div class="namein"><input id="nick" type="text" placeholder="留個稱呼（可留白）" maxlength="12" autocomplete="off"></div>
+    <div class="btnrow"><button class="b" id="start">開 始</button></div>
+  </section>
+
+  <!-- question -->
+  <section id="qbox" class="q hide"></section>
+
+  <!-- end -->
+  <section id="end" class="screen hide"></section>
+
+</div>
+
+<!-- 翻經 button -->
+<div id="flipbar" class="flipbtn hide"><button id="flip">翻 經</button></div>
+
+<!-- 翻經 panel -->
+<div id="panel" class="panel">
+  <div class="ptop"><span>一 至 九 分 ・ 經 文</span><button id="pclose">關閉 ✕</button></div>
+  <div class="pbody" id="pbody"></div>
+</div>
+
+<script>
+/* ---------- 紀錄（同遊戲的 Google Sheet） ---------- */
+var ENDPOINT = "https://script.google.com/macros/s/AKfycbxTZvcSvcnn7uE2g7Dn8ElXr89yTNGFO6_ss4xJ4Bnw3EhF2ISniHkTC7JYMQd5P5JDrw/exec";
+var STORY = "複習測驗・一至九分";
+
+/* ---------- 經文（翻經面板） ---------- */
+var SUTRA = [
+  { n:"第一分", t:"法會因由分", p:"爾時，世尊食時，著衣持鉢，入舍衛大城乞食。於其城中，次第乞已，還至本處。飯食訖，收衣鉢，洗足已，敷座而坐。" },
+  { n:"第二分", t:"善現啟請分", p:"須菩提……白佛言：「希有，世尊！……善男子、善女人，發阿耨多羅三藐三菩提心，應云何住？云何降伏其心？」佛言：「善哉，善哉。……汝今諦聽，當為汝說。」" },
+  { n:"第三分", t:"大乘正宗分", p:"所有一切眾生之類……我皆令入無餘涅槃而滅度之。如是滅度無量無數無邊眾生，實無眾生得滅度者。何以故？須菩提！若菩薩有我相、人相、眾生相、壽者相，即非菩薩。" },
+  { n:"第四分", t:"妙行無住分", p:"復次，須菩提！菩薩於法，應無所住，行於布施，所謂不住色布施，不住聲香味觸法布施。……菩薩不住相布施，其福德不可思量。……須菩提！東方虛空可思量不？「不也，世尊！」" },
+  { n:"第五分", t:"如理實見分", p:"「須菩提！於意云何？可以身相見如來不？」「不也，世尊！不可以身相得見如來。何以故？如來所說身相，即非身相。」佛告須菩提：「凡所有相，皆是虛妄。若見諸相非相，則見如來。」" },
+  { n:"第六分", t:"正信希有分", p:"……「頗有眾生，得聞如是言說章句，生實信不？」……「如來滅後，後五百歲，有持戒修福者，於此章句能生信心，以此為實……是諸眾生無復我相、人相、眾生相、壽者相；無法相，亦無非法相。……不應取法，不應取非法。以是義故，如來常說：汝等比丘，知我說法，如筏喻者；法尚應捨，何況非法？」" },
+  { n:"第七分", t:"無得無說分", p:"「須菩提！於意云何？如來得阿耨多羅三藐三菩提耶？如來有所說法耶？」須菩提言：「……無有定法名阿耨多羅三藐三菩提，亦無有定法如來可說。……一切賢聖，皆以無為法而有差別。」" },
+  { n:"第八分", t:"依法出生分", p:"「……以七寶滿三千大千世界，以用布施……」「……若復有人，於此經中受持，乃至四句偈等，為他人說，其福勝彼。何以故？……一切諸佛，及諸佛阿耨多羅三藐三菩提法，皆從此經出。須菩提！所謂佛法者，即非佛法。」" },
+  { n:"第九分", t:"一相無相分", p:"「須陀洹能作是念：我得須陀洹果不？」……（斯陀含、阿那含、阿羅漢皆然：若作是念「我得某果」，即為著我人眾生壽者。）「……我是離欲阿羅漢。……若作是念：我得阿羅漢道，即為著我人眾生壽者。……以須菩提實無所行，而名須菩提是樂阿蘭那行。」" }
+];
+
+/* ---------- 題庫 ---------- */
+var QS = [
+  { fen:"第一分",
+    stem:"第一分整段，只寫世尊穿衣、拿鉢、進城乞食、吃飯、洗腳、打坐——一句佛法都沒說。這一分擺在開頭，最可能是要我們先看見什麼？",
+    opts:[
+      "佛陀生活清苦，值得效法",
+      "說法前的禮儀程序，無關緊要",
+      "最高的法，就在最平常的穿衣吃飯裡——道不離日用",
+      "這段是後人補的，可以略過"],
+    a:2,
+    ex:"全經還沒開口說「法」，先把一頓飯、一段路演完。等於先告訴你：要找的東西，不在別的地方。" },
+
+  { fen:"第二分",
+    stem:"須菩提一開口，就替所有人問了一個貫穿全經的大問題。它是——",
+    opts:[
+      "怎樣成佛得道、神通廣大",
+      "發了菩提心之後，這個心該「云何住、云何降伏」",
+      "怎樣布施才能得到最多福德",
+      "怎樣分辨真經與偽經"],
+    a:1,
+    ex:"「應云何住？云何降伏其心？」——後面所有的話，都是在回這一問。記住這把尺，整部經才串得起來。" },
+
+  { fen:"第三分",
+    stem:"菩薩要度盡一切眾生，經文卻說「實無眾生得滅度者」。這句話最接近的意思是——",
+    quote:"實無眾生得滅度者。……若菩薩有我相、人相、眾生相、壽者相，即非菩薩。",
+    opts:[
+      "其實沒有眾生，所以不必度",
+      "度生要度到底，一個都不能少",
+      "照度，但不留「我度了誰」的念——一起四相，就不是菩薩",
+      "眾生自己會成佛，與菩薩無關"],
+    a:2,
+    ex:"度，是照做；不存「能度、所度」，才是關鍵。緊接著一句「有四相即非菩薩」，就是在點這裡。" },
+
+  { fen:"第四分",
+    stem:"「菩薩於法，應無所住，行於布施」——為什麼布施要「不住色聲香味觸法」？",
+    opts:[
+      "這樣布施才不會破財",
+      "不黏在「我施、施誰、施了什麼」的相上，福德才不可思量",
+      "布施要挑對象，六塵不淨的就不施",
+      "不住相就是不必真的布施，心意到就好"],
+    a:1,
+    ex:"布施照做，只是不住相。經文用「東方虛空可思量不」來比這種福德之大——大，正因為不落在相裡。" },
+
+  { fen:"第五分",
+    stem:"「凡所有相，皆是虛妄。若見諸相非相，則見如來。」照這句，要「見如來」，靠的是——",
+    quote:"可以身相見如來不？……如來所說身相，即非身相。",
+    opts:[
+      "觀想佛的三十二相莊嚴",
+      "看穿一切相，都不是那個固定不變的相",
+      "把所有相都消滅掉，什麼都不看",
+      "憑佛的身相去辨認"],
+    a:1,
+    ex:"不是「滅相」，是「不被相騙」。第五分先問能不能以身相見如來，答「身相即非身相」——同一個意思。" },
+
+  { fen:"第六分",
+    stem:"「不應取法，不應取非法」「法尚應捨，何況非法」。這裡的「筏」，比喻的是——",
+    quote:"知我說法，如筏喻者；法尚應捨，何況非法？",
+    opts:[
+      "渡人的慈悲心，要一直帶著",
+      "佛所說的法，像過河的筏，到了岸就該放下",
+      "戒律，犯了就要捨",
+      "錢財，應當布施出去"],
+    a:1,
+    ex:"法是工具，不是終點。連「法」都要捨，何況執著一個「空（非法）」。這條「捨」的線，第十分還會再往下挖。" },
+
+  { fen:"第七分",
+    stem:"有人問：如來到底得了「阿耨多羅三藐三菩提」、說了法沒有？照第七分的答法，最準確的是——",
+    opts:[
+      "得了至高無上的法，也說了八萬四千法門",
+      "什麼都沒得、沒說，所以佛講的是空話",
+      "「無有定法」名阿耨多羅三藐三菩提，也「無有定法」如來可說",
+      "這問題不能問，問了就是謗佛"],
+    a:2,
+    ex:"不是「有」或「無」，是沒有一個固定的東西可抓。還補一句「一切賢聖皆以無為法而有差別」。這個「得／無得」，第十分接著用然燈佛來談。" },
+
+  { fen:"第八分",
+    stem:"拿滿三千大千世界的七寶去布施，還比不上受持四句偈、為人解說。第八分給的理由是——",
+    quote:"一切諸佛，及諸佛阿耨多羅三藐三菩提法，皆從此經出。……所謂佛法者，即非佛法。",
+    opts:[
+      "七寶會用完，經文不會",
+      "諸佛與諸佛的菩提法皆從此經出；而且「所謂佛法者，即非佛法」",
+      "布施有漏、誦經無漏，功德自然加倍",
+      "七寶是假的，經才是真的"],
+    a:1,
+    ex:"福德的根，在這部「出生諸佛之法」的經。但話一說完立刻「即非佛法」一刀——免得你又把「經」抓成一個相。" },
+
+  { fen:"第九分",
+    stem:"從須陀洹到阿羅漢，經文都問「能作是念——我得某某果不？」標準答案都是「不也」。為什麼不能起這個念？",
+    quote:"若作是念：我得阿羅漢道，即為著我人眾生壽者。",
+    opts:[
+      "謙虛一點，比較好聽",
+      "一起「我得了果」的念，就著了我、人、眾生、壽者相",
+      "果位是秘密，不能說出口",
+      "因為其實根本沒有果位"],
+    a:1,
+    ex:"得果是事實，「我得果」的那個念才是病。須菩提「實無所行」，才叫樂阿蘭那行——這正好接到第十分：佛自己在然燈佛所，也「實無所得」。" },
+
+  { fen:"一至九分",
+    stem:"把一到九分連起來看，它們其實在反覆磨同一件事。下面哪個說法，最貼近這條主線？",
+    opts:[
+      "教你累積福德，早日成佛",
+      "凡有所「得、有所住、有所取相」就錯了方向——連「法」和「果」都不許抓",
+      "證明金剛經比別的經更殊勝",
+      "要求人人出家、持戒、誦經"],
+    a:1,
+    ex:"不住相、見諸相非相、不取法非法、無有定法、不作得果念——同一把尺。接下來第十分，佛把這把尺，用到了自己身上。" }
+];
+
+/* ---------- 流程 ---------- */
+var order=[], optOrder=[], idx=0, score=0, locked=false, nick="", wrongList=[];
+var $=function(s){return document.querySelector(s);};
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+
+function buildPanel(){
+  var h="";
+  for(var i=0;i<SUTRA.length;i++){
+    h+='<div class="fen"><h3>'+SUTRA[i].n+'　'+SUTRA[i].t+'</h3><p>'+SUTRA[i].p+'</p></div>';
+  }
+  $("#pbody").innerHTML=h;
+}
+$("#flip").addEventListener("click",function(){$("#panel").classList.add("on");});
+$("#pclose").addEventListener("click",function(){$("#panel").classList.remove("on");});
+
+$("#start").addEventListener("click",function(){
+  nick=($("#nick").value||"").trim();
+  order=shuffle(QS.map(function(_,i){return i;}));
+  idx=0;score=0;wrongList=[];
+  $("#intro").classList.add("hide");
+  $("#top").classList.remove("hide");
+  $("#qbox").classList.remove("hide");
+  $("#flipbar").classList.remove("hide");
+  render();
+});
+
+function render(){
+  locked=false;
+  var q=QS[order[idx]];
+  var oo=shuffle(q.opts.map(function(_,i){return i;}));
+  optOrder=oo;
+  var marks=["甲","乙","丙","丁"];
+  var html='<div class="stem">'+q.stem+'</div>';
+  if(q.quote){ html+='<div class="quote">'+q.quote+'</div>'; }
+  html+='<div class="opts">';
+  for(var k=0;k<oo.length;k++){
+    html+='<button class="opt" data-k="'+k+'"><span class="mk">'+marks[k]+'</span><span class="ot">'+q.opts[oo[k]]+'</span></button>';
+  }
+  html+='</div>';
+  html+='<div class="explain" id="explain"></div>';
+  $("#qbox").innerHTML=html;
+  $("#meta").textContent="第 "+(idx+1)+" 題 / "+QS.length+"　・　得分 "+score;
+  $("#barfill").style.width=(idx/QS.length*100)+"%";
+  var btns=document.querySelectorAll(".opt");
+  for(var b=0;b<btns.length;b++){ btns[b].addEventListener("click",choose); }
+  window.scrollTo(0,0);
+}
+
+function choose(e){
+  if(locked) return; locked=true;
+  var btn=e.currentTarget;
+  var k=parseInt(btn.getAttribute("data-k"),10);
+  var q=QS[order[idx]];
+  var chosenOrig=optOrder[k];
+  var correct=(chosenOrig===q.a);
+  if(correct){ score++; } else { wrongList.push(q.fen); }
+  var btns=document.querySelectorAll(".opt");
+  for(var i=0;i<btns.length;i++){
+    btns[i].classList.add("locked");
+    var oi=optOrder[parseInt(btns[i].getAttribute("data-k"),10)];
+    if(oi===q.a){ btns[i].classList.add("correct"); }
+    else if(btns[i]===btn){ btns[i].classList.add("wrong"); }
+    else { btns[i].classList.add("dim"); }
+  }
+  var ex=$("#explain");
+  var last=(idx===QS.length-1);
+  ex.innerHTML=
+    '<div class="verdict '+(correct?"ok":"no")+'">'+(correct?"○　是":"×　再想想")+'</div>'+
+    '<div class="txt">'+q.ex+'</div>'+
+    '<div class="src">出　自　'+q.fen+'</div>'+
+    '<div class="nextrow"><button class="b" id="next">'+(last?"看結果":"下一題")+'</button></div>';
+  ex.classList.add("show");
+  $("#meta").textContent="第 "+(idx+1)+" 題 / "+QS.length+"　・　得分 "+score;
+  $("#next").addEventListener("click",function(){
+    idx++;
+    if(idx>=QS.length){ finish(); } else { render(); }
+  });
+  ex.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+
+function finish(){
+  $("#barfill").style.width="100%";
+  $("#qbox").classList.add("hide");
+  $("#flipbar").classList.add("hide");
+  $("#top").classList.add("hide");
+  var greet=nick?("　"+nick+"　"):"";
+  var band;
+  if(score>=9){
+    band="這九分，你讀進去了。接下來的第十分，佛要把這把尺用到自己身上——正好。";
+  }else if(score>=6){
+    band="大半都站穩了。錯的那幾題別急著記答案，翻回經文，自己再對一遍，比對答案牢。";
+  }else if(score>=3){
+    band="有些地方還黏著「一般的讀法」。這很正常——那正是要鬆開的地方。翻經再走一遍吧。";
+  }else{
+    band="分數不重要，別介意。重要的是：剛剛哪幾句讓你卡住？那就是這部經要你看的地方。";
+  }
+  var wrongTxt = wrongList.length ? ("卡住：" + wrongList.join("、")) : "全對";
+  $("#end").innerHTML=
+    '<div class="kicker">複 習 完 成</div>'+
+    '<h1>'+score+' / '+QS.length+'</h1>'+
+    '<p class="say">'+greet+band+'</p>'+
+    '<div class="rec" id="rec">'+
+      '<p class="recnote">留個紀錄給引導人——<br>也把「卡住的地方」記下來，往後回看。</p>'+
+      '<div class="namein"><input id="rnick" type="text" placeholder="你的稱呼" maxlength="12" autocomplete="off"></div>'+
+      '<div class="ta"><textarea id="rfeel" rows="3" maxlength="200" placeholder="剛剛哪一題、哪一句讓你卡住？（可留白）"></textarea></div>'+
+      '<div class="rhint" id="rhint">'+wrongTxt+'</div>'+
+      '<div class="btnrow">'+
+        '<button class="b" id="send">送 出 紀 錄</button>'+
+        '<button class="b ghost" id="again">再 來 一 次</button>'+
+      '</div>'+
+    '</div>'+
+    '<div class="done hide" id="done">'+
+      '<p class="say">記下了。<span class="em">謝謝你走這一趟。</span></p>'+
+      '<p class="small">答不出的地方，留著——往後讀，自然會鬆。</p>'+
+      '<div class="btnrow">'+
+        '<button class="b" id="again2">再 來 一 次</button>'+
+        '<button class="b ghost" id="review">翻 經 回 看</button>'+
+      '</div>'+
+    '</div>';
+  $("#end").classList.remove("hide");
+  if($("#rnick")) $("#rnick").value = nick;
+
+  function replay(){
+    $("#end").classList.add("hide");
+    order=shuffle(QS.map(function(_,i){return i;}));
+    idx=0;score=0;wrongList=[];
+    $("#top").classList.remove("hide");
+    $("#qbox").classList.remove("hide");
+    $("#flipbar").classList.remove("hide");
+    render();
+  }
+  $("#send").addEventListener("click",function(){
+    var rn=($("#rnick").value||"").trim();
+    var rf=($("#rfeel").value||"").trim();
+    if(!rn){ $("#rhint").textContent="請留個稱呼。"; return; }
+    this.disabled=true; $("#rhint").textContent="送出中……";
+    var reason = wrongTxt + (rf ? ("｜" + rf) : "");
+    fetch(ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify({story:STORY,nickname:rn,choice:'得分 '+score+' / '+QS.length,reason:reason})
+    }).then(after).catch(after);
+    function after(){ $("#rec").classList.add("hide"); $("#done").classList.remove("hide"); window.scrollTo(0,0); }
+  });
+  $("#again").addEventListener("click",replay);
+  $("#again2").addEventListener("click",replay);
+  $("#review").addEventListener("click",function(){$("#panel").classList.add("on");});
+  window.scrollTo(0,0);
+}
+
+buildPanel();
+</script>
+</body>
+</html>

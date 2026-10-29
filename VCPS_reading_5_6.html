@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>金剛經斷疑・第五分　第六分</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    box-sizing:border-box;
+    --bg:#f5ece6;          /* 粉棕淺底 */
+    --bg2:#efe3db;
+    --ink:#3b302b;         /* 深棕墨 */
+    --soft:#8a776e;        /* 棕灰柔 */
+    --faint:#b9a89d;
+    --accent:#a86f5e;      /* 粉棕 */
+    --seal:#a86f5e;        /* 粉棕（印） */
+    --rule:#e7d9cf;
+  }
+  *{box-sizing:inherit;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:'Noto Serif TC',serif;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    overflow:hidden;
+  }
+  #deck{position:fixed;inset:0}
+  .slide{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;justify-content:center;align-items:center;
+    padding:calc(env(safe-area-inset-top,0px) + 7vmin) 9vmin calc(env(safe-area-inset-bottom,0px) + 7vmin);
+    opacity:0;visibility:hidden;transition:opacity .5s ease;
+    text-align:center;
+  }
+  .slide.on{opacity:1;visibility:visible}
+
+  .kicker{font-family:'Noto Sans TC',sans-serif;font-size:clamp(11px,1.5vmin,15px);letter-spacing:.7em;color:var(--accent);margin-bottom:5vmin;text-indent:.7em}
+  .seal{display:inline-block;border:1.5px solid var(--seal);color:var(--seal);font-family:'Noto Sans TC',sans-serif;font-size:clamp(11px,1.4vmin,14px);letter-spacing:.3em;padding:.5em .8em;border-radius:4px;text-indent:.3em}
+
+  h1{font-size:clamp(34px,8vmin,76px);font-weight:700;letter-spacing:.18em;line-height:1.35;text-indent:.18em}
+  h1 .sub{display:block;font-size:clamp(16px,3vmin,26px);font-weight:400;color:var(--soft);letter-spacing:.25em;margin-top:3.5vmin;text-indent:.25em}
+  .key{margin-top:6vmin;font-size:clamp(18px,3.4vmin,30px);color:var(--accent);letter-spacing:.2em;text-indent:.2em}
+
+  /* 開經偈 直排 */
+  .gatha{display:flex;flex-direction:row-reverse;gap:clamp(20px,5vmin,64px);writing-mode:vertical-rl;text-orientation:upright;height:62vmin}
+  .gatha p{font-size:clamp(22px,4.6vmin,40px);letter-spacing:.35em;color:var(--ink);font-weight:300}
+
+  .lead{max-width:60ch}
+  .lead p{font-size:clamp(17px,2.9vmin,25px);line-height:2.2;color:var(--ink);letter-spacing:.06em}
+  .lead p + p{margin-top:2.2vmin}
+  .lead .em{color:var(--accent)}
+  .lead .small{font-size:clamp(14px,2.2vmin,19px);color:var(--soft);letter-spacing:.1em;margin-top:4vmin}
+
+  /* 段落頁 */
+  .sect h2{font-size:clamp(26px,5.5vmin,52px);font-weight:600;letter-spacing:.16em;text-indent:.16em}
+  .sect .eye{margin-top:7vmin;font-family:'Noto Sans TC',sans-serif;font-size:clamp(12px,1.6vmin,15px);letter-spacing:.5em;color:var(--faint);text-indent:.5em;margin-bottom:1.6vmin}
+  .sect .eyeword{font-family:'Noto Serif TC',serif;font-size:clamp(22px,4.4vmin,38px);color:var(--accent);letter-spacing:.2em;text-indent:.2em}
+
+  /* 經文頁 */
+  .sutra{max-width:34ch}
+  .sutra p{font-size:clamp(19px,3.3vmin,30px);line-height:2.3;letter-spacing:.1em;font-weight:400}
+  .sutra .q{color:var(--soft)}
+  .label{position:absolute;top:calc(env(safe-area-inset-top,0px) + 5vmin);left:0;right:0;text-align:center;font-family:'Noto Sans TC',sans-serif;font-size:clamp(11px,1.4vmin,14px);letter-spacing:.5em;color:var(--faint);text-indent:.5em}
+
+  /* 白話頁 */
+  .vern{max-width:40ch}
+  .vern p{font-size:clamp(17px,2.9vmin,24px);line-height:2.15;color:#5a4d45;letter-spacing:.05em}
+  .vern p + p{margin-top:2vmin}
+
+  /* 提問頁 */
+  .ask{max-width:52ch;text-align:left}
+  .ask .h{text-align:center;font-family:'Noto Sans TC',sans-serif;font-size:clamp(12px,1.6vmin,15px);letter-spacing:.5em;color:var(--accent);text-indent:.5em;margin-bottom:5vmin}
+  .ask ol{list-style:none;counter-reset:q}
+  .ask li{counter-increment:q;position:relative;padding-left:2.4em;margin:2.3vmin 0;font-size:clamp(15px,2.5vmin,21px);line-height:1.95;letter-spacing:.03em;color:var(--ink)}
+  .ask li::before{content:counter(q);position:absolute;left:0;top:.05em;width:1.5em;height:1.5em;border:1px solid var(--accent);border-radius:50%;color:var(--accent);font-family:'Noto Sans TC',sans-serif;font-size:.7em;display:flex;align-items:center;justify-content:center}
+
+  /* 收尾 */
+  .end .l1{font-size:clamp(24px,5vmin,46px);letter-spacing:.2em;text-indent:.2em}
+  .end .l2{margin-top:5vmin;font-size:clamp(24px,5vmin,46px);letter-spacing:.2em;text-indent:.2em;color:var(--accent)}
+
+  /* nav */
+  #counter{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 3vmin);left:0;right:0;text-align:center;font-family:'Noto Sans TC',sans-serif;font-size:12px;letter-spacing:.3em;color:var(--faint);pointer-events:none}
+  .nav{position:fixed;top:0;bottom:0;width:22%;cursor:pointer;z-index:5;background:transparent;border:none}
+  .nav.prev{left:0}.nav.next{right:0}
+  .hint{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 3vmin);font-family:'Noto Sans TC',sans-serif;font-size:12px;letter-spacing:.2em;color:var(--faint);pointer-events:none}
+  .hint.l{left:5vmin}.hint.r{right:5vmin}
+  @media(max-width:560px){.hint{display:none}.gatha{height:56vmin}}
+</style>
+</head>
+<body>
+<div id="deck">
+
+  <!-- 0 標題 -->
+  <section class="slide on">
+    <div class="kicker">金 剛 般 若 波 羅 蜜 經</div>
+    <h1>第五分・第六分
+      <span class="sub">如理實見分　正信希有分</span>
+    </h1>
+    <div class="key">凡所有相，皆是虛妄　・　法尚應捨，何況非法</div>
+  </section>
+
+  <!-- 1 開經偈 -->
+  <section class="slide">
+    <div class="gatha">
+      <p>無上甚深微妙法</p>
+      <p>百千萬劫難遭遇</p>
+      <p>我今見聞得受持</p>
+      <p>願解如來真實義</p>
+    </div>
+  </section>
+
+  <!-- 2 承上 / 讀法 -->
+  <section class="slide lead">
+    <div class="lead">
+      <p>第四分說「<span class="em">應無所住</span>」——心不黏著於任何相而行布施。</p>
+      <p>第五分便直問：那個被你住著的「<span class="em">相</span>」，究竟是什麼？</p>
+      <p>一把尺，貫穿五、六兩分——<span class="em">取相，或不取相</span>。</p>
+      <p class="small">讀法：只問，不答。疑處不急著填平，讓它自己鬆開。</p>
+    </div>
+  </section>
+
+  <!-- 3 第五分 段落頁 -->
+  <section class="slide sect">
+    <div class="seal">第 五 分</div>
+    <h2 style="margin-top:4vmin">如理實見分</h2>
+    <div class="eye">本 分 之 眼</div>
+    <div class="eyeword">見諸相，非相</div>
+  </section>
+
+  <!-- 4 第五分 經文 -->
+  <section class="slide">
+    <div class="label">第五分 ・ 經文</div>
+    <div class="sutra">
+      <p class="q">須菩提！於意云何？可以身相見如來不？</p>
+      <p>不也，世尊！不可以身相得見如來。何以故？如來所說身相，即非身相。</p>
+      <p>佛告須菩提：凡所有相，皆是虛妄。若見諸相非相，則見如來。</p>
+    </div>
+  </section>
+
+  <!-- 5 第五分 白話 -->
+  <section class="slide">
+    <div class="label">第五分 ・ 語譯</div>
+    <div class="vern">
+      <p>須菩提，你覺得呢——能不能憑如來的身相，就見到如來？</p>
+      <p>不能，世尊。不能憑身相見到如來。為什麼？因為如來所說的身相，並不是那個真實不變的身相。</p>
+      <p>佛告訴須菩提：凡是一切有形象、能被指認的相，都是虛妄不實的。若能看穿一切相其實都不是那固定的相，就見到如來了。</p>
+    </div>
+  </section>
+
+  <!-- 6 第五分 提問 -->
+  <section class="slide ask">
+    <div class="ask">
+      <div class="h">第 五 分 ・ 斷 疑</div>
+      <ol>
+        <li>上面才剛說「應如所教住」，為何話鋒一轉，又來問「身相」？</li>
+        <li>「不可以身相得見如來」，那要用什麼來見？</li>
+        <li>「如來所說身相，即非身相」——不是「身相」，那是什麼？</li>
+        <li>「凡所有相，皆是虛妄」，不是說「不說斷滅相」嗎？這個「皆是」難道不就是一種「絕對」？</li>
+        <li>「若見諸相非相，即見如來」——「相」都不是「相」了，要怎麼見？</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 7 第六分 段落頁 -->
+  <section class="slide sect">
+    <div class="seal">第 六 分</div>
+    <h2 style="margin-top:4vmin">正信希有分</h2>
+    <div class="eye">本 分 之 眼</div>
+    <div class="eyeword">不取法，不取非法</div>
+  </section>
+
+  <!-- 8 第六分 經文（一） -->
+  <section class="slide">
+    <div class="label">第六分 ・ 經文（一）</div>
+    <div class="sutra" style="max-width:38ch">
+      <p class="q">須菩提白佛言：世尊！頗有眾生，得聞如是言說章句，生實信不？</p>
+      <p>佛告須菩提：莫作是說。如來滅後，後五百歲，有持戒修福者，於此章句能生信心，以此為實……已於無量千萬佛所種諸善根，聞是章句，乃至一念生淨信者。</p>
+      <p>須菩提！如來悉知悉見，是諸眾生得如是無量福德。</p>
+    </div>
+  </section>
+
+  <!-- 9 第六分 經文（二） -->
+  <section class="slide">
+    <div class="label">第六分 ・ 經文（二）</div>
+    <div class="sutra" style="max-width:38ch">
+      <p>何以故？是諸眾生無復我相、人相、眾生相、壽者相；無法相，亦無非法相。</p>
+      <p>若取法相，即著我人眾生壽者。若取非法相，即著我人眾生壽者。是故不應取法，不應取非法。</p>
+      <p>以是義故，如來常說：汝等比丘，知我說法，如筏喻者；法尚應捨，何況非法？</p>
+    </div>
+  </section>
+
+  <!-- 10 第六分 白話（一） -->
+  <section class="slide">
+    <div class="label">第六分 ・ 語譯（一）</div>
+    <div class="vern">
+      <p>須菩提問佛：世尊，會有眾生聽到這樣的言說章句，而生起真實的信心嗎？</p>
+      <p>佛說：別這麼說。如來滅度之後、到了後五百歲，仍會有持戒修福的人，對這些章句生起信心、把它當真。要知道，這種人不是只在三五尊佛那裡種過善根，而是已在無量千萬尊佛那裡種了善根——聽到這些章句，乃至只一念之間，生起清淨的信。</p>
+      <p>須菩提，如來完全知道、完全看見：這些眾生，因此得到無量的福德。</p>
+    </div>
+  </section>
+
+  <!-- 11 第六分 白話（二） -->
+  <section class="slide">
+    <div class="label">第六分 ・ 語譯（二）</div>
+    <div class="vern">
+      <p>為什麼？因為這些眾生，心中不再有我相、人相、眾生相、壽者相；沒有「法」的相，也沒有「非法（空）」的相。</p>
+      <p>因為若取著「法」的相，就著了我、人、眾生、壽者；若取著「非法」的相，同樣著了我人眾生壽者。所以——不應取「法」，也不應取「非法」。</p>
+      <p>正因如此，如來常說：你們這些比丘，要知道我所說的法，像渡河的筏——過了河就該放下。連「法」都應該捨，何況「非法」？</p>
+    </div>
+  </section>
+
+  <!-- 12 第六分 提問 -->
+  <section class="slide ask">
+    <div class="ask">
+      <div class="h">第 六 分 ・ 斷 疑</div>
+      <ol>
+        <li>「有持戒修福者……」——一定要持戒修福嗎？我不持戒、不修福，就與此無緣？</li>
+        <li>「不於一佛、二佛、三四五佛而種善根，已於無量千萬佛所種諸善根」——這又開始囉唆了，直接講「所有佛都種善根」不是比較省事？</li>
+        <li>「如來悉知悉見……」——這太玄了，如來都已入滅，要怎麼「悉知悉見」？</li>
+        <li>「是諸眾生得如是無量福德」——這會不會又是玩那套「做得好，給你一張獎卡」的套路？</li>
+        <li>「不應取法，不應取非法」——這也不取、那也不取，那要怎辦？</li>
+        <li>「知我說法，如筏喻者；法尚應捨，何況非法？」——法來法去，眼都花了，到底什麼是法？</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 13 收尾 -->
+  <section class="slide end">
+    <div class="end">
+      <div class="l1">凡所有相，皆是虛妄。</div>
+      <div class="l2">法尚應捨，何況非法？</div>
+    </div>
+  </section>
+
+</div>
+
+<div id="counter"></div>
+<div class="hint l">← 上一頁</div>
+<div class="hint r">下一頁 →</div>
+<button class="nav prev" aria-label="上一頁"></button>
+<button class="nav next" aria-label="下一頁"></button>
+
+<script>
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var i = 0, N = slides.length;
+  var counter = document.getElementById('counter');
+  function show(n){
+    i = Math.max(0, Math.min(N-1, n));
+    slides.forEach(function(s,k){ s.classList.toggle('on', k===i); });
+    counter.textContent = (i+1) + ' / ' + N;
+  }
+  function next(){ show(i+1); }
+  function prev(){ show(i-1); }
+  document.querySelector('.nav.next').addEventListener('click', next);
+  document.querySelector('.nav.prev').addEventListener('click', prev);
+  document.addEventListener('keydown', function(e){
+    if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' '||e.key==='PageDown'){ next(); e.preventDefault(); }
+    else if(e.key==='ArrowLeft'||e.key==='ArrowUp'||e.key==='PageUp'){ prev(); e.preventDefault(); }
+    else if(e.key==='Home'){ show(0); } else if(e.key==='End'){ show(N-1); }
+  });
+  // 觸控滑動
+  var x0=null;
+  document.addEventListener('touchstart',function(e){ x0=e.touches[0].clientX; },{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(x0===null) return; var dx=e.changedTouches[0].clientX - x0;
+    if(Math.abs(dx)>45){ dx<0 ? next() : prev(); } x0=null;
+  },{passive:true});
+  show(0);
+</script>
+</body>
+</html>

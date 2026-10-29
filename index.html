@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HSG Living・全面靈性扎根</title>
+<meta name="description" content="全面靈性扎根（HSG）——把靈性放回每一天的生活裡，一層一層地扎根。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Noto+Serif+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4ede2;     /* 暖紙底 */
+    --paper2:#efe6d8;    /* 稍深的紙，分區用 */
+    --ink:#2a241f;       /* 深烘焙墨（文字） */
+    --clay:#a86f5e;      /* 赭（品牌重點，少用） */
+    --deep:#322821;      /* 深烘焙棕（暗帶） */
+    --soft:#8a786b;      /* 次要文字 */
+    --line:#d9cbba;      /* 髮絲線 */
+    --cjk:'Noto Serif TC',serif;
+    --lat:'Fraunces',Georgia,serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    background:var(--paper);color:var(--ink);
+    font-family:var(--cjk);line-height:1.9;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 clamp(24px,5vw,64px)}
+
+  /* 頂條 */
+  .top{display:flex;align-items:baseline;justify-content:space-between;
+    padding:clamp(26px,4vw,40px) 0 0}
+  .top .mark{font-family:var(--lat);font-weight:600;font-size:21px;letter-spacing:.01em;color:var(--ink)}
+  .top .mark b{color:var(--clay);font-weight:600}
+  .top .away{font-family:var(--cjk);font-size:13px;letter-spacing:.28em;color:var(--soft);
+    text-decoration:none;text-indent:.28em}
+  .top .away:hover{color:var(--clay)}
+
+  /* 英雄區 */
+  .hero{display:grid;grid-template-columns:1fr auto;gap:clamp(24px,5vw,72px);
+    align-items:end;padding:clamp(48px,9vh,104px) 0 clamp(30px,5vh,52px);min-height:72vh}
+  .lede .wordmark{font-family:var(--lat);font-weight:500;font-size:clamp(40px,6.4vw,74px);
+    line-height:1.0;letter-spacing:.005em;margin-bottom:14px}
+  .lede .en{font-family:var(--lat);font-style:italic;font-size:clamp(15px,1.8vw,19px);
+    color:var(--soft);letter-spacing:.01em;margin-bottom:clamp(28px,4vw,40px)}
+  .lede p{font-size:clamp(17px,1.5vw,19.5px);line-height:2.05;max-width:34ch;color:var(--ink)}
+  .lede .enter{display:inline-block;margin-top:clamp(28px,4vw,40px);font-size:18px;
+    color:var(--ink);text-decoration:none;letter-spacing:.06em;
+    border-bottom:1.5px solid var(--clay);padding-bottom:3px;transition:color .2s,border-color .2s}
+  .lede .enter:hover{color:var(--clay)}
+  .lede .enter .only{font-size:13px;color:var(--soft);letter-spacing:.2em;margin-left:10px;border:0}
+
+  /* 直排英雄字（flex 直欄，避開 writing-mode 的塌陷） */
+  .vert{display:flex;flex-direction:column;align-items:center;align-self:end;gap:.05em;
+    font-size:clamp(46px,8vmin,92px);font-weight:500;line-height:1.05;color:var(--ink);
+    opacity:0;animation:revealv 1.15s cubic-bezier(.2,.7,.2,1) .15s forwards}
+  .vert span{display:block}
+  @keyframes revealv{from{opacity:0;transform:translateY(-18px)}to{opacity:1;transform:none}}
+  @media(prefers-reduced-motion:reduce){.vert{animation:none;opacity:1}}
+
+  /* 扎根線 */
+  .ground{border:0;border-top:1px solid var(--line);margin:0}
+
+  /* 讀書會 主打 */
+  .now{padding:clamp(46px,7vw,78px) 0 clamp(40px,6vw,64px)}
+  .tag{font-size:13.5px;letter-spacing:.42em;color:var(--clay);text-indent:.42em;margin-bottom:22px}
+  .now h2{font-weight:500;font-size:clamp(27px,3.4vw,40px);letter-spacing:.04em;line-height:1.3;margin-bottom:18px}
+  .now h2 .faint{color:var(--soft)}
+  .now p{font-size:clamp(16.5px,1.4vw,19px);line-height:2.05;max-width:44ch;color:var(--ink)}
+  .now .enter{display:inline-block;margin-top:30px;font-size:18px;color:var(--ink);
+    text-decoration:none;letter-spacing:.06em;border-bottom:1.5px solid var(--clay);padding-bottom:3px;transition:color .2s}
+  .now .enter:hover{color:var(--clay)}
+  .now .enter .only{font-size:13px;color:var(--soft);letter-spacing:.2em;margin-left:10px}
+  .soonline{margin-top:clamp(40px,6vw,60px);font-size:16px;color:var(--soft);letter-spacing:.04em}
+
+  /* 關於 暗帶 */
+  .about{background:var(--deep);color:#eaddcf}
+  .about .inner{max-width:1080px;margin:0 auto;padding:clamp(60px,9vw,110px) clamp(24px,5vw,64px)}
+  .about .tag{color:#c89a82}
+  .about h2{font-weight:400;font-size:clamp(21px,2.4vw,30px);line-height:1.85;letter-spacing:.03em;
+    max-width:30ch;color:#f3e7d9}
+  .about .by{margin-top:clamp(34px,5vw,46px);font-family:var(--lat);font-style:italic;
+    font-size:16px;color:#b9a896;letter-spacing:.02em}
+
+  /* 頁腳 */
+  footer{padding:clamp(40px,6vw,64px) 0 clamp(48px,7vw,72px)}
+  footer .row{display:flex;flex-wrap:wrap;gap:14px 28px;align-items:baseline;justify-content:space-between}
+  footer .who{font-family:var(--lat);font-size:16px;color:var(--ink);letter-spacing:.01em}
+  footer .who b{color:var(--clay);font-weight:600}
+  footer .links{display:flex;gap:26px;font-size:13.5px;letter-spacing:.14em}
+  footer .links a{color:var(--soft);text-decoration:none}
+  footer .links a:hover{color:var(--clay)}
+
+  @media(max-width:760px){
+    .hero{grid-template-columns:1fr;gap:clamp(34px,8vw,48px);min-height:0;
+      padding:clamp(40px,8vh,64px) 0 clamp(24px,5vh,36px);align-items:start}
+    .vert{flex-direction:row;gap:.02em;font-size:clamp(46px,15vw,72px);
+      order:-1;align-self:start}
+    .lede p{max-width:38ch}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="mark">HSG Living</div>
+    <a class="away" href="https://elea.idv.tw" target="_blank" rel="noopener">代橘文學網站</a>
+  </header>
+
+  <section class="hero">
+    <div class="lede">
+      <div class="wordmark">HSG Living</div>
+      <div class="en">Holistic Spiritual Grounding</div>
+      <p>全面靈性扎根，是一套慢慢長出來的學習。不談玄，不造神——把靈性放回吃飯、走路、與人相處的日常，一層一層，往下扎根。</p>
+      <a class="enter" href="jing.html">進入讀書會<span class="only">成員專用</span></a>
+    </div>
+    <div class="vert" aria-label="全面靈性扎根"><span>全</span><span>面</span><span>靈</span><span>性</span><span>扎</span><span>根</span></div>
+  </section>
+</div>
+
+<hr class="ground">
+
+<div class="wrap">
+  <section class="now">
+    <div class="tag">正 在 進 行</div>
+    <h2>不只讀書的讀書會<span class="faint">　·　金剛經</span></h2>
+    <p>一段一段地讀《金剛經》。不先問註解怎麼說，而是回到經文，一處一處地問——照一般的讀法，這裡真的講得通嗎？把疑留著，親自把它讀通。</p>
+    <a class="enter" href="jing.html">進入讀書會<span class="only">成員專用</span></a>
+    <div class="soonline">課程、工作坊與書寫，正陸續整理到這裡。</div>
+  </section>
+</div>
+
+<section class="about">
+  <div class="inner">
+    <div class="tag">關 於</div>
+    <h2>這裡沒有老師，只有一個走在前面一點的夥伴。一起讀、一起問，把心裡的疑放到光底下。路要自己走，但不必一個人走。</h2>
+    <div class="by">— 引導人 Elea</div>
+  </div>
+</section>
+
+<div class="wrap">
+  <footer>
+    <div class="row">
+      <div class="who">好療癒工作室　<b>·</b>　HSG Living</div>
+      <div class="links">
+        <a href="https://elea.idv.tw" target="_blank" rel="noopener">代橘文學網站 ↗</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+</body>
+</html>

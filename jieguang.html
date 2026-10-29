@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>接光</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+  const ENDPOINT = "https://script.google.com/macros/s/AKfycbxTZvcSvcnn7uE2g7Dn8ElXr89yTNGFO6_ss4xJ4Bnw3EhF2ISniHkTC7JYMQd5P5JDrw/exec";
+  const STORY = "接光（遊戲）";
+</script>
+<style>
+  :root{
+    --ink0:#17120e; --paper:#f1e7d9; --soft:#b7a899; --faint:#7c6f61;
+    --clay:#c98a63; --clay-d:#a86f5e; --line:#3a2f26;
+    --cjk:'Noto Serif TC',serif; --sans:'Noto Sans TC',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{background:var(--ink0);color:var(--paper);font-family:var(--cjk);overflow:hidden;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;touch-action:none}
+  #stage{position:fixed;inset:0;display:block;cursor:crosshair}
+
+  .hud{position:fixed;top:0;left:0;right:0;padding:20px 24px;display:flex;justify-content:space-between;
+    align-items:baseline;font-family:var(--sans);font-size:13px;letter-spacing:.14em;color:var(--faint);z-index:5;pointer-events:none}
+  .hud .t{color:var(--soft);font-variant-numeric:tabular-nums}
+
+  .overlay{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:40px 28px;
+    background:radial-gradient(ellipse at center, rgba(23,18,14,.5) 0%, rgba(23,18,14,.92) 72%);
+    opacity:0;visibility:hidden;transition:opacity .6s ease}
+  .overlay.on{opacity:1;visibility:visible}
+  .kicker{font-family:var(--sans);font-size:13px;letter-spacing:.5em;color:var(--clay);text-indent:.5em;margin-bottom:26px}
+  h1{font-size:clamp(40px,10vw,76px);font-weight:500;letter-spacing:.3em;text-indent:.3em;margin-bottom:28px}
+  .say{font-size:clamp(17px,2.4vw,21px);line-height:2.1;color:var(--paper);max-width:24ch}
+  .say .em{color:var(--clay)}
+  .small{font-size:14px;color:var(--faint);letter-spacing:.08em;margin-top:18px}
+  .btnrow{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:44px}
+  button.b{font-family:var(--sans);font-size:16px;letter-spacing:.3em;text-indent:.3em;color:var(--ink0);
+    background:var(--clay);border:none;border-radius:999px;padding:15px 44px;cursor:pointer;transition:opacity .2s,transform .1s}
+  button.b:hover{opacity:.9}
+  button.b:active{transform:scale(.97)}
+  button.ghost{background:transparent;color:var(--soft);border:1px solid var(--line)}
+  button.ghost:hover{color:var(--clay);border-color:var(--clay-d)}
+
+  .end .t{font-size:clamp(26px,6vw,44px);font-weight:500;letter-spacing:.14em;margin-bottom:22px}
+  .end .stat{font-family:var(--sans);font-size:14px;letter-spacing:.14em;color:var(--soft);margin-bottom:34px}
+  .end .q{font-size:clamp(16px,2.3vw,20px);line-height:2.15;color:var(--paper);max-width:30ch}
+  .end .q .em{color:var(--clay)}
+
+  .form{max-width:440px;width:100%}
+  .form .lead{font-size:clamp(16px,2.3vw,20px);line-height:2;color:var(--paper);margin-bottom:26px;max-width:28ch;margin-left:auto;margin-right:auto}
+  .field{text-align:left;margin:0 auto 20px}
+  .field label{display:block;font-family:var(--sans);font-size:13px;letter-spacing:.14em;color:var(--soft);margin-bottom:10px}
+  .field input,.field textarea{width:100%;background:rgba(241,231,217,.04);border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;font-family:var(--cjk);font-size:17px;color:var(--paper);line-height:1.8;outline:none}
+  .field input::placeholder,.field textarea::placeholder{color:#6a5e51}
+  .field input:focus,.field textarea:focus{border-color:var(--clay-d);background:rgba(241,231,217,.06)}
+  .field textarea{min-height:110px;resize:vertical}
+  .hint{font-family:var(--sans);font-size:13px;color:var(--faint);min-height:1.3em;margin-top:6px}
+
+  @media(max-width:560px){ h1{letter-spacing:.18em;text-indent:.18em} }
+</style>
+</head>
+<body>
+
+<canvas id="stage"></canvas>
+
+<div class="hud">
+  <span id="score">接到 0</span>
+  <span class="t" id="clock">45.0</span>
+</div>
+
+<!-- 開場 -->
+<div class="overlay on" id="intro">
+  <div class="kicker">不 只 讀 書 的 讀 書 會</div>
+  <h1>接　光</h1>
+  <p class="say">光，從天上落下來。<br><span class="em">移動籃子，接住它。</span></p>
+  <p class="small">能接幾顆，就接幾顆。</p>
+  <div class="btnrow"><button class="b" id="startBtn">開　始</button></div>
+</div>
+
+<!-- 結束 -->
+<div class="overlay end" id="end">
+  <div class="t" id="endTitle">時間到。</div>
+  <div class="stat" id="endStat"></div>
+  <p class="q" id="endQ"></p>
+  <div class="btnrow">
+    <button class="b ghost" id="againBtn">再玩一次</button>
+    <button class="b" id="toFormBtn">寫下感想</button>
+  </div>
+</div>
+
+<!-- 感想 -->
+<div class="overlay" id="form">
+  <div class="form">
+    <div class="kicker" style="margin-bottom:22px">感 想</div>
+    <p class="lead">剛剛那道留不住的光，<br>讓你想起了什麼？</p>
+    <div class="field"><label>你的暱稱</label>
+      <input id="nick" type="text" maxlength="60" placeholder="寫個名字，讓引導人認得你"></div>
+    <div class="field"><label>你的感想</label>
+      <textarea id="reflect" maxlength="2000" placeholder="那一次，我也差一點……"></textarea></div>
+    <div class="btnrow" style="margin-top:26px"><button class="b" id="sendBtn">送　出</button></div>
+    <div class="hint" id="hint"></div>
+  </div>
+</div>
+
+<!-- 完成 -->
+<div class="overlay" id="done">
+  <div class="kicker" style="color:var(--clay)">○</div>
+  <p class="say" style="margin-top:8px">收到了。<br>就放下——<span class="em">我們見面再談。</span></p>
+</div>
+
+<script>
+(function(){
+  var cv=document.getElementById('stage'), ctx=cv.getContext('2d');
+  var W,H,DPR;
+  function resize(){
+    DPR=Math.min(window.devicePixelRatio||1,2);
+    W=cv.width=innerWidth*DPR; H=cv.height=innerHeight*DPR;
+    cv.style.width=innerWidth+'px'; cv.style.height=innerHeight+'px';
+  }
+  resize(); addEventListener('resize', resize);
+
+  var ROUND=45;
+  var STATE='intro';
+  var cursorX, basketX, baseY;
+  var lights=[], sparks=[];
+  var score=0, miss=0, timeLeft=ROUND, spawnT=0, elapsed=0;
+
+  function reset(){
+    cursorX=W/2; basketX=W/2; baseY=H*0.84;
+    lights=[]; sparks=[]; score=0; miss=0; timeLeft=ROUND; spawnT=0; elapsed=0;
+    document.getElementById('score').textContent='接到 0';
+    document.getElementById('clock').textContent=ROUND.toFixed(1);
+  }
+
+  function setCursor(x){ cursorX=x*DPR; }
+  cv.addEventListener('mousemove', function(e){ setCursor(e.clientX); });
+  cv.addEventListener('touchmove', function(e){ var t=e.touches[0]; if(t) setCursor(t.clientX); }, {passive:true});
+  cv.addEventListener('touchstart', function(e){ var t=e.touches[0]; if(t) setCursor(t.clientX); }, {passive:true});
+
+  // 游標與籃子之間：會飄移的偏差（背不起來，只能每刻重估）
+  function offsetAt(t){
+    return 0.15*W*Math.sin(t*0.63+1.2) + 0.09*W*Math.sin(t*1.57+0.4) + 0.05*W*Math.sin(t*2.9+2.1);
+  }
+
+  function spawn(){
+    var m=W*0.08;
+    lights.push({x:m+Math.random()*(W-2*m), y:-20*DPR, vy:(0.30+Math.random()*0.10)*H, r:(5+Math.random()*2)*DPR, caught:false});
+  }
+  function burst(x,y,ok){
+    var n=ok?18:7;
+    for(var i=0;i<n;i++){ var a=Math.random()*Math.PI*2, sp=(0.5+Math.random()*1.6)*DPR*(ok?1.5:0.8);
+      sparks.push({x:x,y:y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp - (ok?1*DPR:0),life:1,ok:ok}); }
+  }
+
+  var last=performance.now();
+  function frame(now){
+    var dt=Math.min(0.04,(now-last)/1000); last=now;
+
+    if(STATE==='play'){
+      elapsed+=dt; timeLeft=Math.max(0,ROUND-elapsed);
+      document.getElementById('clock').textContent=timeLeft.toFixed(1);
+
+      // 籃子 = 游標 + 飄移偏差（帶一點跟隨延遲）
+      var ramp=1+elapsed/ROUND*0.5;
+      var catchW=W*0.072;
+      var tgt=cursorX + offsetAt(elapsed);
+      tgt=Math.max(catchW/2, Math.min(W-catchW/2, tgt));
+      basketX += (tgt-basketX)*Math.min(1, dt*9);
+
+      // 生成
+      spawnT-=dt;
+      var interval=Math.max(0.42, 0.9 - elapsed*0.012);
+      if(spawnT<=0){ spawn(); spawnT=interval; }
+
+      // 掉落 + 接取判定
+      for(var i=lights.length-1;i>=0;i--){
+        var L=lights[i]; L.y+=L.vy*ramp*dt;
+        if(!L.caught && L.y>=baseY-6*DPR && L.y<=baseY+22*DPR){
+          if(Math.abs(L.x-basketX)<catchW/2){ L.caught=true; score++; burst(L.x,baseY,true);
+            document.getElementById('score').textContent='接到 '+score; lights.splice(i,1); continue; }
+        }
+        if(L.y>H+20*DPR){ if(!L.caught){ miss++; } lights.splice(i,1); }
+      }
+
+      if(timeLeft<=0){ endGame(); }
+    }
+
+    // ---- 繪製 ----
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#17120e'; ctx.fillRect(0,0,W,H);
+
+    if(STATE==='play' || STATE==='end'){
+      var catchW=W*0.072;
+      ctx.globalCompositeOperation='lighter';
+      // 落下的光
+      for(var i=0;i<lights.length;i++){ var L=lights[i];
+        var g=ctx.createRadialGradient(L.x,L.y,0,L.x,L.y,L.r*3.2);
+        g.addColorStop(0,'rgba(255,238,205,0.95)'); g.addColorStop(0.4,'rgba(233,162,99,0.5)'); g.addColorStop(1,'rgba(233,162,99,0)');
+        ctx.fillStyle=g; ctx.beginPath(); ctx.arc(L.x,L.y,L.r*3.2,0,7); ctx.fill();
+      }
+      // 火花
+      for(var i=sparks.length-1;i>=0;i--){ var s=sparks[i];
+        s.x+=s.vx; s.y+=s.vy; s.vy+=0.05*DPR; s.life-=dt*1.6;
+        if(s.life<=0){ sparks.splice(i,1); continue; }
+        ctx.fillStyle=(s.ok?'rgba(255,224,170,':'rgba(150,120,100,')+(s.life*0.6)+')';
+        ctx.beginPath(); ctx.arc(s.x,s.y,2*DPR,0,7); ctx.fill();
+      }
+      ctx.globalCompositeOperation='source-over';
+
+      // 「你以為的位置」：游標處的淡標記
+      ctx.strokeStyle='rgba(183,168,153,0.33)'; ctx.lineWidth=1.5*DPR;
+      ctx.beginPath(); ctx.arc(cursorX,baseY,9*DPR,0,7); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cursorX,baseY-16*DPR); ctx.lineTo(cursorX,baseY+16*DPR); ctx.stroke();
+
+      // 籃子（真正的位置）
+      var bw=catchW;
+      ctx.save();
+      ctx.strokeStyle='rgba(255,243,224,0.95)'; ctx.lineWidth=4*DPR; ctx.lineCap='round';
+      ctx.beginPath();
+      ctx.moveTo(basketX+bw/2, baseY-16*DPR);     // 右緣（開口朝上）
+      ctx.lineTo(basketX+bw/2, baseY);
+      ctx.arc(basketX, baseY, bw/2, 0, Math.PI, false);  // 碗底（向下鼓）
+      ctx.lineTo(basketX-bw/2, baseY-16*DPR);
+      ctx.stroke();
+      // 籃子柔光
+      var gb=ctx.createRadialGradient(basketX,baseY,0,basketX,baseY,bw*0.9);
+      gb.addColorStop(0,'rgba(233,162,99,0.22)'); gb.addColorStop(1,'rgba(233,162,99,0)');
+      ctx.globalCompositeOperation='lighter'; ctx.fillStyle=gb;
+      ctx.beginPath(); ctx.arc(basketX,baseY,bw*0.9,0,7); ctx.fill();
+      ctx.restore();
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  function show(id){ ['intro','end','form','done'].forEach(function(k){
+    document.getElementById(k).classList.toggle('on', k===id); }); }
+
+  function startGame(){ reset(); STATE='play'; show(null); }
+
+  function endGame(){
+    STATE='end';
+    document.getElementById('endTitle').textContent='都過去了。';
+    document.getElementById('endStat').textContent='接到 '+score+' 顆　·　漏掉 '+miss+' 顆';
+    document.getElementById('endQ').innerHTML=
+      '那幾顆沒接住的光，<br>像不像你這一生，<br>曾經<span class="em">差一點</span>、卻留不住的什麼？<br><br>愈想抓回來，手愈緊——<br>可它，還是過去了。<br><br>這一次，能不能就<span class="em">讓它過去</span>？';
+    show('end');
+  }
+
+  document.getElementById('startBtn').onclick=startGame;
+  document.getElementById('againBtn').onclick=startGame;
+  document.getElementById('toFormBtn').onclick=function(){ STATE='form'; show('form'); };
+
+  document.getElementById('sendBtn').onclick=function(){
+    var nick=document.getElementById('nick').value.trim();
+    var reflect=document.getElementById('reflect').value.trim();
+    var hint=document.getElementById('hint');
+    if(!nick){ hint.textContent='請填一下你的暱稱。'; return; }
+    if(!reflect){ hint.textContent='寫一句也好。'; return; }
+    this.disabled=true; hint.textContent='送出中……';
+    fetch(ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify({story:STORY,nickname:nick,choice:'接到'+score+'顆・漏'+miss+'顆',reason:reflect})
+    }).then(function(){ STATE='done'; show('done'); }).catch(function(){ STATE='done'; show('done'); });
+  };
+
+  // QA：#end 看結束頁
+  if(location.hash==='#end'){ reset(); score=14; miss=9; STATE='play'; endGame(); }
+})();
+</script>
+</body>
+</html>

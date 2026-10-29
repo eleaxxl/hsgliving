@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>三個故事，選一個標題</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+    --bg:#f6f1e7;--panel:#fbf8f1;--ink:#2c2620;--soft:#6f6656;--faint:#9a9082;--rule:#e0d7c6;--accent:#9c6b45;
+  }
+  *{box-sizing:inherit}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:'Noto Serif TC',serif;line-height:1.9;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;min-height:100%}
+  .wrap{max-width:640px;margin:0 auto;padding:0 24px 96px}
+  header.top{text-align:center;padding:86px 0 26px}
+  header.top .kicker{font-family:'Noto Sans TC',sans-serif;font-size:14px;letter-spacing:8px;color:var(--accent);margin-bottom:22px}
+  header.top h1{font-size:40px;font-weight:600;letter-spacing:6px;margin:0 0 18px}
+  header.top .sub{font-size:16px;color:var(--soft);letter-spacing:1px;line-height:1.9}
+  hr.rule{border:none;border-top:1px solid var(--rule);max-width:110px;margin:38px auto}
+
+  .menu{display:flex;flex-direction:column;gap:18px;margin-top:20px}
+  a.card{
+    display:block;text-decoration:none;color:var(--ink);
+    background:var(--panel);border:1px solid var(--rule);border-radius:18px;
+    padding:30px 30px;transition:border-color .2s,background .2s,transform .1s;
+  }
+  a.card:hover{border-color:var(--accent);background:#fdfbf6}
+  a.card:active{transform:scale(.995)}
+  a.card .n{font-family:'Noto Sans TC',sans-serif;font-size:13px;letter-spacing:4px;color:var(--accent);margin-bottom:12px}
+  a.card .t{font-size:26px;font-weight:600;letter-spacing:3px;margin-bottom:8px}
+  a.card .d{font-size:15px;color:var(--soft);letter-spacing:.5px;line-height:1.8}
+  a.card .go{margin-top:16px;font-family:'Noto Sans TC',sans-serif;font-size:13px;letter-spacing:3px;color:var(--accent)}
+
+  .backhome{text-align:center;margin-top:40px}
+  .backhome a{font-family:'Noto Sans TC',sans-serif;font-size:13px;letter-spacing:3px;color:var(--faint);text-decoration:none}
+  .backhome a:hover{color:var(--accent)}
+
+  footer{text-align:center;padding-top:60px;color:var(--faint);font-family:'Noto Sans TC',sans-serif;font-size:13px;letter-spacing:3px}
+
+  @media(max-width:560px){
+    .wrap{padding:0 20px 72px}
+    header.top{padding:60px 0 22px}
+    header.top h1{font-size:32px;letter-spacing:4px}
+    a.card{padding:26px 24px}
+    a.card .t{font-size:23px}
+  }
+</style>
+</head>
+<body>
+
+<div id="gate" style="position:fixed;inset:0;z-index:9999;background:#f5ece6;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Noto Sans TC',sans-serif;padding:24px">
+  <div style="font-size:15px;letter-spacing:.5em;color:#a86f5e;margin-bottom:28px;text-indent:.5em">不 只 讀 書 的 讀 書 會</div>
+  <input id="gatepw" type="password" inputmode="numeric" placeholder="請輸入密碼"
+    style="font-family:'Noto Serif TC',serif;font-size:20px;text-align:center;letter-spacing:.3em;color:#3b302b;background:#fcf8f4;border:1px solid #e7d9cf;border-radius:12px;padding:14px 20px;width:min(260px,80vw);outline:none">
+  <button id="gatebtn"
+    style="margin-top:18px;font-family:'Noto Sans TC',sans-serif;font-size:16px;letter-spacing:.3em;color:#fff;background:#a86f5e;border:none;border-radius:999px;padding:12px 44px;cursor:pointer;text-indent:.3em">進　入</button>
+  <div id="gatemsg" style="margin-top:16px;font-size:13px;letter-spacing:.1em;color:#b9a89d;min-height:1.2em"></div>
+</div>
+<script>
+(function(){
+  var PW="8888";
+  var g=document.getElementById('gate'), inp=document.getElementById('gatepw'),
+      btn=document.getElementById('gatebtn'), msg=document.getElementById('gatemsg');
+  function tryOpen(){
+    if(inp.value===PW){ g.style.display='none'; }
+    else { msg.textContent='密碼不對，再試一次。'; inp.value=''; inp.focus(); }
+  }
+  btn.addEventListener('click',tryOpen);
+  inp.addEventListener('keydown',function(e){ if(e.key==='Enter') tryOpen(); });
+  inp.focus();
+})();
+</script>
+
+<div class="wrap">
+  <header class="top">
+    <div class="kicker">讀 ・ 選</div>
+    <h1>三個故事，一個標題</h1>
+    <div class="sub">讀完每一則，替它選一個你覺得最適合的標題，填上暱稱與理由送出。<br>沒有標準答案——你選的，是你自己。</div>
+  </header>
+  <hr class="rule">
+  <div class="menu">
+  <a class="card" href="f1.html">
+    <div class="n">第 一 則</div>
+    <div class="t">勞山道士</div>
+    <div class="d">改寫自《聊齋誌異》</div>
+    <div class="go">進入 →</div>
+  </a>
+  <a class="card" href="f2.html">
+    <div class="n">第 二 則</div>
+    <div class="t">雪夜訪戴</div>
+    <div class="d">改寫自《世說新語》</div>
+    <div class="go">進入 →</div>
+  </a>
+  <a class="card" href="f3.html">
+    <div class="n">第 三 則</div>
+    <div class="t">石頭湯</div>
+    <div class="d">改寫自歐洲民間故事</div>
+    <div class="go">進入 →</div>
+  </a>
+  </div>
+  <div class="backhome"><a href="jing.html">← 回金剛經選單</a></div>
+  <footer>不 只 讀 書 的 讀 書 會</footer>
+</div>
+</body>
+</html>

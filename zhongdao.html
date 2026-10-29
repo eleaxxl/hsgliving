@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>中道</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+  const ENDPOINT = "https://script.google.com/macros/s/AKfycbxTZvcSvcnn7uE2g7Dn8ElXr89yTNGFO6_ss4xJ4Bnw3EhF2ISniHkTC7JYMQd5P5JDrw/exec";
+  const STORY = "中道（遊戲）";
+</script>
+<style>
+  :root{
+    --ink0:#17120e; --paper:#f1e7d9; --soft:#b7a899; --faint:#7c6f61;
+    --clay:#c98a63; --clay-d:#a86f5e; --line:#3a2f26;
+    --cjk:'Noto Serif TC',serif; --sans:'Noto Sans TC',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{background:var(--ink0);color:var(--paper);font-family:var(--cjk);overflow:hidden;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;touch-action:none}
+  #stage{position:fixed;inset:0;display:block;cursor:pointer}
+
+  .hud{position:fixed;top:0;left:0;right:0;padding:20px 24px;display:flex;justify-content:space-between;
+    align-items:baseline;font-family:var(--sans);font-size:13px;letter-spacing:.14em;color:var(--faint);z-index:5;pointer-events:none}
+  .hud .t{color:var(--soft);font-variant-numeric:tabular-nums}
+
+  .overlay{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:40px 28px;
+    background:radial-gradient(ellipse at center, rgba(23,18,14,.5) 0%, rgba(23,18,14,.92) 72%);
+    opacity:0;visibility:hidden;transition:opacity .6s ease}
+  .overlay.on{opacity:1;visibility:visible}
+  #end{ justify-content:flex-end;
+    background:linear-gradient(to bottom, rgba(23,18,14,0) 0%, rgba(23,18,14,0) 34%, rgba(23,18,14,.82) 48%, rgba(23,18,14,.98) 100%);
+    padding-bottom:clamp(26px,4.5vh,48px); }
+  #end .t{font-size:clamp(24px,5vw,38px);margin-bottom:14px}
+  #end .stat{margin-bottom:22px}
+  #end .q{line-height:1.95;max-width:28ch}
+  .kicker{font-family:var(--sans);font-size:13px;letter-spacing:.5em;color:var(--clay);text-indent:.5em;margin-bottom:26px}
+  h1{font-size:clamp(40px,10vw,76px);font-weight:500;letter-spacing:.3em;text-indent:.3em;margin-bottom:28px}
+  .say{font-size:clamp(17px,2.4vw,21px);line-height:2.1;color:var(--paper);max-width:26ch}
+  .say .em{color:var(--clay)}
+  .small{font-size:14px;color:var(--faint);letter-spacing:.08em;margin-top:18px}
+  .btnrow{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:44px}
+  button.b{font-family:var(--sans);font-size:16px;letter-spacing:.3em;text-indent:.3em;color:var(--ink0);
+    background:var(--clay);border:none;border-radius:999px;padding:15px 44px;cursor:pointer;transition:opacity .2s,transform .1s}
+  button.b:hover{opacity:.9}
+  button.b:active{transform:scale(.97)}
+  button.ghost{background:transparent;color:var(--soft);border:1px solid var(--line)}
+  button.ghost:hover{color:var(--clay);border-color:var(--clay-d)}
+
+  .end .t{font-size:clamp(26px,6vw,44px);font-weight:500;letter-spacing:.14em;margin-bottom:22px}
+  .end .stat{font-family:var(--sans);font-size:14px;letter-spacing:.14em;color:var(--soft);margin-bottom:34px}
+  .end .q{font-size:clamp(16px,2.3vw,20px);line-height:2.15;color:var(--paper);max-width:30ch}
+  .end .q .em{color:var(--clay)}
+
+  .form{max-width:440px;width:100%}
+  .form .lead{font-size:clamp(16px,2.3vw,20px);line-height:2;color:var(--paper);margin-bottom:26px;max-width:28ch;margin-left:auto;margin-right:auto}
+  .field{text-align:left;margin:0 auto 20px}
+  .field label{display:block;font-family:var(--sans);font-size:13px;letter-spacing:.14em;color:var(--soft);margin-bottom:10px}
+  .field input,.field textarea{width:100%;background:rgba(241,231,217,.04);border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;font-family:var(--cjk);font-size:17px;color:var(--paper);line-height:1.8;outline:none}
+  .field input::placeholder,.field textarea::placeholder{color:#6a5e51}
+  .field input:focus,.field textarea:focus{border-color:var(--clay-d);background:rgba(241,231,217,.06)}
+  .field textarea{min-height:110px;resize:vertical}
+  .hint{font-family:var(--sans);font-size:13px;color:var(--faint);min-height:1.3em;margin-top:6px}
+
+  @media(max-width:560px){ h1{letter-spacing:.18em;text-indent:.18em} }
+</style>
+</head>
+<body>
+
+<canvas id="stage"></canvas>
+
+<div class="hud">
+  <span>中 道</span>
+  <span class="t" id="clock">0.0 秒</span>
+</div>
+
+<div class="overlay on" id="intro">
+  <div class="kicker">不 只 讀 書 的 讀 書 會</div>
+  <h1>中　道</h1>
+  <p class="say">箭頭一直在上下擺。<br><span class="em">在它經過「中」的那一下，點一下往前。</span></p>
+  <p class="small">走到右邊那盞光，越直越快。</p>
+  <div class="btnrow"><button class="b" id="startBtn">開　始</button></div>
+</div>
+
+<div class="overlay end" id="end">
+  <div class="t" id="endTitle">到了。</div>
+  <div class="stat" id="endStat"></div>
+  <p class="q" id="endQ"></p>
+  <div class="btnrow">
+    <button class="b ghost" id="againBtn">再玩一次</button>
+    <button class="b" id="toFormBtn">寫下感想</button>
+  </div>
+</div>
+
+<div class="overlay" id="form">
+  <div class="form">
+    <div class="kicker" style="margin-bottom:22px">感 想</div>
+    <p class="lead">那個「中」一直在擺、也一直在移。<br>你是怎麼抓它的？抓到了嗎？</p>
+    <div class="field"><label>你的暱稱</label>
+      <input id="nick" type="text" maxlength="60" placeholder="寫個名字，讓引導人認得你"></div>
+    <div class="field"><label>你的感想</label>
+      <textarea id="reflect" maxlength="2000" placeholder="說說剛剛抓「中」的事……"></textarea></div>
+    <div class="btnrow" style="margin-top:26px"><button class="b" id="sendBtn">送　出</button></div>
+    <div class="hint" id="hint"></div>
+  </div>
+</div>
+
+<div class="overlay" id="done">
+  <div class="kicker" style="color:var(--clay)">○</div>
+  <p class="say" style="margin-top:8px">收到了。<br>就放下——<span class="em">我們見面再談。</span></p>
+</div>
+
+<script>
+(function(){
+  var cv=document.getElementById('stage'), ctx=cv.getContext('2d');
+  var W,H,DPR;
+  function resize(){
+    DPR=Math.min(window.devicePixelRatio||1,2);
+    W=cv.width=innerWidth*DPR; H=cv.height=innerHeight*DPR;
+    cv.style.width=innerWidth+'px'; cv.style.height=innerHeight+'px';
+  }
+  resize(); addEventListener('resize', resize);
+
+  var STATE='intro';
+  var A,B,STEP,AMP,FREQ;
+  var arrow={x:0,y:0,angle:0};
+  var nodes=[], pathLen=0;
+  var elapsed=0, started=false, t=0;
+  var flash=null;                  // 點擊後顯示「正解」的回饋
+  var reviewMin=0, reviewMax=0;     // 結束攤開兩條路時的上下界
+
+  function centerY(tt){
+    var y=H*(0.5 + 0.20*Math.sin(tt*0.47+0.6) + 0.085*Math.sin(tt*1.03+2.1));
+    return Math.max(H*0.24, Math.min(H*0.76, y));
+  }
+  function reset(){
+    A={x:W*0.12}; B={x:W*0.86, y:centerY(0)};
+    STEP=(B.x-A.x)/12; AMP=H*0.16; FREQ=4.4;
+    arrow.x=A.x; arrow.y=B.y; arrow.angle=0;
+    nodes=[]; pathLen=0; elapsed=0; started=false;
+  }
+
+  function doStep(){
+    if(STATE!=='play') return;
+    if(!started) started=true;
+    var cyNow=centerY(t);                       // 這一刻「真正的中」
+    var node={x:arrow.x, y:arrow.y, cy:cyNow};
+    if(nodes.length) pathLen+=Math.hypot(node.x-nodes[nodes.length-1].x, node.y-nodes[nodes.length-1].y);
+    nodes.push(node);
+    flash={x:arrow.x, ay:arrow.y, cy:cyNow, t:5};   // 正解回饋停留 5 秒
+    arrow.x=Math.min(B.x, arrow.x+STEP);
+    if(arrow.x>=B.x-0.5){
+      var fy=centerY(t)+AMP*Math.sin(t*FREQ);
+      pathLen+=Math.hypot(B.x-node.x, fy-node.y);
+      nodes.push({x:B.x,y:fy,cy:centerY(t)});
+      endGame();
+    }
+  }
+  cv.addEventListener('mousedown', doStep);
+  cv.addEventListener('touchstart', function(e){ e.preventDefault(); doStep(); }, {passive:false});
+  addEventListener('keydown', function(e){ if(e.key===' '){ e.preventDefault(); doStep(); } });
+
+  var last=performance.now();
+  function frame(now){
+    var dt=Math.min(0.04,(now-last)/1000); last=now; t+=dt;
+    if(flash && flash.t>0) flash.t=Math.max(0, flash.t-dt);
+
+    if(STATE==='play'){
+      var cY=centerY(t); B.y=cY;
+      arrow.y=cY + AMP*Math.sin(t*FREQ);        // 掃描束的當下位置
+      if(started){ elapsed+=dt; document.getElementById('clock').textContent=elapsed.toFixed(1)+' 秒'; }
+    }
+
+    ctx.clearRect(0,0,W,H); ctx.fillStyle='#17120e'; ctx.fillRect(0,0,W,H);
+
+    if(STATE==='play'){
+      // 走過的路
+      if(nodes.length>1){
+        ctx.beginPath(); ctx.moveTo(nodes[0].x,nodes[0].y);
+        for(var i=1;i<nodes.length;i++) ctx.lineTo(nodes[i].x,nodes[i].y);
+        if(STATE==='play'){ ctx.lineTo(arrow.x,arrow.y); }
+        ctx.strokeStyle='rgba(201,138,99,0.34)'; ctx.lineWidth=2*DPR; ctx.lineJoin='round'; ctx.stroke();
+      }
+      // 正解：理想的「中道」整條路（你每一下真正的中連起來）
+      if(nodes.length>1){
+        ctx.setLineDash([5*DPR,7*DPR]);
+        ctx.beginPath(); ctx.moveTo(nodes[0].x,nodes[0].cy);
+        for(var j=1;j<nodes.length;j++) ctx.lineTo(nodes[j].x,nodes[j].cy);
+        ctx.strokeStyle='rgba(183,168,153,0.32)'; ctx.lineWidth=1.3*DPR; ctx.stroke();
+        ctx.setLineDash([]);
+      }
+      // 剛點那一下的正解回饋：亮圈＝真正的中，點＝你落在哪，線＝差多少
+      if(flash && flash.t>0){
+        var fa=Math.min(1, flash.t/0.8);   // 停留 5 秒，最後 0.8 秒才淡出
+        ctx.strokeStyle='rgba(201,138,99,'+(0.65*fa)+')'; ctx.lineWidth=2*DPR;
+        ctx.beginPath(); ctx.moveTo(flash.x,flash.ay); ctx.lineTo(flash.x,flash.cy); ctx.stroke();
+        ctx.strokeStyle='rgba(235,205,160,'+(0.95*fa)+')'; ctx.lineWidth=2*DPR;
+        ctx.beginPath(); ctx.arc(flash.x,flash.cy,9*DPR,0,7); ctx.stroke();
+        ctx.fillStyle='rgba(255,243,224,'+(0.95*fa)+')';
+        ctx.beginPath(); ctx.arc(flash.x,flash.ay,4*DPR,0,7); ctx.fill();
+      }
+      // A
+      ctx.fillStyle='rgba(183,168,153,0.45)'; ctx.beginPath(); ctx.arc(A.x,(nodes[0]?nodes[0].y:B.y),5*DPR,0,7); ctx.fill();
+      // B（淡、隨中點飄）
+      ctx.globalCompositeOperation='lighter';
+      var gb=ctx.createRadialGradient(B.x,B.y,0,B.x,B.y,48*DPR);
+      gb.addColorStop(0,'rgba(201,138,99,0.42)'); gb.addColorStop(1,'rgba(201,138,99,0)');
+      ctx.fillStyle=gb; ctx.beginPath(); ctx.arc(B.x,B.y,48*DPR,0,7); ctx.fill();
+      // 掃描光束（取代箭頭）：在這一欄上下掃，像雷達／示波器
+      if(STATE==='play'){
+        var sx=arrow.x, cen=B.y, sy=arrow.y, hw=38*DPR;
+        var top=cen-AMP, bot=cen+AMP;
+        // 掃描場（擺幅範圍，淡漸層）
+        var field=ctx.createLinearGradient(0,top,0,bot);
+        field.addColorStop(0,'rgba(201,138,99,0)');
+        field.addColorStop(0.5,'rgba(201,138,99,0.13)');
+        field.addColorStop(1,'rgba(201,138,99,0)');
+        ctx.fillStyle=field; ctx.fillRect(sx-hw, top, hw*2, bot-top);
+        // 中線（目標：掃到這裡點，就走直）
+        ctx.setLineDash([3*DPR,5*DPR]);
+        ctx.strokeStyle='rgba(255,243,224,0.32)'; ctx.lineWidth=1*DPR;
+        ctx.beginPath(); ctx.moveTo(sx-hw,cen); ctx.lineTo(sx+hw,cen); ctx.stroke();
+        ctx.setLineDash([]);
+        // 掃描亮束 + 上下光暈
+        ctx.globalCompositeOperation='lighter';
+        var glow=ctx.createRadialGradient(sx,sy,0,sx,sy,hw*1.7);
+        glow.addColorStop(0,'rgba(255,236,200,0.85)');
+        glow.addColorStop(0.45,'rgba(233,162,99,0.40)');
+        glow.addColorStop(1,'rgba(233,162,99,0)');
+        ctx.fillStyle=glow; ctx.beginPath(); ctx.arc(sx,sy,hw*1.7,0,7); ctx.fill();
+        ctx.strokeStyle='rgba(255,248,235,0.95)'; ctx.lineWidth=2.5*DPR; ctx.lineCap='round';
+        ctx.beginPath(); ctx.moveTo(sx-hw,sy); ctx.lineTo(sx+hw,sy); ctx.stroke();
+        ctx.globalCompositeOperation='source-over';
+      }
+      ctx.globalCompositeOperation='source-over';
+    }
+    else if(STATE==='end' && nodes.length>1){
+      // 結束：把兩條路完整攤開在上半畫面，放大看清
+      var tT=H*0.07, tB=H*0.30, tMid=(tT+tB)/2;
+      var sMid=(reviewMin+reviewMax)/2, sRange=Math.max(reviewMax-reviewMin, H*0.05);
+      var sc=Math.min(1,(tB-tT)/sRange);
+      function my(y){ return tMid+(y-sMid)*sc; }
+      var n0=nodes[0], nL=nodes[nodes.length-1];
+      // 中道（最短）：虛線
+      ctx.setLineDash([6*DPR,9*DPR]);
+      ctx.beginPath(); ctx.moveTo(n0.x,my(n0.cy));
+      for(var e1=1;e1<nodes.length;e1++) ctx.lineTo(nodes[e1].x,my(nodes[e1].cy));
+      ctx.strokeStyle='rgba(236,222,202,0.55)'; ctx.lineWidth=1.6*DPR; ctx.lineJoin='round'; ctx.stroke();
+      ctx.setLineDash([]);
+      // 你走的路：實線
+      ctx.beginPath(); ctx.moveTo(n0.x,my(n0.y));
+      for(var e2=1;e2<nodes.length;e2++) ctx.lineTo(nodes[e2].x,my(nodes[e2].y));
+      ctx.strokeStyle='rgba(201,138,99,0.95)'; ctx.lineWidth=2.8*DPR; ctx.lineJoin='round'; ctx.stroke();
+      // 每一下落點：小點標出你點的位置
+      for(var e3=0;e3<nodes.length;e3++){
+        ctx.fillStyle='rgba(255,243,224,0.9)';
+        ctx.beginPath(); ctx.arc(nodes[e3].x,my(nodes[e3].y),3.2*DPR,0,7); ctx.fill();
+      }
+      // 起點 A、終點 B
+      ctx.fillStyle='rgba(183,168,153,0.7)'; ctx.beginPath(); ctx.arc(n0.x,my(n0.y),6*DPR,0,7); ctx.fill();
+      ctx.fillStyle='rgba(201,138,99,0.9)'; ctx.beginPath(); ctx.arc(nL.x,my(nL.y),6*DPR,0,7); ctx.fill();
+      ctx.fillStyle='rgba(154,144,130,0.85)'; ctx.font='500 '+(13*DPR)+'px "Noto Sans TC",sans-serif';
+      ctx.textBaseline='alphabetic'; ctx.textAlign='center';
+      ctx.fillText('A', n0.x, my(n0.y)-13*DPR);
+      ctx.fillText('B', nL.x, my(nL.y)-13*DPR);
+      // 圖例
+      var ly=tB+30*DPR, lx=W*0.5-150*DPR;
+      ctx.lineCap='round'; ctx.textBaseline='middle'; ctx.textAlign='left';
+      ctx.setLineDash([]); ctx.strokeStyle='rgba(201,138,99,0.95)'; ctx.lineWidth=2.8*DPR;
+      ctx.beginPath(); ctx.moveTo(lx,ly); ctx.lineTo(lx+32*DPR,ly); ctx.stroke();
+      ctx.fillStyle='rgba(241,231,217,0.9)'; ctx.font='500 '+(15*DPR)+'px "Noto Sans TC",sans-serif';
+      ctx.fillText('你走的路', lx+44*DPR, ly);
+      ctx.setLineDash([6*DPR,9*DPR]); ctx.strokeStyle='rgba(236,222,202,0.6)'; ctx.lineWidth=1.6*DPR;
+      ctx.beginPath(); ctx.moveTo(lx+170*DPR,ly); ctx.lineTo(lx+202*DPR,ly); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle='rgba(241,231,217,0.9)';
+      ctx.fillText('中道（最短）', lx+214*DPR, ly);
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  function show(id){ ['intro','end','form','done'].forEach(function(k){
+    document.getElementById(k).classList.toggle('on', k===id); }); }
+  function startGame(){ reset(); STATE='play'; document.getElementById('clock').textContent='0.0 秒'; show(null); }
+  function endGame(){
+    STATE='end';
+    // 攤開兩條路的上下界（涵蓋你走的點與每一刻的中）
+    var lo=Infinity, hi=-Infinity;
+    for(var r=0;r<nodes.length;r++){
+      lo=Math.min(lo, nodes[r].y, nodes[r].cy);
+      hi=Math.max(hi, nodes[r].y, nodes[r].cy);
+    }
+    reviewMin=lo; reviewMax=hi;
+    var straight=(B.x-A.x);
+    var pct=Math.max(0, Math.round((pathLen/straight-1)*100));
+    document.getElementById('endTitle').textContent='到了。';
+    document.getElementById('endStat').textContent='走了 '+elapsed.toFixed(1)+' 秒　·　比直線多繞了 '+pct+' %';
+    document.getElementById('endQ').innerHTML=
+      '它一直在擺、也一直在移。<br>你只能在它經過「<span class="em">中</span>」的那一下，剛好放手。<br>你是在等一個停下來的中，還是學會<span class="em">在移動裡接住它</span>？';
+    show('end');
+  }
+
+  document.getElementById('startBtn').onclick=startGame;
+  document.getElementById('againBtn').onclick=startGame;
+  document.getElementById('toFormBtn').onclick=function(){ STATE='form'; show('form'); };
+  document.getElementById('sendBtn').onclick=function(){
+    var nick=document.getElementById('nick').value.trim();
+    var reflect=document.getElementById('reflect').value.trim();
+    var hint=document.getElementById('hint');
+    if(!nick){ hint.textContent='請填一下你的暱稱。'; return; }
+    if(!reflect){ hint.textContent='寫一句也好。'; return; }
+    this.disabled=true; hint.textContent='送出中……';
+    fetch(ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify({story:STORY,nickname:nick,choice:'走了'+elapsed.toFixed(1)+'秒',reason:reflect})
+    }).then(function(){ STATE='done'; show('done'); }).catch(function(){ STATE='done'; show('done'); });
+  };
+
+  if(location.hash==='#end'){
+    reset(); STATE='play'; elapsed=9.2; nodes=[]; pathLen=0;
+    for(var q=0;q<=12;q++){
+      var qx=A.x+(B.x-A.x)*(q/12);
+      var qcy=centerY(q*0.8);
+      var qy=qcy+H*0.12*Math.sin(q*1.7+0.4);
+      if(nodes.length) pathLen+=Math.hypot(qx-nodes[q-1].x, qy-nodes[q-1].y);
+      nodes.push({x:qx,y:qy,cy:qcy});
+    }
+    endGame();
+  }
+})();
+</script>
+</body>
+</html>

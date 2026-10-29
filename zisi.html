@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>他們都很自私</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+  const ENDPOINT = "https://script.google.com/macros/s/AKfycbxTZvcSvcnn7uE2g7Dn8ElXr89yTNGFO6_ss4xJ4Bnw3EhF2ISniHkTC7JYMQd5P5JDrw/exec";
+  const STORY = "他們都很自私（遊戲）";
+</script>
+<style>
+  :root{
+    --ink0:#17120e; --ink1:#251d16; --paper:#f4ebdf; --soft:#cfc1b2; --faint:#a89a8b;
+    --clay:#dc9e76; --clay-d:#b57b66; --line:#4a3d32;
+    --share:#b9cfa5; --hoard:#e29384;
+    --cjk:'Noto Serif TC',serif; --sans:'Noto Sans TC',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{background:var(--ink0);color:var(--paper);font-family:var(--cjk);line-height:1.9;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    padding:calc(env(safe-area-inset-top,0px) + 56px) max(20px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 72px) max(20px,env(safe-area-inset-left,0px))}
+  main{max-width:680px;margin:0 auto}
+  section{display:flex;flex-direction:column;gap:22px}
+  .kicker{font-family:var(--sans);font-size:13px;letter-spacing:.5em;color:var(--clay);text-indent:.5em;text-align:center}
+  h1{font-size:clamp(36px,9vw,64px);font-weight:500;letter-spacing:.2em;text-indent:.2em;text-align:center;line-height:1.3}
+  h2{font-size:clamp(22px,4.6vw,28px);font-weight:500;letter-spacing:.12em}
+  p{font-size:clamp(16px,2.3vw,19px);line-height:2.05}
+  .center{text-align:center}
+  .say{max-width:28ch;margin:0 auto;text-align:center}
+  .em{color:var(--clay)}
+  .small{font-family:var(--sans);font-size:14px;color:var(--faint);letter-spacing:.08em;line-height:1.9}
+  .rules{list-style:none;display:flex;flex-direction:column;gap:12px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 4px}
+  .rules li{font-size:17px;line-height:1.95;padding-left:1.3em;position:relative}
+  .rules li::before{content:"○";position:absolute;left:0;color:var(--clay);font-size:.7em;top:.45em}
+  .rules b{color:var(--clay);font-weight:600}
+  .btnrow{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:10px}
+  button.b{font-family:var(--sans);font-size:16px;letter-spacing:.3em;text-indent:.3em;color:var(--ink0);background:var(--clay);
+    border:none;border-radius:999px;padding:14px 40px;cursor:pointer;transition:opacity .2s,transform .1s}
+  button.b:hover{opacity:.9} button.b:active{transform:scale(.97)}
+  button.b:disabled{opacity:.35;cursor:default}
+  button.ghost{background:transparent;color:var(--soft);border:1px solid var(--line)}
+  button.ghost:hover{color:var(--clay);border-color:var(--clay-d)}
+  button:focus-visible{outline:2px solid var(--clay);outline-offset:3px}
+  .back{display:block;text-align:center;margin-top:44px;font-family:var(--sans);font-size:13px;letter-spacing:3px;color:var(--faint);text-decoration:none}
+  .back:hover{color:var(--clay)}
+
+  .status{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--sans);font-size:13px;letter-spacing:.14em;color:var(--faint)}
+  .status .r{font-family:var(--cjk);font-size:22px;color:var(--paper);letter-spacing:.12em;font-variant-numeric:tabular-nums}
+  .seats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  @media(max-width:560px){.seats{grid-template-columns:repeat(2,1fr)}}
+  .seat{background:var(--ink1);border:1px solid var(--line);border-radius:14px;padding:14px 14px 12px;display:flex;flex-direction:column;gap:4px;min-width:0}
+  .seat.me{border-color:var(--clay-d)}
+  .seat .name{font-size:18px;letter-spacing:.12em}
+  .seat .coins{font-family:var(--sans);font-size:13px;color:var(--faint);font-variant-numeric:tabular-nums}
+  .seat .coins b{font-family:var(--cjk);font-size:19px;color:var(--clay);font-weight:500}
+  .chip{display:inline-block;font-family:var(--sans);font-size:14px;font-weight:500;letter-spacing:.2em;padding:1px 12px;border-radius:99px;border:1px solid var(--line);color:var(--faint);margin-top:4px}
+  .chip.S{background:var(--share);border-color:var(--share);color:var(--ink0)}
+  .chip.H{background:var(--hoard);border-color:var(--hoard);color:var(--ink0)}
+  .seat .gain,.seat .rate{font-family:var(--sans);font-size:13px;color:var(--soft);font-variant-numeric:tabular-nums;min-height:1.6em}
+  .seat .rate{color:var(--faint)}
+  .pot{text-align:center;font-family:var(--sans);font-size:14px;letter-spacing:.06em;color:var(--soft);min-height:1.7em;font-variant-numeric:tabular-nums}
+  .picks{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .pick{font-family:var(--cjk);cursor:pointer;border-radius:16px;padding:18px 10px;border:1px solid currentColor;background:transparent;display:flex;flex-direction:column;align-items:center;gap:2px;transition:background .2s}
+  .pick strong{font-size:24px;font-weight:500;letter-spacing:.3em;text-indent:.3em}
+  .pick span{font-family:var(--sans);font-size:13px;letter-spacing:.12em}
+  .pick.S{color:var(--share)} .pick.H{color:var(--hoard)}
+  .pick:hover:not(:disabled){background:rgba(241,231,217,.05)}
+  .pick:disabled{opacity:.45;cursor:default}
+
+  .who{display:flex;flex-direction:column;gap:10px;padding:16px 0;border-bottom:1px solid var(--line)}
+  .who .n{font-size:18px}
+  .words{display:flex;flex-wrap:wrap;gap:8px}
+  .word{font-family:var(--cjk);font-size:15px;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--soft);border-radius:99px;padding:5px 16px;letter-spacing:.1em}
+  .word:hover{color:var(--paper)}
+  .word[aria-pressed="true"]{background:var(--clay);border-color:var(--clay);color:var(--ink0)}
+
+  .big{font-size:clamp(22px,5vw,32px);font-weight:500;line-height:1.75;letter-spacing:.06em;text-align:center}
+  .gridwrap{overflow-x:auto;padding-bottom:4px}
+  table.mirror{border-collapse:separate;border-spacing:4px;min-width:500px;margin:0 auto;font-family:var(--sans)}
+  .mirror th{font-weight:400;font-size:13px;color:var(--faint);text-align:center}
+  .mirror th.rh{text-align:left;font-family:var(--cjk);font-size:15px;color:var(--paper);padding-right:10px;white-space:nowrap}
+  .mirror td{width:38px;height:34px;border-radius:6px;text-align:center;font-size:14px;color:var(--ink0);font-weight:700;cursor:default}
+  .mirror td.S{background:var(--share)} .mirror td.H{background:var(--hoard)}
+  .mirror td.seed{background:transparent!important;color:var(--soft);border:1px dashed var(--faint)}
+  .mirror td.hl{outline:2px solid var(--paper);outline-offset:1px}
+  .verdict{border-left:2px solid var(--clay-d);padding:2px 0 2px 16px;display:flex;flex-direction:column;gap:4px}
+  .verdict .s{font-size:19px}
+  .verdict .d{font-family:var(--sans);font-size:14px;color:var(--soft);line-height:1.9}
+  .qs{list-style:none;counter-reset:q;display:flex;flex-direction:column;gap:12px}
+  .qs li{counter-increment:q;position:relative;padding-left:2.2em;font-size:17px;line-height:1.95}
+  .qs li::before{content:counter(q);position:absolute;left:0;top:.35em;width:1.5em;height:1.5em;border:1px solid var(--clay-d);border-radius:50%;color:var(--clay);font-family:var(--sans);font-size:.72em;display:flex;align-items:center;justify-content:center}
+  hr.rule{border:none;border-top:1px solid var(--line);width:110px;margin:16px auto}
+
+  .field{display:flex;flex-direction:column;gap:8px}
+  .field label{font-family:var(--sans);font-size:13px;letter-spacing:.14em;color:var(--soft)}
+  .field input,.field textarea{width:100%;background:rgba(241,231,217,.04);border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-family:var(--cjk);font-size:17px;color:var(--paper);line-height:1.8;outline:none}
+  .field input::placeholder,.field textarea::placeholder{color:#6a5e51}
+  .field input:focus,.field textarea:focus{border-color:var(--clay-d);background:rgba(241,231,217,.06)}
+  .field textarea{min-height:120px;resize:vertical}
+  .hint{text-align:center;font-family:var(--sans);font-size:13px;color:var(--faint);min-height:1.3em}
+  [hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main>
+
+  <section id="intro">
+    <div class="kicker">不 只 讀 書 的 讀 書 會</div>
+    <h1>他們都很自私</h1>
+    <ul class="rules">
+      <li>你和另外三位玩家——阿凱、小雨、老林。每一回合，每個人手上都有 10 枚硬幣。</li>
+      <li><b>分享</b>：把 10 枚放進公共池。池子會變成 1.6 倍，再平分給四個人。</li>
+      <li><b>獨佔</b>：10 枚自己留著，一樣分得到公共池。</li>
+      <li>大家同時決定，不能交談。一共 10 回合。</li>
+    </ul>
+    <p class="small center">玩的時候，留意你對每個人慢慢長出來的印象。</p>
+    <div class="btnrow"><button class="b" id="startBtn">開　始</button></div>
+    <a class="back" href="jing.html">← 回金剛經選單</a>
+  </section>
+
+  <section id="play" hidden>
+    <div class="status"><span class="r" id="roundLabel">第 1 回合</span><span>共 10 回合</span></div>
+    <div class="seats" id="seats"></div>
+    <div class="pot" id="pot">請做出你的決定。</div>
+    <div class="picks">
+      <button class="pick S" id="pickS"><strong>分享</strong><span>放進公共池</span></button>
+      <button class="pick H" id="pickH"><strong>獨佔</strong><span>留給自己</span></button>
+    </div>
+    <div class="btnrow"><button class="b" id="nextBtn" hidden>下一回合</button></div>
+  </section>
+
+  <section id="impression" hidden>
+    <div class="kicker">十 回 合 結 束</div>
+    <p class="say">在看結果之前，<br>替每個人選一個<span class="em">最貼切的形容</span>。</p>
+    <div id="imprRows"></div>
+    <div class="btnrow"><button class="b" id="revealBtn" disabled>看看他們是誰</button></div>
+  </section>
+
+  <section id="reveal" hidden>
+    <div class="kicker">揭 曉</div>
+    <p class="big">阿凱、小雨、老林，<br>從來沒有自己的主意。<br><span class="em">他們一直在學你</span>——只是慢了幾拍。</p>
+    <p class="small center">阿凱做的是你上一回合的選擇，小雨晚兩回合，老林晚三回合。<br>只有最前面幾格是預先設定的（虛線框）。</p>
+    <div class="gridwrap"><table class="mirror" id="mirror"></table></div>
+    <p class="small center">點一下任何一格，會標出它學的是你哪一回合。</p>
+    <hr class="rule">
+    <div id="verdicts" style="display:flex;flex-direction:column;gap:18px"></div>
+    <p id="summary"></p>
+    <hr class="rule">
+    <ol class="qs">
+      <li>你給他們的那些形容詞，現在讀起來，是在說誰？</li>
+      <li>最早讓你起疑的是哪一刻？那時候，你怎麼回應？</li>
+      <li>生活裡，有沒有哪段關係，你一直覺得對方「本來就是那樣」？</li>
+    </ol>
+    <div class="btnrow">
+      <button class="b ghost" id="againBtn">再玩一次</button>
+      <button class="b" id="toFormBtn">寫下感想</button>
+    </div>
+  </section>
+
+  <section id="form" hidden>
+    <div class="kicker">感 想</div>
+    <p class="say">發現他們只是你的回聲，<br>那一刻，心裡冒出什麼？</p>
+    <div class="field"><label for="nick">你的暱稱</label>
+      <input id="nick" type="text" maxlength="60" placeholder="寫個名字，讓引導人認得你"></div>
+    <div class="field"><label for="reflect">你的感想</label>
+      <textarea id="reflect" maxlength="2000" placeholder="我說老林自私的時候……"></textarea></div>
+    <div class="btnrow"><button class="b" id="sendBtn">送　出</button></div>
+    <div class="hint" id="hint"></div>
+  </section>
+
+  <section id="done" hidden style="padding-top:18vh">
+    <div class="kicker">○</div>
+    <p class="say">收到了。<br>就放下——<span class="em">我們見面再談。</span></p>
+    <a class="back" href="jing.html">← 回金剛經選單</a>
+  </section>
+
+</main>
+
+<script>
+(function(){
+  var ROUNDS=10, STAKE=10, MULT=1.6;
+  var WORDS=['慷慨','值得信任','精明','自私','善變','讀不懂'];
+  var others=[
+    {name:'阿凱',delay:1,seed:['S']},
+    {name:'小雨',delay:2,seed:['H','S']},
+    {name:'老林',delay:3,seed:['H','H','H']}
+  ];
+  var player, coins, round, impressions;
+  function $(id){return document.getElementById(id);}
+  function label(c){return c==='S'?'分享':'獨佔';}
+  function choiceOf(o,r){return r<o.delay?o.seed[r]:player[r-o.delay];}
+  function fmt(n){return Number.isInteger(n)?String(n):n.toFixed(1);}
+  function show(id){['intro','play','impression','reveal','form','done'].forEach(function(k){$(k).hidden=(k!==id);});window.scrollTo(0,0);}
+
+  function reset(){player=[];coins=[0,0,0,0];round=0;impressions={};}
+
+  function renderSeats(choices,gains){
+    var names=['你'].concat(others.map(function(o){return o.name;}));
+    $('seats').innerHTML=names.map(function(n,i){
+      var c=choices?choices[i]:null, rate='';
+      if(i>0){
+        var done=choices?round+1:round, s=0;
+        for(var r=0;r<done;r++) if(choiceOf(others[i-1],r)==='S') s++;
+        if(done>0) rate='分享過 '+s+' / '+done;
+      }
+      return '<div class="seat'+(i===0?' me':'')+'"><div class="name">'+n+'</div>'+
+        '<div class="coins">累計 <b>'+fmt(coins[i])+'</b> 枚</div>'+
+        '<div><span class="chip '+(c||'')+'">'+(c?label(c):'思考中')+'</span></div>'+
+        '<div class="gain">'+(gains?'本回合 +'+fmt(gains[i]):'')+'</div>'+
+        '<div class="rate">'+rate+'</div></div>';
+    }).join('');
+  }
+
+  function startRound(){
+    $('roundLabel').textContent='第 '+(round+1)+' 回合';
+    $('pot').textContent='請做出你的決定。';
+    $('pickS').disabled=$('pickH').disabled=false;
+    $('nextBtn').hidden=true;
+    renderSeats(null,null);
+  }
+
+  function choose(c){
+    $('pickS').disabled=$('pickH').disabled=true;
+    player.push(c);
+    var choices=[c].concat(others.map(function(o){return choiceOf(o,round);}));
+    var sharers=choices.filter(function(x){return x==='S';}).length;
+    var each=sharers*STAKE*MULT/4;
+    var gains=choices.map(function(x){return (x==='H'?STAKE:0)+each;});
+    gains.forEach(function(g,i){coins[i]+=g;});
+    renderSeats(choices,gains);
+    $('pot').textContent=sharers+' 人分享　·　公共池 '+sharers*STAKE+' → '+fmt(sharers*STAKE*MULT)+' 枚　·　每人分到 '+fmt(each);
+    round++;
+    $('nextBtn').textContent=round<ROUNDS?'下一回合':'結　束';
+    $('nextBtn').hidden=false; $('nextBtn').focus();
+  }
+
+  function showImpressions(){
+    $('imprRows').innerHTML=others.map(function(o,i){
+      return '<div class="who"><div class="n">'+o.name+'，是一個……的人</div><div class="words" data-i="'+i+'">'+
+        WORDS.map(function(w){return '<button class="word" aria-pressed="false" data-w="'+w+'">'+w+'</button>';}).join('')+'</div></div>';
+    }).join('');
+    [].forEach.call($('imprRows').querySelectorAll('.words'),function(row){
+      row.addEventListener('click',function(e){
+        var b=e.target.closest('.word'); if(!b) return;
+        [].forEach.call(row.querySelectorAll('.word'),function(x){x.setAttribute('aria-pressed','false');});
+        b.setAttribute('aria-pressed','true');
+        impressions[row.getAttribute('data-i')]=b.getAttribute('data-w');
+        $('revealBtn').disabled=Object.keys(impressions).length<others.length;
+      });
+    });
+    show('impression');
+  }
+
+  function showReveal(){
+    var html='<tr><th></th>';
+    for(var r=0;r<ROUNDS;r++) html+='<th>'+(r+1)+'</th>';
+    html+='</tr><tr><th class="rh">你</th>';
+    player.forEach(function(c){html+='<td class="'+c+'">'+label(c)[0]+'</td>';});
+    html+='</tr>';
+    others.forEach(function(o){
+      html+='<tr><th class="rh">'+o.name+'</th>';
+      for(var r=0;r<ROUNDS;r++){
+        var seed=r<o.delay;
+        html+='<td class="'+choiceOf(o,r)+(seed?' seed':'')+'" data-src="'+(seed?'':(r-o.delay))+'">'+label(choiceOf(o,r))[0]+'</td>';
+      }
+      html+='</tr>';
+    });
+    var t=$('mirror'); t.innerHTML=html;
+    var mine=[].slice.call(t.rows[1].cells,1);
+    function hl(e){
+      var td=e.target.closest('td');
+      [].forEach.call(t.querySelectorAll('.hl'),function(x){x.classList.remove('hl');});
+      if(!td||!td.getAttribute('data-src')) return;
+      td.classList.add('hl'); mine[+td.getAttribute('data-src')].classList.add('hl');
+    }
+    t.onmouseover=hl; t.onclick=hl;
+
+    $('verdicts').innerHTML=others.map(function(o,i){
+      var copies=ROUNDS-o.delay;
+      var youHoard=player.slice(0,copies).filter(function(c){return c==='H';}).length;
+      return '<div class="verdict"><div class="s">你說'+o.name+'是「<span class="em">'+impressions[i]+'</span>」的人。</div>'+
+        '<div class="d">他的十回合裡，有 '+copies+' 回合在重複你 '+o.delay+' 回合前的選擇。那 '+copies+' 次裡，你自己獨佔了 '+youHoard+' 次。</div></div>';
+    }).join('');
+    var total=player.filter(function(c){return c==='H';}).length;
+    $('summary').innerHTML='你一共獨佔了 '+total+' 次、分享了 '+(ROUNDS-total)+' 次。<br>你在他們身上看見的慷慨或自私，大半是<span class="em">晚了幾拍、回到你面前的自己</span>。';
+    show('reveal');
+  }
+
+  $('startBtn').onclick=function(){reset();show('play');startRound();};
+  $('pickS').onclick=function(){choose('S');};
+  $('pickH').onclick=function(){choose('H');};
+  $('nextBtn').onclick=function(){ round<ROUNDS?startRound():showImpressions(); };
+  $('revealBtn').onclick=showReveal;
+  $('againBtn').onclick=function(){reset();show('play');startRound();};
+  $('toFormBtn').onclick=function(){show('form');};
+
+  $('sendBtn').onclick=function(){
+    var nick=$('nick').value.trim(), reflect=$('reflect').value.trim(), hint=$('hint');
+    if(!nick){hint.textContent='請填一下你的暱稱。';return;}
+    if(!reflect){hint.textContent='寫一句也好。';return;}
+    this.disabled=true; hint.textContent='送出中……';
+    var total=player.filter(function(c){return c==='H';}).length;
+    var words=others.map(function(o,i){return o.name+'='+impressions[i];}).join('、');
+    fetch(ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify({story:STORY,nickname:nick,choice:'獨佔'+total+'次・分享'+(ROUNDS-total)+'次・評語：'+words,reason:reflect})
+    }).then(function(){show('done');}).catch(function(){show('done');});
+  };
+})();
+</script>
+</body>
+</html>
