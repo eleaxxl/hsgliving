@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>金剛經・斷疑　第十三分・第十四分</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --rose:#c793a8; --rose-d:#a86f88; --pale:#ebe1e8; --mauve:#a0889e;
+    --ink:#453541; --soft:#8a7784; --paper:#faf5f8; --line:#ddcad6; --on:#fff;
+    --cjk:'Noto Serif TC',serif; --sans:'Noto Sans TC',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{background:var(--pale);color:var(--ink);font-family:var(--cjk);
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow:hidden}
+  #deck{position:fixed;inset:0;
+    background:radial-gradient(ellipse at 50% 28%, #f6eef3 0%, var(--pale) 62%, #e4d6e0 100%)}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;
+    padding:calc(env(safe-area-inset-top,0) + 56px) clamp(22px,6vw,80px) calc(env(safe-area-inset-bottom,0) + 72px);
+    text-align:center;opacity:0;transition:opacity .5s ease}
+  .slide.on{display:flex;opacity:1}
+  .inner{max-width:720px;width:100%;max-height:100%;overflow-y:auto;padding:4px}
+  .inner::-webkit-scrollbar{width:0}
+  /* 固定角標 */
+  .corner{position:fixed;top:calc(env(safe-area-inset-top,0) + 22px);left:0;right:0;text-align:center;z-index:5;
+    font-family:var(--sans);font-size:11.5px;letter-spacing:.45em;color:var(--rose-d);text-indent:.45em;pointer-events:none}
+  footer.foot{position:fixed;bottom:calc(env(safe-area-inset-bottom,0) + 24px);left:0;right:0;text-align:center;z-index:5;
+    font-family:var(--sans);font-size:11px;letter-spacing:.35em;color:var(--mauve);text-indent:.35em;pointer-events:none;opacity:.8}
+  /* 封面 */
+  .cover .k{font-family:var(--sans);font-size:13px;letter-spacing:.6em;color:var(--rose-d);text-indent:.6em;margin-bottom:34px}
+  .cover h1{font-size:clamp(38px,8vw,64px);font-weight:600;letter-spacing:.2em;text-indent:.2em;line-height:1.3}
+  .cover .sub{margin-top:26px;font-size:clamp(16px,2.6vw,20px);letter-spacing:.3em;color:var(--mauve);text-indent:.3em}
+  .cover .dot{width:9px;height:9px;border-radius:50%;background:var(--rose);margin:40px auto 0;box-shadow:0 0 0 7px rgba(199,147,168,.18)}
+  /* 開經偈 */
+  .verse .lab,.passage .lab,.qslide .lab{font-family:var(--sans);font-size:12px;letter-spacing:.4em;color:var(--rose-d);text-indent:.4em;margin-bottom:30px}
+  .verse .gatha{font-size:clamp(22px,4.4vw,32px);font-weight:500;line-height:2.2;letter-spacing:.14em}
+  .verse .bai{margin-top:34px;padding-top:26px;border-top:1px solid var(--line);
+    font-size:clamp(15px,2.2vw,17.5px);line-height:2.1;color:var(--soft);letter-spacing:.04em;max-width:30em;margin-left:auto;margin-right:auto}
+  /* 分題 */
+  .divider .n{font-family:var(--sans);font-size:14px;letter-spacing:.5em;color:var(--rose-d);text-indent:.5em;margin-bottom:24px}
+  .divider h2{font-size:clamp(40px,9vw,72px);font-weight:600;letter-spacing:.28em;text-indent:.28em;color:var(--ink)}
+  .divider .cn{margin-top:22px;font-size:clamp(15px,2.3vw,18px);letter-spacing:.2em;color:var(--mauve)}
+  .divider .rule{width:56px;height:1px;background:var(--rose);margin:34px auto 0;opacity:.7}
+  /* 白話 */
+  .passage .bai{font-size:clamp(16px,2.3vw,19px);line-height:2.2;letter-spacing:.03em;text-align:justify;color:var(--ink)}
+  .passage .bai p{margin-bottom:1.1em}
+  .passage .bai .say{color:var(--rose-d)}
+  /* 提問 */
+  .qslide .seal{display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:50%;
+    border:1.5px solid var(--rose);color:var(--rose-d);font-size:24px;font-weight:600;margin-bottom:26px}
+  .qslide .qnum{font-family:var(--sans);font-size:12px;letter-spacing:.3em;color:var(--mauve);text-indent:.3em;margin-bottom:22px}
+  .qslide .q{font-size:clamp(20px,3.3vw,27px);font-weight:500;line-height:2;letter-spacing:.04em;color:var(--ink);text-wrap:pretty}
+  .qslide .q em{color:var(--rose-d);font-style:normal}
+  .qslide .hint{margin-top:26px;font-family:var(--sans);font-size:13px;letter-spacing:.06em;color:var(--mauve);line-height:1.8}
+  /* 結尾 */
+  .end .big{font-size:clamp(28px,6vw,46px);font-weight:600;letter-spacing:.2em;line-height:1.8;color:var(--rose-d)}
+  .end .s{margin-top:24px;font-size:clamp(15px,2.3vw,18px);letter-spacing:.14em;color:var(--mauve);line-height:2}
+  /* 導航 */
+  .ctrl{position:fixed;bottom:calc(env(safe-area-inset-bottom,0) + 18px);z-index:6}
+  .arr{position:fixed;top:0;bottom:0;width:22%;max-width:160px;z-index:4;border:none;background:transparent;cursor:pointer}
+  .arr.l{left:0}.arr.r{right:0}
+  .navrow{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0) + 52px);z-index:6;
+    display:flex;align-items:center;gap:14px}
+  .navrow button{font-family:var(--sans);font-size:18px;color:var(--rose-d);background:rgba(255,255,255,.6);border:1px solid var(--line);
+    border-radius:999px;width:40px;height:40px;cursor:pointer;line-height:1;transition:background .15s}
+  .navrow button:hover{background:#fff}
+  .navrow .cnt{font-family:var(--sans);font-size:12px;letter-spacing:.1em;color:var(--mauve);min-width:52px;text-align:center}
+</style>
+</head>
+<body>
+<div id="deck"></div>
+
+<div class="corner" id="corner">金 剛 經 ・ 斷 疑</div>
+<footer class="foot">不 只 讀 書 的 讀 書 會</footer>
+
+<button class="arr l" id="arrL" aria-label="上一張"></button>
+<button class="arr r" id="arrR" aria-label="下一張"></button>
+<div class="navrow">
+  <button id="prev">‹</button>
+  <div class="cnt" id="cnt">1 / 1</div>
+  <button id="next">›</button>
+</div>
+
+<script>
+var SLIDES = [
+  {type:'cover'},
+  {type:'verse',
+    gatha:'無上甚深微妙法　百千萬劫難遭遇<br>我今見聞得受持　願解如來真實義',
+    bai:'這無上、甚深、微妙的佛法，經過百千萬劫也難得遇見一次；如今我能見到、聽到、領受持守，但願我能真正了解如來話語中的真實義理。'},
+
+  {type:'divider', n:'第 十 三 分', name:'如法受持分'},
+  {type:'passage', label:'第十三分・白話　其一', html:
+    '<p>這時，須菩提問佛陀：「<span class="say">世尊，應當用什麼名字來稱呼這部經呢？我們應該如何信守奉持這部經呢？</span>」</p>'+
+    '<p>佛陀回答：「這部經叫做《金剛般若波羅蜜》，你們用這個名字信奉就可以了。為什麼呢？須菩提，佛說到彼岸的智慧，其實法無定法，並非到彼岸的智慧，因此名為到彼岸的智慧。須菩提，你覺得如來真的說了什麼法嗎？」</p>'+
+    '<p>須菩提回答：「世尊，如來實際上什麼也沒有說。」</p>'},
+  {type:'passage', label:'第十三分・白話　其二', html:
+    '<p>「須菩提，你說三千大千世界的所有微塵是不是很多？」須菩提回答：「很多，世尊。」</p>'+
+    '<p>「所有的微塵，如來說並非微塵，才名叫微塵；如來說世界即非世界，所以稱為世界。須菩提，你覺得可以依據三十二種身體特徵來認識如來嗎？」</p>'+
+    '<p>「不可以，世尊。三十二種身體特徵並非如來的真實本質，只是方便稱呼而已，所以稱為三十二相。」</p>'+
+    '<p>「須菩提，如果有善男子、善女人，以恆河中沙子那麼多的身體和性命來做布施；又有人能夠信守奉持此經，甚至只是其中的四句偈，並廣為他人宣說——他的福德，遠遠超過以生命布施的福德。」</p>'},
+  {type:'q', fen:'第十三分', n:'問 一', q:'佛陀才為這部經立下名字「金剛般若波羅蜜」、叫人奉持，為什麼下一句就說「般若波羅蜜，即非般若波羅蜜，是名般若波羅蜜」，立刻把這個名字抹掉？——既然連名字都不可執，我們「奉持」的，到底是什麼？'},
+  {type:'q', fen:'第十三分', n:'問 二', q:'這一段裡，「微塵」（最小）與「世界」（最大）為什麼被放在一起說？世尊對須菩提的「甚多」，既不肯定、也不否定——這是什麼意思？'},
+  {type:'q', fen:'第十三分', n:'問 三', q:'第五分早已說過「凡所有相，皆是虛妄」「不可以身相見如來」，為什麼這裡又提一次「三十二相」？佛的三十二相，和凡夫的身相，是同一個問題嗎？'},
+
+  {type:'divider', n:'第 十 四 分', name:'離相寂滅分'},
+  {type:'passage', label:'第十四分・白話　其一', html:
+    '<p>那時，須菩提聽了佛陀解說這部經典，深深領會了他的意旨，<span class="say">喜極而泣</span>，恭敬地對佛陀說：</p>'+
+    '<p>「真是奇妙啊，世尊！您把最深的道理說得如此明白。我雖然久已修得慧眼，卻不曾聽過這樣的經。</p>'},
+  {type:'passage', label:'第十四分・白話　其二', html:
+    '<p>世尊，假如有人聽到這部經，能夠深深領會、生起清淨的信心，脫離了觀念與形象的羈絆，因而見到事物的本來面目，那麼這個人就成就了第一等的稀有功德。世尊，這所謂的實相，其實並不是一個可以執取的相，只是假名為實相罷了。</p>'+
+    '<p>世尊，我今天親耳聽到這樣的經典，能夠信奉、理解、領受、持行，並不困難。但假如到了末法時代，也就是後五百歲時，有人有緣聽到這部經，還能信奉、理解、領受、持行，這個人就更是難得了。因為他已經不存我相、不存人相、不存眾生相、不存壽者相——我相即非是相，人、眾生、壽者相也都即非是相。總之，<span class="say">能夠離於一切相的，就叫做佛。</span>」</p>'},
+  {type:'passage', label:'第十四分・白話　其三', html:
+    '<p>佛聽後說：「是這樣的，是這樣的。假如有人聽到了這部經以後，不驚訝、不恐懼、不畏怯，那麼他一定是一位極難得的人。</p>'+
+    '<p>為什麼呢？須菩提，如來所說的第一波羅蜜（最徹底的解脫智慧），即非第一波羅蜜，只是假名為第一波羅蜜——正因為對它也不可執取，才是真正的第一波羅蜜。須菩提，忍辱也是如此。</p>'+
+    '<p>就好比我在過去世被歌利王割截身體，當時我沒有我相、沒有人相、沒有眾生相、沒有壽者相。若心中還存著我、人、眾生、壽者的念頭，就會生起瞋恨；一旦生起瞋恨，就不得解脫了。須菩提，不要以為我只在那一世行忍辱——過去五百世我做忍辱仙人時，便已沒有這四相的分別執著了。</p>'},
+  {type:'passage', label:'第十四分・白話　其四', html:
+    '<p>所以，須菩提，菩薩應當離開一切相，發起追求至高無上正等正覺的心願：不滯留在任何形色的事物上，不滯留在任何聲音、氣息、味道、觸覺和法塵上，應當生起一種對一切都不執著的心。<span class="say">心若有所攀附依立，那樣的「住」，其實就不是真能安立的住。</span>所以菩薩應當以這不執著的心來行布施。</p>'+
+    '<p>須菩提，為了成就一切眾生的利益，菩薩應該這樣布施。如來所說的一切諸相，即非是相；如來所說的一切眾生，也即非眾生——只是假名罷了。</p>'},
+  {type:'passage', label:'第十四分・白話　其五', html:
+    '<p>須菩提，如來是真語者、實語者、如語者、不誑語者、不異語者——我所說的，真而不妄、實而不虛，不自欺欺人，也不前後相違。</p>'+
+    '<p>須菩提，如來所證得的這個法，<span class="say">無實、無虛</span>——它既不是一個真實可取的東西，也不是虛妄斷滅的空無。</p>'+
+    '<p>假如菩薩的心執著於法相而行布施，就好像人走入了黑暗，什麼也看不見；假如菩薩的心不執著於法相而行布施，就好像人有了明亮的眼睛，在日光照耀下，能夠看見種種形色。將來若有善男子、善女人能信守奉持、理解讀誦這部經，如來以佛的智慧，完全知道、完全看見這樣的人，他們都能成就無量無邊的功德。」</p>'},
+
+  {type:'q', fen:'第十四分', n:'問 一', q:'須菩提「深解義趣」之後，為什麼會「涕淚悲泣」？他此刻聽懂的，和之前的「懂」有什麼不同，值得這樣動容？'},
+  {type:'q', fen:'第十四分', n:'問 二', q:'這裡再次出現「希有，世尊！」——它和第二分一開始須菩提讚歎的「希有世尊」，讚歎的是同一件事嗎？一個讚歎的是佛，一個讚歎的，是什麼？'},
+  {type:'q', fen:'第十四分', n:'問 三', q:'須菩提說自己「從昔以來所得慧眼」——「慧眼」是什麼眼？它所見到的，是什麼？'},
+  {type:'q', fen:'第十四分', n:'問 四', q:'「是實相者，即是非相，是故如來說名實相。」——如果連「實相」都「即是非相」，那「生實相」，到底生出了什麼？'},
+  {type:'q', fen:'第十四分', n:'問 五', q:'須菩提說「離一切諸相，即名諸佛」；而佛在第五分說的是「若見諸相非相，即見如來」。一個說「<em>離</em>」，一個說「<em>見</em>」——這兩種說法，差在哪裡？'},
+  {type:'q', fen:'第十四分', n:'問 六', q:'「得聞是經，不驚、不怖、不畏」——金剛經，為什麼會讓人「驚、怖、畏」？那個「怕」，怕的究竟是什麼？'},
+  {type:'q', fen:'第十四分', n:'問 七', q:'「第一波羅蜜」是什麼？「忍辱波羅蜜」又是什麼？在這裡，為什麼單單挑出這兩種波羅蜜來說？'},
+  {type:'q', fen:'第十四分', n:'問 八', q:'「若有我相、人相、眾生相、壽者相，應生瞋恨。」——「瞋恨」和「四相的執著」之間，是什麼關係？'},
+  {type:'q', fen:'第十四分', n:'問 九', q:'「若心有住，即為非住。」——心「有住」，怎麼反而成了「非住」？'},
+  {type:'q', fen:'第十四分', n:'問 十', q:'「一切眾生，即非眾生。」——發心度盡一切眾生，卻又說眾生即非眾生，這該怎麼理解？'},
+  {type:'q', fen:'第十四分', n:'問 十一', q:'講到這裡，佛為什麼要特別聲明「如來是真語者、實語者、如語者、不誑語者、不異語者」？是什麼，讓人需要這一句保證？'},
+  {type:'q', fen:'第十四分', n:'問 十二', q:'「如來所得法，此法無實無虛。」——「無實」又「無虛」，這兩個否定擺在一起，是要擋掉哪兩種誤解？'},
+  {type:'q', fen:'第十四分', n:'問 十三', q:'前面才說「不應住色布施」，這裡卻用「如人有目，日光明照，見種種色」來作比喻——「不住色」和「見種種色」，矛盾嗎？'},
+  {type:'q', fen:'第十四分', n:'問 十四', q:'「如來悉知是人、悉見是人，皆得成就無量無邊功德」——這句話，在前面哪幾分已經說過了？（不妨打開「脈絡搜尋」，找找「受持」「功德」這條線。）'},
+
+  {type:'end'}
+];
+
+(function(){
+  var deck=document.getElementById('deck');
+  var corner=document.getElementById('corner'), cnt=document.getElementById('cnt');
+  function esc(s){return s;}
+  function renderSlide(s){
+    if(s.type==='cover') return '<div class="inner"><div class="k">金 剛 經 ・ 斷 疑</div><h1>第十三分<br>第十四分</h1><div class="sub">如 法 受 持 ・ 離 相 寂 滅</div><div class="dot"></div></div>';
+    if(s.type==='verse') return '<div class="inner verse"><div class="lab">開 經 偈</div><div class="gatha">'+s.gatha+'</div><div class="bai">'+s.bai+'</div></div>';
+    if(s.type==='divider') return '<div class="inner divider"><div class="n">'+s.n+'</div><h2>'+s.name+'</h2><div class="rule"></div></div>';
+    if(s.type==='passage') return '<div class="inner passage"><div class="lab">'+s.label+'</div><div class="bai">'+s.html+'</div></div>';
+    if(s.type==='q') return '<div class="inner qslide"><div class="seal">問</div><div class="qnum">'+s.fen+'　'+s.n+'</div><div class="q">'+s.q+'</div></div>';
+    if(s.type==='end') return '<div class="inner end"><div class="big">只 問，不 答。</div><div class="s">答案，留在你自己讀的時候。</div></div>';
+    return '';
+  }
+  SLIDES.forEach(function(s,i){
+    var el=document.createElement('section');
+    el.className='slide '+s.type+(s.type==='cover'?' cover':'');
+    el.innerHTML=renderSlide(s);
+    deck.appendChild(el);
+  });
+  var slides=Array.prototype.slice.call(deck.querySelectorAll('.slide'));
+  var cur=0, N=slides.length;
+  function show(i){
+    cur=Math.max(0,Math.min(N-1,i));
+    slides.forEach(function(el,k){ el.classList.toggle('on',k===cur); if(k===cur) el.querySelector('.inner').scrollTop=0; });
+    cnt.textContent=(cur+1)+' / '+N;
+    corner.style.opacity = (SLIDES[cur].type==='cover') ? 0 : 1;
+  }
+  function next(){ show(cur+1); } function prev(){ show(cur-1); }
+  document.getElementById('next').addEventListener('click',next);
+  document.getElementById('prev').addEventListener('click',prev);
+  document.getElementById('arrR').addEventListener('click',next);
+  document.getElementById('arrL').addEventListener('click',prev);
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' ') { next(); e.preventDefault(); }
+    else if(e.key==='ArrowLeft'||e.key==='PageUp') { prev(); e.preventDefault(); }
+    else if(e.key==='Home'){ show(0); } else if(e.key==='End'){ show(N-1); }
+  });
+  var x0=null;
+  deck.addEventListener('touchstart',function(e){ x0=e.touches[0].clientX; },{passive:true});
+  deck.addEventListener('touchend',function(e){
+    if(x0===null) return; var dx=e.changedTouches[0].clientX-x0;
+    if(Math.abs(dx)>50){ dx<0?next():prev(); } x0=null;
+  },{passive:true});
+  show(0);
+})();
+</script>
+</body>
+</html>
