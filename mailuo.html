@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>金剛經・脈絡搜尋</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4ede2; --card:#fbf5ea; --ink:#2a241f; --soft:#8a786b;
+    --clay:#a86f5e; --clay-d:#90594a; --line:#d9cbba; --line2:#e7dccb; --on:#fff7ec;
+    --cjk:'Noto Serif TC',serif; --sans:'Noto Sans TC',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:var(--cjk);line-height:1.9;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  .bar{position:sticky;top:0;z-index:20;background:rgba(244,237,226,.96);backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);padding:14px clamp(16px,4vw,40px) 12px}
+  .bar .inner{max-width:760px;margin:0 auto}
+  .ttl{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px}
+  .ttl .nm{font-family:var(--sans);font-size:12px;letter-spacing:.35em;color:var(--clay);text-indent:.35em}
+  #fenToggle{font-family:var(--sans);font-size:12.5px;letter-spacing:.06em;color:var(--clay-d);background:transparent;
+    border:1px solid var(--line);border-radius:999px;padding:5px 14px;cursor:pointer;white-space:nowrap;flex:none}
+  body.showfen #fenToggle{background:var(--clay);border-color:var(--clay);color:var(--on)}
+  .searchrow{display:flex;gap:10px;align-items:center}
+  #q{flex:1;font-family:var(--cjk);font-size:17px;color:var(--ink);background:var(--card);
+    border:1px solid var(--line);border-radius:999px;padding:11px 18px;outline:none;-webkit-appearance:none}
+  #q:focus{border-color:var(--clay)}
+  #q::placeholder{color:var(--soft)}
+  .nav{display:flex;gap:4px;align-items:center}
+  .navb{font-family:var(--sans);font-size:16px;color:var(--clay-d);background:var(--card);border:1px solid var(--line);
+    border-radius:10px;width:38px;height:40px;cursor:pointer;line-height:1}
+  .navb:hover{border-color:var(--clay)}
+  .navb[disabled]{opacity:.35;cursor:default}
+  .chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}
+  .chip{font-family:var(--sans);font-size:13.5px;letter-spacing:.05em;color:var(--clay-d);background:transparent;
+    border:1px solid var(--line);border-radius:999px;padding:6px 14px;cursor:pointer;transition:all .15s}
+  .chip:hover{border-color:var(--clay)}
+  .chip.on{background:var(--clay);border-color:var(--clay);color:var(--on)}
+  .count{font-family:var(--sans);font-size:13px;color:var(--soft);margin-top:11px;letter-spacing:.04em;min-height:1.2em;
+    display:flex;flex-wrap:wrap;align-items:center;gap:4px 14px}
+  .count b{color:var(--ink);font-weight:600}
+  .count .sw{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px;box-shadow:0 0 0 1px rgba(168,111,94,.25)}
+  .count .pos{color:var(--soft)}
+  .hint{font-family:var(--sans);font-size:12px;color:var(--soft);margin-top:6px}
+  .doc{max-width:760px;margin:0 auto;padding:22px clamp(16px,4vw,40px) 140px}
+  .para{font-size:clamp(16.5px,2.2vw,18.5px);line-height:2.15;letter-spacing:.02em;margin-bottom:1.15em;text-align:justify}
+  .fenhead{display:none}
+  body.showfen .fenhead{display:block;font-family:var(--sans);font-size:12.5px;letter-spacing:.2em;color:var(--clay);
+    border-top:1px solid var(--line);margin:30px 0 16px;padding-top:11px}
+  body.showfen .fenhead b{color:var(--clay-d);font-weight:600;margin-right:10px;letter-spacing:.1em}
+  mark.hit{color:inherit;border-radius:3px;padding:0 1px;box-shadow:0 0 0 1px rgba(168,111,94,.16)}
+  mark.hit.c0{background:#f3d9a8} mark.hit.c1{background:#cde0cf} mark.hit.c2{background:#ecc8cf}
+  mark.hit.c3{background:#cdd8e8} mark.hit.c4{background:#e4d2ec}
+  mark.hit.cur{box-shadow:0 0 0 2px var(--clay-d)}
+  #hitmap{position:fixed;right:6px;top:50%;transform:translateY(-50%);width:16px;height:64vh;z-index:15;pointer-events:none}
+  #hitmap .track{position:absolute;left:7px;top:0;bottom:0;width:2px;background:var(--line)}
+  #hitmap .dot{position:absolute;left:3px;width:10px;height:10px;margin-top:-5px;border-radius:50%;
+    opacity:.85;pointer-events:auto;cursor:pointer;transition:transform .1s;box-shadow:0 0 0 1px rgba(168,111,94,.25)}
+  #hitmap .dot:hover{transform:scale(1.4)}
+  #hitmap.empty{display:none}
+  #noteBtn{position:fixed;right:18px;bottom:18px;z-index:30;font-family:var(--sans);font-size:14px;letter-spacing:.08em;
+    color:var(--on);background:var(--clay);border:none;border-radius:999px;padding:12px 20px;cursor:pointer;box-shadow:0 6px 20px rgba(144,89,74,.3)}
+  #noteBtn:hover{background:var(--clay-d)}
+  #notes{position:fixed;right:0;bottom:0;z-index:31;width:min(420px,100%);background:var(--card);
+    border-top:1px solid var(--line);border-left:1px solid var(--line);border-radius:16px 0 0 0;
+    box-shadow:0 -8px 40px rgba(42,36,31,.22);padding:18px 18px 20px;transform:translateY(110%);transition:transform .25s ease}
+  #notes.open{transform:none}
+  #notes h3{font-family:var(--sans);font-size:14px;letter-spacing:.1em;color:var(--clay-d);margin-bottom:4px;display:flex;justify-content:space-between;align-items:center}
+  #notes .x{cursor:pointer;color:var(--soft);font-size:18px;border:none;background:none}
+  #notes .tip{font-size:12.5px;color:var(--soft);font-family:var(--sans);margin-bottom:10px;line-height:1.7}
+  #noteText{width:100%;height:34vh;font-family:var(--cjk);font-size:15px;line-height:1.9;color:var(--ink);
+    background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px;outline:none;resize:none}
+  #noteText:focus{border-color:var(--clay)}
+  .noterow{display:flex;gap:8px;margin-top:10px;justify-content:flex-end}
+  .noterow button{font-family:var(--sans);font-size:13px;letter-spacing:.06em;border-radius:999px;padding:9px 18px;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--clay-d)}
+  .noterow .save{background:var(--clay);border-color:var(--clay);color:var(--on)}
+  @media (max-width:520px){ #hitmap{height:56vh} }
+  .toolbtns{display:flex;gap:8px;flex:none}
+  #xzBtn{font-family:var(--sans);font-size:12.5px;letter-spacing:.06em;color:var(--clay-d);background:transparent;
+    border:1px solid var(--line);border-radius:999px;padding:5px 14px;cursor:pointer;white-space:nowrap}
+  body.xzopen #xzBtn{background:var(--clay);border-color:var(--clay);color:var(--on)}
+  #xzPanel{position:fixed;top:0;right:0;bottom:0;width:min(580px,100%);background:var(--paper);z-index:50;
+    box-shadow:-10px 0 44px rgba(42,36,31,.28);border-left:1px solid var(--line);
+    transform:translateX(102%);transition:transform .28s ease;display:flex;flex-direction:column}
+  #xzPanel.open{transform:none}
+  .xz-head{flex:none;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;
+    padding:16px 20px 13px;border-bottom:1px solid var(--line);background:var(--card)}
+  .xz-t{font-family:var(--cjk);font-weight:600;font-size:18px;letter-spacing:.04em;color:var(--clay-d)}
+  .xz-sub{font-family:var(--sans);font-size:11.5px;color:var(--soft);margin-top:5px;letter-spacing:.12em}
+  .xz-x{border:none;background:none;font-size:25px;color:var(--soft);cursor:pointer;line-height:1;flex:none}
+  .xz-body{flex:1;overflow-y:auto;padding:20px clamp(18px,3vw,30px) 70px}
+  .xz-body p{font-size:16px;line-height:2.12;letter-spacing:.02em;margin-bottom:1.1em;text-align:justify;text-indent:2em}
+  /* 分段目錄 */
+  #toc{display:none}
+  .toc-ttl{font-family:var(--sans);font-size:11.5px;letter-spacing:.2em;color:var(--clay);margin:0 9px 8px;text-indent:.2em}
+  .toc-item{display:block;width:100%;text-align:left;font-family:var(--sans);font-size:12.5px;line-height:1.5;
+    color:var(--clay-d);background:none;border:none;border-radius:8px;padding:7px 9px;cursor:pointer;letter-spacing:.02em}
+  .toc-item:hover{background:#f0e4d2;color:var(--ink)}
+  .toc-item b{color:var(--clay);font-weight:600;margin-right:7px;letter-spacing:.06em}
+  #tocBtn{position:fixed;left:18px;bottom:18px;z-index:41;display:none;font-family:var(--sans);font-size:14px;
+    letter-spacing:.06em;color:var(--on);background:var(--clay);border:none;border-radius:999px;padding:12px 18px;
+    cursor:pointer;box-shadow:0 6px 20px rgba(144,89,74,.3)}
+  #tocBtn:hover{background:var(--clay-d)}
+  body.showfen .fenhead{scroll-margin-top:172px}
+  @media (min-width:1200px){
+    body.showfen #toc{display:block;position:fixed;top:150px;left:max(14px,calc((100vw - 760px)/2 - 204px));
+      width:190px;max-height:calc(100vh - 170px);overflow-y:auto;padding-right:4px;z-index:14}
+  }
+  @media (max-width:1199px){
+    body.showfen #tocBtn{display:block}
+    body.showfen #toc{display:block;position:fixed;left:0;top:0;bottom:0;width:min(268px,82%);background:var(--card);
+      border-right:1px solid var(--line);box-shadow:6px 0 30px rgba(42,36,31,.2);padding:18px 12px 26px;overflow-y:auto;
+      transform:translateX(-106%);transition:transform .25s ease;z-index:42}
+    body.showfen #toc.open{transform:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="inner">
+    <div class="ttl">
+      <span class="nm">金 剛 經 ・ 脈 絡 搜 尋</span>
+      <span class="toolbtns"><button id="xzBtn">玄奘對照</button><button id="fenToggle">顯示分段</button></span>
+    </div>
+    <div class="searchrow">
+      <input id="q" type="search" placeholder="一個或多個字彙，用 ＋ 分隔，例如：福德＋功德" autocomplete="off" autocapitalize="off" spellcheck="false">
+      <div class="nav">
+        <button class="navb" id="prev" disabled>‹</button>
+        <button class="navb" id="next" disabled>›</button>
+      </div>
+    </div>
+    <div class="chips" id="chips">
+      <button class="chip" data-w="相">相</button>
+      <button class="chip" data-w="身相">身相</button>
+      <button class="chip" data-w="三十二相">三十二相</button>
+      <button class="chip" data-w="即非">即非</button>
+      <button class="chip" data-w="是名">是名</button>
+      <button class="chip" data-w="福德">福德</button>
+      <button class="chip" data-w="功德">功德</button>
+      <button class="chip" data-w="布施">布施</button>
+      <button class="chip" data-w="四句偈">四句偈</button>
+      <button class="chip" data-w="受持">受持</button>
+      <button class="chip" data-w="眾生">眾生</button>
+      <button class="chip" data-w="我相">我相</button>
+      <button class="chip" data-w="無所住">無所住</button>
+      <button class="chip" data-w="住">住</button>
+      <button class="chip" data-w="法">法</button>
+      <button class="chip" data-w="如來">如來</button>
+    </div>
+    <div class="count" id="count">輸入或點字彙，看它散落在全經哪裡。可用 ＋ 疊兩三個詞比對（各一色）。</div>
+  </div>
+</div>
+
+<div class="doc" id="doc"></div>
+
+<nav id="toc" aria-label="分段目錄"></nav>
+<button id="tocBtn">☰ 分 段 目 錄</button>
+
+<aside id="xzPanel"><div class="xz-head"><div><div class="xz-t">能斷金剛般若波羅蜜多經</div><div class="xz-sub">唐 · 三藏法師 玄奘 奉詔譯</div></div><button class="xz-x" id="xzClose">×</button></div><div class="xz-body"><p>如是我聞。一時，薄伽梵在室羅筏，住誓多林給孤獨園，與大苾芻眾千二百五十人俱。爾時，世尊於日初分，整理裳服，執持衣蒖，入室羅筏大城乞食。時，薄伽梵於其城中行乞食已，出還本處。飯食訖，收衣蒖，洗足已，於食後時，敷如常座，結跏趺坐，端身正願，住對面念。</p><p>時，諸苾芻來詣佛所，到已頂禮世尊雙足，右遶三匝，退坐一面。具壽善現亦於如是眾會中坐。</p><p>爾時，眾中具壽善現從座而起，偏袒一肩，右膝著地，合掌恭敬而白佛言：「希有！世尊！乃至如來、應、正等覺，能以最勝攝受，攝受諸菩薩摩訶薩；乃至如來、應、正等覺，能以最勝付囑，付囑諸菩薩摩訶薩。世尊！諸有發趣菩薩乘者，應云何住？云何修行？云何攝伏其心？」</p><p>作是語已。爾時，世尊告具壽善現曰：「善哉！善哉！善現！如是，如是。如汝所說。乃至如來、應、正等覺，能以最勝攝受，攝受諸菩薩摩訶薩；乃至如來、應、正等覺，能以最勝付囑，付囑諸菩薩摩訶薩。是故，善現！汝應諦聽，極善作意，吾當為汝分別解說。諸有發趣菩薩乘者，應如是住，如是修行，如是攝伏其心。」</p><p>具壽善現白佛言：「如是，世尊！願樂欲聞。」</p><p>佛言：「善現！諸有發趣菩薩乘者，應當發起如是之心：『所有諸有情，有情攝所攝：若卵生、若胎生、若濕生、若化生，若有色、若無色，若有想、若無想，若非有想非無想，乃至有情界施設所施設，如是一切，我當皆令於無餘依妙涅槃界而般涅槃。雖度如是無量有情令滅度已，而無有情得滅度者。』何以故？善現！若諸菩薩摩訶薩有情想轉，不應說名菩薩摩訶薩。所以者何？善現！若諸菩薩摩訶薩不應說言有情想轉，如是命者想、士夫想、補特伽羅想、意生想、摩納婆想、作者想、受者想轉，當知亦爾。何以故？善現！無有少法名為發趣菩薩乘者。</p><p>「復次，善現！菩薩摩訶薩不住於事應行布施，都無所住應行布施；不住於色應行布施，不住聲、香、味、觸、法應行布施。善現！如是菩薩摩訶薩如不住相想應行布施。何以故？善現！若菩薩摩訶薩都無所住而行布施，其福德聚不可取量。」</p><p>佛告善現：「於汝意云何？東方虛空可取量不？」<br>善現答言：「不也，世尊！」<br>「善現！如是南西北方四維上下，周遍十方一切世界虛空可取量不？」<br>善現答言：「不也，世尊！」</p><p>佛言：「善現！如是，如是。若菩薩摩訶薩都無所住而行布施，其福德聚不可取量，亦復如是。善現！菩薩如是如不住相想應行布施。」</p><p>佛告善現：「於汝意云何？可以諸相具足觀如來不？」</p><p>善現答言：「不也，世尊！不應以諸相具足觀於如來。何以故？如來說諸相具足，即非諸相具足。」</p><p>說是語已。佛復告具壽善現言：「善現！乃至諸相具足皆是虛妄，乃至非相具足，皆非虛妄，如是以相非相應觀如來。」</p><p>說是語已。具壽善現復白佛言：「世尊！頗有有情於當來世，後時、後分、後五百歲，正法將滅時分轉時，聞說如是色經典句，生實想不？」</p><p>佛告善現：「勿作是說：『頗有有情於當來世，後時、後分、後五百歲，正法將滅時分轉時，聞說如是色經典句生實想不？』然復，善現！有菩薩摩訶薩於當來世，後時、後分、後五百歲，正法將滅時分轉時，具足尸羅，具德、具慧。復次，善現！彼菩薩摩訶薩非於一佛所承事供養，非於一佛所種諸善根。然復，善現！彼菩薩摩訶薩於其非一、百、千佛所承事供養，於其非一、百、千佛所種諸善根，乃能聞說如是色經典句，當得一淨信心。善現！如來以其佛智悉已知彼，如來以其佛眼悉已見彼。善現！如來悉已覺彼一切有情，當生無量無數福聚，當攝無量無數福聚。何以故？善現！彼菩薩摩訶薩無我想轉，無有情想、無命者想、無士夫想、無補特伽羅想、無意生想、無摩納婆想、無作者想、無受者想轉。善現！彼菩薩摩訶薩無法想轉、無非法想轉，無想轉亦無非想轉。所以者何？</p><p>善現！若菩薩摩訶薩有法想轉，彼即應有我執、有情執、命者執、補特伽羅等執。若有非法想轉，彼亦應有我執、有情執、命者執、補特伽羅等執。何以故？善現！不應取法，不應取非法。是故如來密意而說筏喻法門。諸有智者，法尚應斷，何況非法！」</p><p>佛復告具壽善現言：「善現！於汝意云何？頗有少法，如來、應、正等覺證得阿耨多羅三藐三菩提耶？頗有少法，如來、應、正等覺是所說耶？」</p><p>善現答言：「世尊！如我解佛所說義者，無有少法，如來、應、正等覺證得阿耨多羅三藐三菩提；亦無有少法，是如來、應、正等覺所說。何以故？世尊！如來、應、正等覺所證、所說、所思惟法皆不可取，不可宣說，非法，非非法。何以故？以諸賢聖補特伽羅皆是無為之所顯故。」</p><p>佛告善現：「於汝意云何？若善男子或善女人，以此三千大千世界盛滿七寶持用布施，是善男子或善女人，由此因緣所生福聚寧為多不？」</p><p>善現答言：「甚多，世尊！甚多，善逝！是善男子或善女人，由此因緣所生福聚其量甚多。何以故？世尊！福德聚福德聚者，如來說為非福德聚，是故如來說名福德聚福德聚。」</p><p>佛復告善現言：「善現！若善男子或善女人，以此三千大千世界盛滿七寶持用布施。若善男子或善女人，於此法門乃至四句伽陀，受持、讀誦、究竟通利，及廣為他宣說、開示、如理作意，由是因緣所生福聚，甚多於前無量無數。何以故？一切如來、應、正等覺阿耨多羅三藐三菩提皆從此經出，諸佛世尊皆從此經生。所以者何？善現！諸佛、法諸佛、法者，如來說為非諸佛、法，是故如來說名諸佛、法諸佛、法。」</p><p>佛告善現：「於汝意云何？諸預流者頗作是念：『我能證得預流果』不？」</p><p>善現答言：「不也，世尊！諸預流者不作是念：『我能證得預流之果。』何以故？世尊！諸預流者無少所預，故名預流；不預色、聲、香、味、觸、法，故名預流。世尊！若預流者作如是念：『我能證得預流之果。』即為執我、有情、命者、士夫、補特伽羅等。」</p><p>佛告善現：「於汝意云何？諸一來者頗作是念：『我能證得一來果』不？」</p><p>善現答言：「不也，世尊！諸一來者不作是念：『我能證得一來之果。』何以故？世尊！以無少法證一來性，故名一來。」</p><p>佛告善現：「於汝意云何？諸不還者頗作是念：『我能證得不還果』不？」</p><p>善現答言：「不也，世尊！諸不還者不作是念：『我能證得不還之果。』何以故？世尊！以無少法證不還性，故名不還。」</p><p>佛告善現：「於汝意云何？諸阿羅漢頗作是念：『我能證得阿羅漢不』？」</p><p>善現答言：「不也，世尊！諸阿羅漢不作是念：『我能證得阿羅漢性。』何以故？世尊！以無少法名阿羅漢，由是因緣名阿羅漢。世尊！若阿羅漢作如是念：『我能證得阿羅漢性。』即為執我、有情、命者、士夫、補特伽羅等。所以者何？世尊！如來、應、正等覺說我得無諍住最為第一，世尊！我雖是阿羅漢，永離貪欲，而我未曾作如是念：『我得阿羅漢永離貪欲。』世尊！我若作如是念：『我得阿羅漢永離貪欲』者，如來不應記說我言：『善現善男子得無諍住最為第一。』以都無所住，是故如來說名無諍住無諍住。」</p><p>佛告善現：「於汝意云何？如來昔在然燈如來、應、正等覺所，頗於少法有所取不？」</p><p>善現答言：「不也，世尊！如來昔在然燈如來、應、正等覺所，都無少法而有所取。」</p><p>佛告善現：「若有菩薩作如是言：『我當成辦佛土功德莊嚴。』如是菩薩非真實語。何以故？善現！佛土功德莊嚴佛土功德莊嚴者，如來說非莊嚴，是故如來說名佛土功德莊嚴佛土功德莊嚴。是故，善現！菩薩如是都無所住應生其心，不住於色應生其心，不住非色應生其心；不住聲、香、味、觸、法應生其心，不住非聲、香、味、觸、法應生其心，都無所住應生其心。」</p><p>佛告善現：「如有士夫具身大身，其色自體假使譬如妙高山王。善現！於汝意云何？彼之自體為廣大不？」</p><p>善現答言：「彼之自體廣大！世尊！廣大！善逝！何以故？世尊！彼之自體，如來說非彼體故名自體，非以彼體故名自體。」</p><p>佛告善現：「於汝意云何？乃至殑伽河中所有沙數，假使有如是沙等殑伽河，是諸殑伽河沙寧為多不？」</p><p>善現答言：「甚多，世尊！甚多，善逝！諸殑伽河尚多無數，何況其沙！」</p><p>佛言：「善現！吾今告汝，開覺於汝：假使若善男子或善女人，以妙七寶盛滿爾所殑伽河沙等世界，奉施如來、應、正等覺。善現！於汝意云何？是善男子或善女人，由此因緣所生福聚寧為多不？」</p><p>善現答言：「甚多，世尊！甚多，善逝！是善男子或善女人，由此因緣所生福聚其量甚多。」</p><p>佛復告善現：「若以七寶盛滿爾所沙等世界，奉施如來、應、正等覺。若善男子或善女人，於此法門乃至四句伽陀，受持、讀誦、究竟通利，及廣為他宣說、開示、如理作意，由此因緣所生福聚，甚多於前無量無數。</p><p>「復次，善現！若地方所，於此法門乃至為他宣說，開示四句伽陀，此地方所尚為世間諸天及人、阿素洛等之所供養如佛靈廟，何況有能於此法門具足究竟、書寫、受持、讀誦、究竟通利，及廣為他宣說、開示、如理作意！如是有情成就最勝希有功德。此地方所，大師所住，或隨一一尊重處所，若諸有智同梵行者。」</p><p>說是語已。具壽善現復白佛言：「世尊！當何名此法門？我當云何奉持？」</p><p>作是語已。佛告善現言：「具壽！今此法門名為能斷金剛般若波羅蜜多，如是名字汝當奉持。何以故？善現！如是般若波羅蜜多，如來說為非般若波羅蜜多，是故如來說名般若波羅蜜多。」</p><p>佛告善現：「於汝意云何？頗有少法如來可說不？」<br>善現答言：「不也，世尊！無有少法如來可說。」<br>佛告善現：「乃至三千大千世界大地微塵寧為多不？」<br>善現答言：「此地微塵甚多，世尊！甚多，善逝！」</p><p>佛言：「善現！大地微塵，如來說非微塵，是故如來說名大地微塵；諸世界，如來說非世界，是故如來說名世界。」</p><p>佛告善現：「於汝意云何？應以三十二大士夫相觀於如來、應、正等覺不？」</p><p>善現答言：「不也，世尊！不應以三十二大士夫相觀於如來、應、正等覺。何以故？世尊！三十二大士夫相，如來說為非相，是故如來說名三十二大士夫相。」</p><p>佛復告善現言：「假使若有善男子或善女人，於日日分捨施殑伽河沙等自體，如是經殑伽河沙等劫數捨施自體。復有善男子或善女人，於此法門乃至四句伽陀，受持、讀誦、究竟通利，及廣為他宣說、開示、如理作意，由是因緣所生福聚，甚多於前無量無數。」</p><p>爾時，具壽善現聞法威力悲泣墮淚，俛仰捫淚而白佛言：「甚奇希有！世尊！最極希有！善逝！如來今者所說法門，普為發趣最上乘者作諸義利，普為發趣最勝乘者作諸義利。世尊！我昔生智以來，未曾得聞如是法門。世尊！若諸有情聞說如是甚深經典生真實想，當知成就最勝希有。何以故？世尊！諸真實想真實想者，如來說為非想，是故如來說名真實想真實想。世尊！我今聞說如是法門，領悟、信解未為希有。若諸有情於當來世，後時、後分、後五百歲，正法將滅時分轉時，當於如是甚深法門，領悟、信解、受持、讀誦、究竟通利，及廣為他宣說、開示、如理作意，當知成就最勝希有。何以故？世尊！彼諸有情無我想轉，無有情想、無命者想、無士夫想、無補特伽羅想、無意生想、無摩納婆想、無作者想、無受者想轉。所以者何？世尊！諸我想即是非想，諸有情想、命者想、士夫想、補特伽羅想、意生想、摩納婆想、作者想、受者想即是非想。何以故？諸佛世尊離一切想。」</p><p>作是語已。爾時，世尊告具壽善現言：「如是，如是。善現！若諸有情聞說如是甚深經典，不驚、不懼、無有怖畏，當知成就最勝希有。何以故？善現！如來說最勝波羅蜜多，謂般若波羅蜜多。善現！如來所說最勝波羅蜜多，無量諸佛世尊所共宣說，故名最勝波羅蜜多。如來說最勝波羅蜜多即非波羅蜜多，是故如來說名最勝波羅蜜多。</p><p>「復次，善現！如來說忍辱波羅蜜多即非波羅蜜多，是故如來說名忍辱波羅蜜多。何以故？善現！我昔過去世曾為羯利王斷肢節肉，我於爾時都無我想、或有情想、或命者想、或士夫想、或補特伽羅想、或意生想、或摩納婆想、或作者想、或受者想，我於爾時都無有想亦非無想。何以故？善現！我於爾時若有我想，即於爾時應有恚想；我於爾時若有有情想、命者想、士夫想、補特伽羅想、意生想、摩納婆想、作者想、受者想，即於爾時應有恚想。何以故？善現！我憶過去五百生中，曾為自號忍辱仙人，我於爾時都無我想、無有情想、無命者想、無士夫想、無補特伽羅想、無意生想、無摩納婆想、無作者想、無受者想，我於爾時都無有想亦非無想。是故，善現！菩薩摩訶薩遠離一切想，應發阿耨多羅三藐三菩提心，不住於色應生其心，不住非色應生其心；不住聲、香、味、觸、法應生其心，不住非聲、香、味、觸、法應生其心，都無所住應生其心。何以故？善現！諸有所住則為非住。是故如來說諸菩薩應無所住而行布施，不應住色、聲、香、味、觸、法而行布施。</p><p>「復次，善現！菩薩摩訶薩為諸有情作義利故，應當如是棄捨布施。何以故？善現！諸有情想即是非想；一切有情，如來即說為非有情。善現！如來是實語者、諦語者、如語者、不異語者。</p><p>「復次，善現！如來現前等所證法、或所說法、或所思法，即於其中非諦非妄。善現！譬如士夫入於暗室，都無所見，當知菩薩若墮於事，謂墮於事而行布施，亦復如是。善現！譬如明眼士夫，過夜曉已，日光出時，見種種色，當知菩薩不墮於事，謂不墮事而行布施，亦復如是。</p><p>「復次，善現！若善男子或善女人於此法門受持、讀誦、究竟通利，及廣為他宣說、開示、如理作意，則為如來以其佛智悉知是人，則為如來以其佛眼悉見是人，則為如來悉覺是人，如是有情一切當生無量福聚。</p><p>「復次，善現！假使善男子或善女人，日初時分以殑伽河沙等自體布施，日中時分復以殑伽河沙等自體布施，日後時分亦以殑伽河沙等自體布施，由此法門，經於俱胝那庾多百千劫以自體布施。若有聞說如是法門，不生誹謗，由此因緣所生福聚，尚多於前無量無數，何況能於如是法門具足畢竟、書寫、受持、讀誦、究竟通利，及廣為他宣說、開示、如理作意！</p><p>「復次，善現！如是法門不可思議、不可稱量，應當希冀不可思議所感異熟。善現！如來宣說如是法門，為欲饒益趣最上乘諸有情故，為欲饒益趣最勝乘諸有情故。善現！若有於此法門受持、讀誦、究竟通利，及廣為他宣說、開示、如理作意，即為如來以其佛智悉知是人，即為如來以其佛眼悉見是人，則為如來悉覺是人。如是有情一切成就無量福聚，皆當成就不可思議、不可稱量無邊福聚。善現！如是一切有情，其肩荷擔如來無上正等菩提。何以故？善現！如是法門非諸下劣信解有情所能聽聞，非諸我見、非諸有情見、非諸命者見、非諸士夫見、非諸補特伽羅見、非諸意生見、非諸摩納婆見、非諸作者見、非諸受者見所能聽聞。此等若能受持、讀誦、究竟通利，及廣為他宣說、開示、如理作意，無有是處。</p><p>「復次，善現！若地方所聞此經典，此地方所當為世間諸天及人、阿素洛等之所供養、禮敬、右遶如佛靈廟。</p><p>「復次，善現！若善男子或善女人於此經典受持、讀誦、究竟通利，及廣為他宣說、開示、如理作意，若遭輕毀、極遭輕毀。所以者何？善現！是諸有情宿生所造諸不淨業應感惡趣，以現法中遭輕毀故，宿生所造諸不淨業皆悉消盡，當得無上正等菩提。</p><p>何以故？善現！我憶過去於無數劫復過無數，於然燈如來、應、正等覺先，復過先，曾值八十四俱胝那庾多百千諸佛，我皆承事。既承事已，皆無違犯。善現！我於如是諸佛世尊皆得承事，既承事已，皆無違犯；若諸有情，後時、後分、後五百歲，正法將滅時分轉時，於此經典受持、讀誦、究竟通利，及廣為他宣說、開示、如理作意。善現！我先福聚於此福聚，百分計之所不能及，如是千分、若百千分、若俱胝百千分、若俱胝那庾多百千分、若數分、若計分、若算分、若喻分、若鄔波尼殺曇分亦不能及。</p><p>「善現！我若具說當於爾時是善男子或善女人所生福聚，乃至是善男子或善女人所攝福聚，有諸有情則便迷悶，心或狂亂。是故，善現！如來宣說如是法門不可思議、不可稱量，應當希冀不可思議所感異熟。」</p><p>爾時，具壽善現復白佛言：「世尊！諸有發趣菩薩乘者，應云何住？云何修行？云何攝伏其心？」</p><p>佛告善現：「諸有發趣菩薩乘者，應當發起如是之心：『我當皆令一切有情，於無餘依妙涅槃界而般涅槃，雖度如是一切有情，令滅度已，而無有情得滅度者。』何以故？善現！若諸菩薩摩訶薩有情想轉，不應說名菩薩摩訶薩。所以者何？若諸菩薩摩訶薩不應說言有情想轉，如是命者想、士夫想、補特伽羅想、意生想、摩納婆想、作者想、受者想轉，當知亦爾。何以故？善現！無有少法名為發趣菩薩乘者。」</p><p>佛告善現：「於汝意云何？如來昔於然燈如來、應、正等覺所，頗有少法能證阿耨多羅三藐三菩提不？」</p><p>作是語已。具壽善現白佛言：「世尊！如我解佛所說義者，如來昔於然燈如來、應、正等覺所，無有少法能證阿耨多羅三藐三菩提。」</p><p>說是語已。佛告具壽善現言：「如是，如是。善現！如來昔於然燈如來、應、正等覺所，無有少法能證阿耨多羅三藐三菩提。何以故？善現！如來昔於然燈如來、應、正等覺所，若有少法能證阿耨多羅三藐三菩提者，然燈如來、應、正等覺不應授我記言：『汝摩納婆於當來世，名釋迦牟尼如來、應、正等覺。』善現！以如來無有少法能證阿耨多羅三藐三菩提，是故然燈如來、應、正等覺授我記言：『汝摩納婆於當來世，名釋迦牟尼如來、應、正等覺。』所以者何？善現！言如來者，即是真實、真如增語；言如來者，即是無生、法性增語；言如來者，即是永斷道路增語；言如來者，即是畢竟不生增語。何以故？善現！若實無生，即最勝義。</p><p>「善現！若如是說如來、應、正等覺能證阿耨多羅三藐三菩提者，當知此言為不真實。所以者何？善現！由彼謗我起不實執。何以故？善現！無有少法，如來、應、正等覺能證阿耨多羅三藐三菩提。善現！如來現前等所證法，或所說法，或所思法，即於其中非諦非妄，是故如來說一切法皆是佛法。善現！一切法一切法者，如來說非一切法，是故如來說名一切法一切法。」</p><p>佛告善現：「譬如士夫具身大身。」</p><p>具壽善現即白佛言：「世尊！如來所說士夫具身大身，如來說為非身，是故說名具身大身。」</p><p>佛言：「善現！如是，如是。若諸菩薩作如是言：『我當滅度無量有情。』是則不應說名菩薩。何以故？善現！頗有少法名菩薩不？」</p><p>善現答言：「不也，世尊！無有少法名為菩薩。」</p><p>佛告善現：「有情有情者，如來說非有情，故名有情，是故如來說一切法無有有情、無有命者、無有士夫、無有補特伽羅等。善現！若諸菩薩作如是言：『我當成辦佛土功德莊嚴。』亦如是說。何以故？善現！佛土功德莊嚴佛土功德莊嚴者，如來說非莊嚴，是故如來說名佛土功德莊嚴佛土功德莊嚴。善現！若諸菩薩於無我、法無我、法深信解者，如來、應、正等覺說為菩薩菩薩。」</p><p>佛告善現：「於汝意云何？如來等現有肉眼不？」<br>善現答言：「如是，世尊！如來等現有肉眼。」</p><p>佛言：「善現！於汝意云何？如來等現有天眼不？」<br>善現答言：「如是，世尊！如來等現有天眼。」</p><p>佛言：「善現！於汝意云何？如來等現有慧眼不？」<br>善現答言：「如是，世尊！如來等現有慧眼。」</p><p>佛言：「善現！於汝意云何？如來等現有法眼不？」<br>善現答言：「如是，世尊！如來等現有法眼。」</p><p>佛言：「善現！於汝意云何？如來等現有佛眼不？」<br>善現答言：「如是，世尊！如來等現有佛眼。」</p><p>佛告善現：「於汝意云何？乃至殑伽河中所有諸沙，如來說是沙不？」<br>善現答言：「如是，世尊！如是，善逝！如來說是沙。」</p><p>佛言：「善現！於汝意云何？乃至殑伽河中所有沙數，假使有如是等殑伽河，乃至是諸殑伽河中所有沙數，假使有如是等世界。是諸世界寧為多不？」</p><p>善現答言：「如是！世尊！如是！善逝！是諸世界其數甚多。」</p><p>佛言：「善現！乃至爾所諸世界中所有有情，彼諸有情各有種種，其心流注我悉能知。何以故？善現！心流注心流注者，如來說非流注，是故如來說名心流注心流注。所以者何？善現！過去心不可得，未來心不可得，現在心不可得。」</p><p>佛告善現：「於汝意云何？若善男子或善女人，以此三千大千世界盛滿七寶奉施如來、應、正等覺，是善男子或善女人，由是因緣所生福聚寧為多不？」</p><p>善現答言：「甚多，世尊！甚多，善逝！」</p><p>佛言：「善現！如是，如是。彼善男子或善女人，由此因緣所生福聚其量甚多。何以故？善現！若有福聚，如來不說福聚福聚。」</p><p>佛告善現：「於汝意云何？可以色身圓實觀如來不？」<br>善現答言：「不也，世尊！不可以色身圓實觀於如來。何以故？世尊！色身圓實色身圓實者，如來說非圓實，是故如來說名色身圓實色身圓實。」</p><p>佛告善現：「於汝意云何？可以諸相具足觀如來不？」<br>善現答言：「不也，世尊！不可以諸相具足觀於如來。何以故？世尊！諸相具足諸相具足者，如來說為非相具足，是故如來說名諸相具足諸相具足。」</p><p>佛告善現：「於汝意云何？如來頗作是念：我當有所說法耶？善現！汝今勿當作如是觀。何以故？善現！若言如來有所說法，即為謗我，為非善取。何以故？善現！說法說法者，無法可說，故名說法。」</p><p>爾時，具壽善現白佛言：「世尊！於當來世後時、後分、後五百歲，正法將滅時分轉時，頗有有情聞說如是色類法已能深信不？」</p><p>佛言：「善現！彼非有情、非不有情。何以故？善現！一切有情者，如來說非有情，故名一切有情。」</p><p>佛告善現：「於汝意云何？頗有少法，如來、應、正等覺現證無上正等菩提耶？」</p><p>具壽善現白佛言：「世尊！如我解佛所說義者，無有少法，如來、應、正等覺現證無上正等菩提。」</p><p>佛言：「善現！如是！如是！於中少法無有無得，故名無上正等菩提。<br>「復次，善現！是法平等，於其中間無不平等，故名無上正等菩提。以無我性、無有情性、無命者性、無士夫性、無補特伽羅等性平等，故名無上正等菩提。一切善法無不現證，一切善法無不妙覺。善現！善法善法者，如來一切說為非法，是故如來說名善法善法。</p><p>「復次，善現！若善男子或善女人集七寶聚，量等三千大千世界其中所有妙高山王，持用布施。若善男子或善女人，於此般若波羅蜜多經中乃至四句伽陀，受持、讀誦、究竟通利，及廣為他宣說、開示、如理作意。善現！前說福聚於此福聚，百分計之所不能及，如是千分、若百千分、若俱胝百千分、若俱胝那庾多百千分、若數分、若計分、若算分、若喻分、若鄔波尼殺曇分亦不能及。」</p><p>佛告善現：「於汝意云何？如來頗作是念：我當度脫諸有情耶？善現！汝今勿當作如是觀。何以故？善現！無少有情如來度者。善現！若有有情如來度者，如來即應有其我執、有有情執、有命者執、有士夫執、有補特伽羅等執。善現！我等執者，如來說為非執，故名我等執，而諸愚夫異生強有此執。善現！愚夫異生者，如來說為非生，故名愚夫異生。」</p><p>佛告善現：「於汝意云何？可以諸相具足觀如來不？」<br>善現答言：「如我解佛所說義者，不應以諸相具足觀於如來。」</p><p>佛言：「善現！善哉！善哉！如是，如是。如汝所說。不應以諸相具足觀於如來。善現！若以諸相具足觀如來者，轉輪聖王應是如來，是故不應以諸相具足觀於如來，如是應以諸相非相觀於如來。」</p><p>爾時，世尊而說頌曰：<br>「諸以色觀我，以音聲尋我，<br>彼生履邪斷，不能當見我。<br>應觀佛法性，即導師法身；<br>法性非所識，故彼不能了。」</p><p>佛告善現：「於汝意云何？如來、應、正等覺以諸相具足現證無上正等覺耶？善現！汝今勿當作如是觀。何以故？善現！如來、應、正等覺不以諸相具足現證無上正等菩提。</p><p>「復次，善現！如是發趣菩薩乘者，頗施設少法若壞若斷耶？善現！汝今勿當作如是觀。諸有發趣菩薩乘者，終不施設少法若壞若斷。</p><p>「復次，善現！若善男子或善女人，以殑伽河沙等世界盛滿七寶，奉施如來、應、正等覺，若有菩薩於諸無我，無生法中獲得堪忍，由是因緣所生福聚甚多於彼。</p><p>「復次，善現！菩薩不應攝受福聚。」</p><p>具壽善現即白佛言：「世尊！云何菩薩不應攝受福聚？」</p><p>佛言：「善現！所應攝受，不應攝受，是故說名所應攝受。</p><p>「復次，善現！若有說言如來若去、若來、若住、若坐、若臥，是人不解我所說義。何以故？善現！言如來者即是真實、真如增語，都無所去、無所從來，故名如來、應、正等覺。</p><p>「復次，善現！若善男子或善女人，乃至三千大千世界大地極微塵量等世界，即以如是無數世界色像為量如極微聚。善現！於汝意云何？是極微聚寧為多不？」</p><p>善現答言：「是極微聚甚多，世尊！甚多，善逝！何以故？世尊！若極微聚是實有者，佛不應說為極微聚。所以者何？如來說極微聚即為非聚，故名極微聚。如來說三千大千世界即非世界，故名三千大千世界。何以故？世尊！若世界是實有者，即為一合執，如來說一合執即為非執，故名一合執。」</p><p>佛言：「善現！此一合執不可言說，不可戲論，然彼一切愚夫異生強執是法。何以故？善現！若作是言：『如來宣說我見、有情見、命者見、士夫見、補特伽羅見、意生見、摩納婆見、作者見、受者見。』於汝意云何？如是所說為正語不？」</p><p>善現答言：「不也，世尊！不也，善逝！如是所說非為正語。所以者何？如來所說我見、有情見、命者見、士夫見、補特伽羅見、意生見、摩納婆見、作者見、受者見，即為非見，故名我見乃至受者見。」</p><p>佛告善現：「諸有發趣菩薩乘者，於一切法應如是知，應如是見，應如是信解，如是不住法想。何以故？善現！法想法想者，如來說為非想，是故如來說名法想法想。</p><p>「復次，善現！若菩薩摩訶薩以無量無數世界盛滿七寶，奉施如來、應、正等覺。若善男子或善女人，於此般若波羅蜜多經中乃至四句伽陀，受持、讀誦、究竟通利、如理作意，及廣為他宣說、開示，由此因緣所生福聚，甚多於前無量無數。云何為他宣說、開示？如不為他宣說、開示，故名為他宣說、開示。」</p><p>爾時，世尊而說頌曰：<br>「諸和合所為，如星翳燈幻，<br>露泡夢電雲，應作如是觀。」</p><p>時，薄伽梵說是經已，尊者善現及諸苾芻、苾芻尼、鄔波索迦、鄔波斯迦，並諸世間天、人、阿素洛、健達縛等，聞薄伽梵所說經已，皆大歡喜，信受奉行。</p></div></aside>
+
+<div id="hitmap" class="empty"><div class="track"></div></div>
+
+<button id="noteBtn">✎ 我 發 現 的 脈 絡</button>
+<div id="notes">
+  <h3>我發現的脈絡 <button class="x" id="noteX">×</button></h3>
+  <p class="tip">把你看到的線寫下來——哪個字反覆出現、串起哪些地方、在講同一件什麼事。</p>
+  <textarea id="noteText" placeholder="例如：&#10;「相」——身相、諸相、三十二相、我相……到處都是，而且常常接「即非、是名」。&#10;「福德／功德」——一個講有相的布施，一個講受持演說……"></textarea>
+  <div class="noterow">
+    <button id="noteDl">下載筆記</button>
+    <button class="save" id="noteSave">存起來</button>
+  </div>
+</div>
+
+<script>
+var BLOCKS = [{"t": "f", "n": 1, "name": "法會因由分"}, {"t": "p", "s": "如是我聞。一時，佛在舍衛國祇樹給孤獨園，與大比丘眾千二百五十人俱。爾時，世尊食時，著衣持缽，入舍衛大城乞食。於其城中，次第乞已，還至本處。飯食訖，收衣缽，洗足已，敷座而坐。"}, {"t": "f", "n": 2, "name": "善現啟請分"}, {"t": "p", "s": "時，長老須菩提在大眾中即從座起，偏袒右肩，右膝著地，合掌恭敬而白佛言：「希有！世尊！如來善護念諸菩薩，善付囑諸菩薩。世尊！善男子、善女人，發阿耨多羅三藐三菩提心，應云何住？云何降伏其心？」"}, {"t": "p", "s": "佛言：「善哉，善哉。須菩提！如汝所說：如來善護念諸菩薩，善付囑諸菩薩，汝今諦聽！當為汝說：善男子、善女人，發阿耨多羅三藐三菩提心，應如是住，如是降伏其心。」"}, {"t": "p", "s": "「唯然。世尊！願樂欲聞。」"}, {"t": "f", "n": 3, "name": "大乘正宗分"}, {"t": "p", "s": "佛告須菩提：「諸菩薩摩訶薩應如是降伏其心！所有一切眾生之類：若卵生、若胎生、若濕生、若化生；若有色、若無色；若有想、若無想、若非有想非無想，我皆令入無餘涅槃而滅度之。如是滅度無量無數無邊眾生，實無眾生得滅度者。何以故？須菩提！若菩薩有我相、人相、眾生相、壽者相，即非菩薩。"}, {"t": "f", "n": 4, "name": "妙行無住分"}, {"t": "p", "s": "「復次，須菩提！菩薩於法，應無所住，行於布施，所謂不住色布施，不住聲香味觸法布施。須菩提！菩薩應如是布施，不住於相。何以故？若菩薩不住相布施，其福德不可思量。"}, {"t": "p", "s": "「須菩提！於意云何？東方虛空可思量不？」"}, {"t": "p", "s": "「不也，世尊！」"}, {"t": "p", "s": "「須菩提！南西北方四維上下虛空可思量不？」"}, {"t": "p", "s": "「不也，世尊！」"}, {"t": "p", "s": "「須菩提！菩薩無住相布施，福德亦復如是不可思量。須菩提！菩薩但應如所教住。"}, {"t": "f", "n": 5, "name": "如理實見分"}, {"t": "p", "s": "「須菩提！於意云何？可以身相見如來不？」"}, {"t": "p", "s": "「不也，世尊！不可以身相得見如來。何以故？如來所說身相，即非身相。」"}, {"t": "p", "s": "佛告須菩提：「凡所有相，皆是虛妄。若見諸相非相，即見如來。」"}, {"t": "f", "n": 6, "name": "正信希有分"}, {"t": "p", "s": "須菩提白佛言：「世尊！頗有眾生，得聞如是言說章句，生實信不？」"}, {"t": "p", "s": "佛告須菩提：「莫作是說。如來滅後，後五百歲，有持戒修福者，於此章句能生信心，以此為實，當知是人不於一佛二佛三四五佛而種善根，已於無量千萬佛所種諸善根，聞是章句，乃至一念生淨信者，須菩提！如來悉知悉見，是諸眾生得如是無量福德。何以故？是諸眾生無復我相、人相、眾生相、壽者相。"}, {"t": "p", "s": "「無法相，亦無非法相。何以故？是諸眾生若心取相，則為著我人眾生壽者。"}, {"t": "p", "s": "「若取法相，即著我人眾生壽者。何以故？若取非法相，即著我人眾生壽者，是故不應取法，不應取非法。以是義故，如來常說：汝等比丘，知我說法，如筏喻者，法尚應捨，何況非法。"}, {"t": "f", "n": 7, "name": "無得無說分"}, {"t": "p", "s": "「須菩提！於意云何？如來得阿耨多羅三藐三菩提耶？如來有所說法耶？」"}, {"t": "p", "s": "須菩提言：「如我解佛所說義，無有定法名阿耨多羅三藐三菩提，亦無有定法，如來可說。何以故？如來所說法，皆不可取、不可說、非法、非非法。所以者何？一切賢聖，皆以無為法而有差別。」"}, {"t": "f", "n": 8, "name": "依法出生分"}, {"t": "p", "s": "「須菩提！於意云何？若人滿三千大千世界七寶以用布施，是人所得福德，寧為多不？」"}, {"t": "p", "s": "須菩提言：「甚多，世尊！何以故？是福德即非福德性，是故如來說福德多。」"}, {"t": "p", "s": "「若復有人，於此經中受持，乃至四句偈等，為他人說，其福勝彼。何以故？須菩提！一切諸佛，及諸佛阿耨多羅三藐三菩提法，皆從此經出。須菩提！所謂佛、法者，即非佛、法。"}, {"t": "f", "n": 9, "name": "一相無相分"}, {"t": "p", "s": "「須菩提！於意云何？須陀洹能作是念：『我得須陀洹果』不？」"}, {"t": "p", "s": "須菩提言：「不也，世尊！何以故？須陀洹名為入流，而無所入，不入色聲香味觸法，是名須陀洹。」"}, {"t": "p", "s": "「須菩提！於意云何？斯陀含能作是念：『我得斯陀含果』不？」"}, {"t": "p", "s": "須菩提言：「不也，世尊！何以故？斯陀含名一往來，而實無往來，是名斯陀含。」"}, {"t": "p", "s": "「須菩提！於意云何？阿那含能作是念：『我得阿那含果』不？」"}, {"t": "p", "s": "須菩提言：「不也，世尊！何以故？阿那含名為不來，而實無不來，是故名阿那含。」"}, {"t": "p", "s": "「須菩提！於意云何？阿羅漢能作是念：『我得阿羅漢道』不？」"}, {"t": "p", "s": "須菩提言：「不也，世尊！何以故？實無有法名阿羅漢。世尊！若阿羅漢作是念：『我得阿羅漢道』，即為著我人眾生壽者。世尊！佛說我得無諍三昧，人中最為第一，是第一離欲阿羅漢。世尊！我不作是念：『我是離欲阿羅漢』。世尊！我若作是念：『我得阿羅漢道』，世尊則不說須菩提是樂阿蘭那行者！以須菩提實無所行，而名須菩提是樂阿蘭那行。」"}, {"t": "f", "n": 10, "name": "莊嚴淨土分"}, {"t": "p", "s": "佛告須菩提：「於意云何？如來昔在燃燈佛所，於法有所得不？」"}, {"t": "p", "s": "「不也，世尊！如來在燃燈佛所，於法實無所得。」"}, {"t": "p", "s": "「須菩提！於意云何？菩薩莊嚴佛土不？」"}, {"t": "p", "s": "「不也，世尊！何以故？莊嚴佛土者，即非莊嚴，是名莊嚴。」"}, {"t": "p", "s": "「是故須菩提，諸菩薩摩訶薩應如是生清淨心，不應住色生心，不應住聲香味觸法生心，應無所住而生其心。"}, {"t": "p", "s": "「須菩提！譬如有人，身如須彌山王，於意云何？是身為大不？」"}, {"t": "p", "s": "須菩提言：「甚大，世尊！何以故？佛說非身，是名大身。」"}, {"t": "f", "n": 11, "name": "無為福勝分"}, {"t": "p", "s": "「須菩提！如恒河中所有沙數，如是沙等恒河，於意云何？是諸恒河沙寧為多不？」"}, {"t": "p", "s": "須菩提言：「甚多，世尊！但諸恒河尚多無數，何況其沙！」"}, {"t": "p", "s": "「須菩提！我今實言告汝：若有善男子、善女人，以七寶滿爾所恒河沙數三千大千世界，以用布施，得福多不？」"}, {"t": "p", "s": "須菩提言：「甚多，世尊！」"}, {"t": "p", "s": "佛告須菩提：「若善男子、善女人，於此經中，乃至受持四句偈等，為他人說，而此福德勝前福德。"}, {"t": "f", "n": 12, "name": "尊重正教分"}, {"t": "p", "s": "復次，須菩提！隨說是經，乃至四句偈等，當知此處，一切世間、天、人、阿修羅，皆應供養，如佛塔廟，何況有人盡能受持讀誦。須菩提！當知是人成就最上第一希有之法，若是經典所在之處，即為有佛，若尊重弟子。」"}, {"t": "f", "n": 13, "name": "如法受持分"}, {"t": "p", "s": "爾時，須菩提白佛言：「世尊！當何名此經？我等云何奉持？」"}, {"t": "p", "s": "佛告須菩提：「是經名為《金剛般若波羅蜜》，以是名字，汝當奉持。所以者何？須菩提！佛說般若波羅蜜，即非般若波羅蜜，是名般若波羅蜜。須菩提！於意云何？如來有所說法不？」"}, {"t": "p", "s": "須菩提白佛言：「世尊！如來無所說。」"}, {"t": "p", "s": "「須菩提！於意云何？三千大千世界所有微塵是為多不？」"}, {"t": "p", "s": "須菩提言：「甚多，世尊！」"}, {"t": "p", "s": "「須菩提！諸微塵，如來說非微塵，是名微塵。如來說：世界，非世界，是名世界。"}, {"t": "p", "s": "「須菩提！於意云何？可以三十二相見如來不？」"}, {"t": "p", "s": "「不也，世尊！不可以三十二相得見如來。何以故？如來說：三十二相，即是非相，是名三十二相。」"}, {"t": "p", "s": "「須菩提！若有善男子、善女人，以恒河沙等身命布施；若復有人，於此經中，乃至受持四句偈等，為他人說，其福甚多！」"}, {"t": "f", "n": 14, "name": "離相寂滅分"}, {"t": "p", "s": "爾時，須菩提聞說是經，深解義趣，涕淚悲泣，而白佛言：「希有，世尊！佛說如是甚深經典，我從昔來所得慧眼，未曾得聞如是之經。世尊！若復有人得聞是經，信心清淨，則生實相，當知是人，成就第一希有功德。世尊！是實相者，即是非相，是故如來說名實相。世尊！我今得聞如是經典，信解受持不足為難，若當來世，後五百歲，其有眾生，得聞是經，信解受持，是人即為第一希有。何以故？此人無我相、無人相、無眾生相、無壽者相。所以者何？我相即是非相，人相、眾生相、壽者相即是非相。何以故？離一切諸相，即名諸佛。」"}, {"t": "p", "s": "佛告須菩提：「如是！如是！若復有人，得聞是經，不驚、不怖、不畏，當知是人甚為希有。何以故？須菩提！如來說：第一波羅蜜，即非第一波羅蜜，是名第一波羅蜜。須菩提！忍辱波羅蜜，如來說非忍辱波羅蜜，是名忍辱波羅蜜。何以故？須菩提！如我昔為歌利王割截身體，我於爾時，無我相、無人相、無眾生相、無壽者相。何以故？我於往昔節節支解時，若有我相、人相、眾生相、壽者相，應生瞋恨。須菩提！又念過去於五百世作忍辱仙人，於爾所世，無我相、無人相、無眾生相、無壽者相。是故須菩提！菩薩應離一切相，發阿耨多羅三藐三菩提心，不應住色生心，不應住聲香味觸法生心，應生無所住心。若心有住，即為非住。"}, {"t": "p", "s": "「是故佛說：菩薩心不應住色布施。須菩提！菩薩為利益一切眾生故，應如是布施。如來說：一切諸相，即是非相。又說：一切眾生，即非眾生。須菩提！如來是真語者、實語者、如語者、不誑語者、不異語者。"}, {"t": "p", "s": "「須菩提！如來所得法，此法無實無虛。須菩提！若菩薩心住於法而行布施，如人入暗，即無所見；若菩薩心不住法而行布施，如人有目，日光明照，見種種色。"}, {"t": "p", "s": "「須菩提！當來之世，若有善男子、善女人，能於此經受持讀誦，即為如來以佛智慧，悉知是人，悉見是人，皆得成就無量無邊功德。"}, {"t": "f", "n": 15, "name": "持經功德分"}, {"t": "p", "s": "「須菩提！若有善男子、善女人，初日分以恒河沙等身布施，中日分復以恒河沙等身布施，後日分亦以恒河沙等身布施，如是無量百千萬億劫以身布施；若復有人，聞此經典，信心不逆，其福勝彼，何況書寫、受持、讀誦、為人解說。"}, {"t": "p", "s": "「須菩提！以要言之，是經有不可思議、不可稱量、無邊功德。如來為發大乘者說，為發最上乘者說。若有人能受持讀誦，廣為人說，如來悉知是人，悉見是人，皆得成就不可量、不可稱、無有邊、不可思議功德，如是人等，即為荷擔如來阿耨多羅三藐三菩提。何以故？須菩提！若樂小法者，著我見、人見、眾生見、壽者見，則於此經，不能聽受讀誦、為人解說。"}, {"t": "p", "s": "「須菩提！在在處處，若有此經，一切世間、天、人、阿修羅，所應供養；當知此處，則為是塔，皆應恭敬，作禮圍繞，以諸華香而散其處。"}, {"t": "f", "n": 16, "name": "能淨業障分"}, {"t": "p", "s": "「復次，須菩提！善男子、善女人，受持讀誦此經，若為人輕賤，是人先世罪業，應墮惡道，以今世人輕賤故，先世罪業則為消滅，當得阿耨多羅三藐三菩提。"}, {"t": "p", "s": "「須菩提！我念過去無量阿僧祇劫，於燃燈佛前，得值八百四千萬億那由他諸佛，悉皆供養承事，無空過者；若復有人，於後末世，能受持讀誦此經，所得功德，於我所供養諸佛功德，百分不及一，千萬億分、乃至算數譬喻所不能及。"}, {"t": "p", "s": "「須菩提！若善男子、善女人，於後末世，有受持讀誦此經，所得功德，我若具說者，或有人聞，心則狂亂，狐疑不信。須菩提！當知是經義不可思議，果報亦不可思議。」"}, {"t": "f", "n": 17, "name": "究竟無我分"}, {"t": "p", "s": "爾時，須菩提白佛言：「世尊！善男子、善女人，發阿耨多羅三藐三菩提心，云何應住？云何降伏其心？」"}, {"t": "p", "s": "佛告須菩提：「善男子、善女人，發阿耨多羅三藐三菩提心者，當生如是心，我應滅度一切眾生。滅度一切眾生已，而無有一眾生實滅度者。何以故？須菩提！若菩薩有我相、人相、眾生相、壽者相，即非菩薩。所以者何？須菩提！實無有法發阿耨多羅三藐三菩提心者。"}, {"t": "p", "s": "「須菩提！於意云何？如來於燃燈佛所，有法得阿耨多羅三藐三菩提不？」"}, {"t": "p", "s": "「不也，世尊！如我解佛所說義，佛於燃燈佛所，無有法得阿耨多羅三藐三菩提。」"}, {"t": "p", "s": "佛言：「如是，如是。須菩提！實無有法如來得阿耨多羅三藐三菩提。須菩提！若有法如來得阿耨多羅三藐三菩提者，燃燈佛則不與我授記：『汝於來世，當得作佛，號釋迦牟尼。』以實無有法得阿耨多羅三藐三菩提，是故燃燈佛與我授記，作是言：『汝於來世，當得作佛，號釋迦牟尼。』何以故？如來者，即諸法如義。"}, {"t": "p", "s": "「若有人言：如來得阿耨多羅三藐三菩提。須菩提！實無有法，佛得阿耨多羅三藐三菩提。須菩提！如來所得阿耨多羅三藐三菩提，於是中無實無虛。是故如來說：一切法皆是佛法。須菩提！所言一切法者，即非一切法，是故名一切法。"}, {"t": "p", "s": "「須菩提！譬如人身長大。」"}, {"t": "p", "s": "須菩提言：「世尊！如來說：人身長大，即為非大身，是名大身。」"}, {"t": "p", "s": "「須菩提！菩薩亦如是。若作是言：『我當滅度無量眾生』，即不名菩薩。何以故？須菩提！實無有法名為菩薩。是故佛說：一切法無我、無人、無眾生、無壽者。須菩提！若菩薩作是言：『我當莊嚴佛土』，是不名菩薩。何以故？如來說：莊嚴佛土者，即非莊嚴，是名莊嚴。須菩提！若菩薩通達無我法者，如來說名真是菩薩。"}, {"t": "f", "n": 18, "name": "一體同觀分"}, {"t": "p", "s": "「須菩提！於意云何？如來有肉眼不？」"}, {"t": "p", "s": "「如是，世尊！如來有肉眼。」"}, {"t": "p", "s": "「須菩提！於意云何？如來有天眼不？」"}, {"t": "p", "s": "「如是，世尊！如來有天眼。」"}, {"t": "p", "s": "「須菩提！於意云何？如來有慧眼不？」"}, {"t": "p", "s": "「如是，世尊！如來有慧眼。」"}, {"t": "p", "s": "「須菩提！於意云何？如來有法眼不？」"}, {"t": "p", "s": "「如是，世尊！如來有法眼。」"}, {"t": "p", "s": "「須菩提！於意云何？如來有佛眼不？」"}, {"t": "p", "s": "「如是，世尊！如來有佛眼。」"}, {"t": "p", "s": "「須菩提！於意云何？如恒河中所有沙，佛說是沙不？」"}, {"t": "p", "s": "「如是，世尊！如來說是沙。」"}, {"t": "p", "s": "「須菩提！於意云何？如一恒河中所有沙，有如是沙等恒河，是諸恒河所有沙數，佛世界如是，寧為多不？」"}, {"t": "p", "s": "「甚多，世尊！」"}, {"t": "p", "s": "佛告須菩提：「爾所國土中，所有眾生，若干種心，如來悉知。何以故？如來說：諸心皆為非心，是名為心。所以者何？須菩提！過去心不可得，現在心不可得，未來心不可得。"}, {"t": "f", "n": 19, "name": "法界通化分"}, {"t": "p", "s": "「須菩提！於意云何？若有人滿三千大千世界七寶以用布施，是人以是因緣，得福多不？」"}, {"t": "p", "s": "「如是，世尊！此人以是因緣，得福甚多。」"}, {"t": "p", "s": "「須菩提！若福德有實，如來不說得福德多；以福德無故，如來說得福德多。"}, {"t": "f", "n": 20, "name": "離色離相分"}, {"t": "p", "s": "「須菩提！於意云何？佛可以具足色身見不？」"}, {"t": "p", "s": "「不也，世尊！如來不應以具足色身見。何以故？如來說：具足色身，即非具足色身，是名具足色身。」"}, {"t": "p", "s": "「須菩提！於意云何？如來可以具足諸相見不？」"}, {"t": "p", "s": "「不也，世尊！如來不應以具足諸相見。何以故？如來說：諸相具足，即非具足，是名諸相具足。」"}, {"t": "f", "n": 21, "name": "非說所說分"}, {"t": "p", "s": "「須菩提！汝勿謂如來作是念：『我當有所說法。』莫作是念，何以故？若人言：如來有所說法，即為謗佛，不能解我所說故。須菩提！說法者，無法可說，是名說法。」"}, {"t": "p", "s": "爾時，慧命須菩提白佛言：「世尊！頗有眾生，於未來世，聞說是法，生信心不？」"}, {"t": "p", "s": "佛言：「須菩提！彼非眾生，非不眾生。何以故？須菩提！眾生眾生者，如來說非眾生，是名眾生。」"}, {"t": "f", "n": 22, "name": "無法可得分"}, {"t": "p", "s": "須菩提白佛言：「世尊！佛得阿耨多羅三藐三菩提，為無所得耶？」"}, {"t": "p", "s": "佛言：「如是，如是。須菩提！我於阿耨多羅三藐三菩提乃至無有少法可得，是名阿耨多羅三藐三菩提。」"}, {"t": "f", "n": 23, "name": "淨心行善分"}, {"t": "p", "s": "「復次，須菩提！是法平等，無有高下，是名阿耨多羅三藐三菩提；以無我、無人、無眾生、無壽者，修一切善法，即得阿耨多羅三藐三菩提。須菩提！所言善法者，如來說即非善法，是名善法。"}, {"t": "f", "n": 24, "name": "福智無比分"}, {"t": "p", "s": "「須菩提！若三千大千世界中所有諸須彌山王，如是等七寶聚，有人持用布施；若人以此《般若波羅蜜經》，乃至四句偈等，受持讀誦、為他人說，於前福德百分不及一，百千萬億分，乃至算數譬喻所不能及。"}, {"t": "f", "n": 25, "name": "化無所化分"}, {"t": "p", "s": "「須菩提！於意云何？汝等勿謂如來作是念：『我當度眾生。』須菩提！莫作是念。何以故？實無有眾生如來度者，若有眾生如來度者，如來即有我人眾生壽者。須菩提！如來說：『有我者，即非有我，而凡夫之人以為有我。』須菩提！凡夫者，如來說即非凡夫，是名凡夫。」"}, {"t": "f", "n": 26, "name": "法身非相分"}, {"t": "p", "s": "「須菩提！於意云何？可以三十二相觀如來不？」"}, {"t": "p", "s": "須菩提言：「如是！如是！以三十二相觀如來。」"}, {"t": "p", "s": "佛言：「須菩提！若以三十二相觀如來者，轉輪聖王即是如來。」"}, {"t": "p", "s": "須菩提白佛言：「世尊！如我解佛所說義，不應以三十二相觀如來。」"}, {"t": "p", "s": "爾時，世尊而說偈言："}, {"t": "p", "s": "「若以色見我　以音聲求我　是人行邪道　不能見如來"}, {"t": "f", "n": 27, "name": "無斷無滅分"}, {"t": "p", "s": "「須菩提！汝若作是念：『如來不以具足相故，得阿耨多羅三藐三菩提。』須菩提！莫作是念：『如來不以具足相故，得阿耨多羅三藐三菩提。』"}, {"t": "p", "s": "「須菩提！汝若作是念，發阿耨多羅三藐三菩提心者，說諸法斷滅。莫作是念！何以故？發阿耨多羅三藐三菩提心者，於法不說斷滅相。"}, {"t": "f", "n": 28, "name": "不受不貪分"}, {"t": "p", "s": "「須菩提！若菩薩以滿恒河沙等世界七寶，持用布施；若復有人知一切法無我，得成於忍，此菩薩勝前菩薩所得功德。何以故？須菩提！以諸菩薩不受福德故。」"}, {"t": "p", "s": "須菩提白佛言：「世尊！云何菩薩不受福德？」"}, {"t": "p", "s": "「須菩提！菩薩所作福德，不應貪著，是故說不受福德。"}, {"t": "f", "n": 29, "name": "威儀寂淨分"}, {"t": "p", "s": "「須菩提！若有人言：如來若來若去、若坐若臥，是人不解我所說義。何以故？如來者，無所從來，亦無所去，故名如來。"}, {"t": "f", "n": 30, "name": "一合理相分"}, {"t": "p", "s": "「須菩提！若善男子、善女人，以三千大千世界碎為微塵，於意云何？是微塵眾寧為多不？」"}, {"t": "p", "s": "須菩提言：「甚多，世尊！何以故？若是微塵眾實有者，佛即不說是微塵眾，所以者何？佛說：微塵眾，即非微塵眾，是名微塵眾。世尊！如來所說三千大千世界，則非世界，是名世界。何以故？若世界實有，即是一合相。如來說：一合相，即非一合相，是名一合相。」"}, {"t": "p", "s": "「須菩提！一合相者，則是不可說，但凡夫之人貪著其事。"}, {"t": "f", "n": 31, "name": "知見不生分"}, {"t": "p", "s": "「須菩提！若人言：佛說我見、人見、眾生見、壽者見。須菩提！於意云何？是人解我所說義不？」"}, {"t": "p", "s": "「不也，世尊！是人不解如來所說義。何以故？世尊說：我見、人見、眾生見、壽者見，即非我見、人見、眾生見、壽者見，是名我見、人見、眾生見、壽者見。」"}, {"t": "f", "n": 32, "name": "應化非真分"}, {"t": "p", "s": "「須菩提！發阿耨多羅三藐三菩提心者，於一切法，應如是知，如是見，如是信解，不生法相。須菩提！所言法相者，如來說即非法相，是名法相。"}, {"t": "p", "s": "「須菩提！若有人以滿無量阿僧祇世界七寶持用布施，若有善男子、善女人，發菩提心者，持於此經，乃至四句偈等，受持讀誦，為人演說，其福勝彼。云何為人演說，不取於相，如如不動。何以故？"}, {"t": "p", "s": "「一切有為法　如夢幻泡影　如露亦如電　應作如是觀」"}, {"t": "p", "s": "佛說是經已，長老須菩提及諸比丘、比丘尼、優婆塞、優婆夷、一切世間、天、人、阿修羅，聞佛所說，皆大歡喜，信受奉行。"}];
+(function(){
+  var $=function(s){return document.querySelector(s);};
+  var COLORS=['#f3d9a8','#cde0cf','#ecc8cf','#cdd8e8','#e4d2ec'];
+  var doc=$('#doc'), qEl=$('#q'), countEl=$('#count'), mapEl=$('#hitmap');
+  var prevB=$('#prev'), nextB=$('#next');
+  var hits=[], cur=-1, curTerms=[];
+
+  function cn(n){ var u=['零','一','二','三','四','五','六','七','八','九'];
+    if(n<10) return u[n]; if(n<20) return '十'+(n>10?u[n-10]:'');
+    var t=Math.floor(n/10), o=n%10; return u[t]+'十'+(o?u[o]:''); }
+  function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function parseTerms(str){
+    var seen={}, out=[];
+    (str||'').split(/[+＋,，、\s]+/).forEach(function(s){
+      s=s.trim(); if(s && !seen[s]){ seen[s]=1; out.push(s); }
+    });
+    return out.slice(0,5);
+  }
+  function hlMulti(text, terms){
+    if(!terms.length) return esc(text);
+    var marks=[];
+    terms.forEach(function(t,ci){
+      var i=0, idx;
+      while((idx=text.indexOf(t,i))>=0){ marks.push({s:idx,e:idx+t.length,ci:ci}); i=idx+t.length; }
+    });
+    if(!marks.length) return esc(text);
+    marks.sort(function(a,b){ return a.s-b.s || b.e-a.e; });
+    var kept=[], lastEnd=-1;
+    marks.forEach(function(m){ if(m.s>=lastEnd){ kept.push(m); lastEnd=m.e; } });
+    var out='', pos=0;
+    kept.forEach(function(m){
+      out += esc(text.slice(pos,m.s)) + '<mark class="hit c'+m.ci+'">'+esc(text.slice(m.s,m.e))+'</mark>';
+      pos=m.e;
+    });
+    return out + esc(text.slice(pos));
+  }
+  function render(str){
+    curTerms = parseTerms(str);
+    doc.innerHTML = BLOCKS.map(function(b){
+      if(b.t==='f') return '<div class="fenhead" id="fen-'+b.n+'"><b>第'+cn(b.n)+'分</b>'+b.name+'</div>';
+      return '<p class="para">'+hlMulti(b.s,curTerms)+'</p>';
+    }).join('');
+    hits = Array.prototype.slice.call(doc.querySelectorAll('mark.hit'));
+    cur=-1;
+    buildMap();
+    updateCount();
+    prevB.disabled = nextB.disabled = hits.length===0;
+    Array.prototype.forEach.call(document.querySelectorAll('.chip'),function(c){
+      c.classList.toggle('on', curTerms.indexOf(c.getAttribute('data-w'))>=0);
+    });
+  }
+  function updateCount(){
+    if(!curTerms.length){ countEl.innerHTML='輸入或點字彙，看它散落在全經哪裡。可用 ＋ 疊兩三個詞比對（各一色）。'; return; }
+    if(!hits.length){ countEl.innerHTML='全經找不到「<b>'+esc(curTerms.join('、'))+'</b>」。'; return; }
+    var html='';
+    curTerms.forEach(function(t,ci){
+      var n=doc.querySelectorAll('mark.hit.c'+ci).length;
+      html += '<span><span class="sw" style="background:'+COLORS[ci%COLORS.length]+'"></span><b>'+esc(t)+'</b> '+n+' 處</span>';
+    });
+    if(cur>=0) html += '<span class="pos">第 '+(cur+1)+' / '+hits.length+'</span>';
+    countEl.innerHTML=html;
+  }
+  function buildMap(){
+    mapEl.innerHTML='<div class="track"></div>';
+    if(!hits.length){ mapEl.classList.add('empty'); return; }
+    mapEl.classList.remove('empty');
+    var H=document.body.scrollHeight||1, trackH=mapEl.clientHeight;
+    hits.forEach(function(h,i){
+      var r=(h.offsetTop)/H;
+      var d=document.createElement('div'); d.className='dot';
+      d.style.top=(r*trackH)+'px';
+      d.style.background=getComputedStyle(h).backgroundColor;
+      d.addEventListener('click',function(){ goTo(i); });
+      mapEl.appendChild(d);
+    });
+  }
+  function goTo(i){
+    if(!hits.length) return;
+    if(cur>=0 && hits[cur]) hits[cur].classList.remove('cur');
+    cur=(i+hits.length)%hits.length;
+    var h=hits[cur]; h.classList.add('cur');
+    h.scrollIntoView({block:'center',behavior:'smooth'});
+    updateCount();
+  }
+
+  var deb;
+  qEl.addEventListener('input',function(){
+    clearTimeout(deb);
+    deb=setTimeout(function(){ render(qEl.value); },180);
+  });
+  prevB.addEventListener('click',function(){ goTo(cur<=0?hits.length-1:cur-1); });
+  nextB.addEventListener('click',function(){ goTo(cur+1); });
+  Array.prototype.forEach.call(document.querySelectorAll('.chip'),function(c){
+    c.addEventListener('click',function(){
+      var w=c.getAttribute('data-w');
+      var terms=parseTerms(qEl.value);
+      var k=terms.indexOf(w);
+      if(k>=0) terms.splice(k,1); else terms.push(w);
+      qEl.value=terms.join('＋');
+      render(qEl.value);
+    });
+  });
+  $('#fenToggle').addEventListener('click',function(){
+    var on=document.body.classList.toggle('showfen');
+    this.textContent = on ? '隱藏分段' : '顯示分段';
+    if(!on) $('#toc').classList.remove('open');
+    if(hits.length) buildMap();
+  });
+  (function(){
+    var toc=$('#toc');
+    var html='<div class="toc-ttl">三 十 二 分</div>';
+    BLOCKS.forEach(function(b){ if(b.t==='f'){ html+='<button class="toc-item" data-n="'+b.n+'"><b>'+cn(b.n)+'</b>'+b.name+'</button>'; } });
+    toc.innerHTML=html;
+    toc.addEventListener('click',function(e){
+      var it=e.target.closest('.toc-item'); if(!it) return;
+      var el=$('#fen-'+it.getAttribute('data-n'));
+      if(el) el.scrollIntoView({block:'start',behavior:'smooth'});
+      toc.classList.remove('open');
+    });
+    $('#tocBtn').addEventListener('click',function(){ toc.classList.toggle('open'); });
+  })();
+  $('#xzBtn').addEventListener('click',function(){
+    var on=$('#xzPanel').classList.toggle('open');
+    document.body.classList.toggle('xzopen', on);
+  });
+  $('#xzClose').addEventListener('click',function(){
+    $('#xzPanel').classList.remove('open'); document.body.classList.remove('xzopen');
+  });
+  window.addEventListener('resize',function(){ if(hits.length) buildMap(); });
+
+  // ---- 筆記本 ----
+  var KEY='jingang_mailuo_notes', noteText=$('#noteText');
+  try{ var sv=localStorage.getItem(KEY); if(sv) noteText.value=sv; }catch(e){}
+  $('#noteBtn').addEventListener('click',function(){ $('#notes').classList.add('open'); noteText.focus(); });
+  $('#noteX').addEventListener('click',function(){ $('#notes').classList.remove('open'); });
+  $('#noteSave').addEventListener('click',function(){
+    try{ localStorage.setItem(KEY, noteText.value); }catch(e){}
+    var b=$('#noteSave'); var t=b.textContent; b.textContent='已存'; setTimeout(function(){ b.textContent=t; },1200);
+  });
+  noteText.addEventListener('input',function(){ try{ localStorage.setItem(KEY,noteText.value); }catch(e){} });
+  $('#noteDl').addEventListener('click',function(){
+    var blob=new Blob([noteText.value||''],{type:'text/plain;charset=utf-8'});
+    var a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+    a.download='金剛經_我發現的脈絡.txt'; document.body.appendChild(a); a.click();
+    document.body.removeChild(a); setTimeout(function(){ URL.revokeObjectURL(a.href); },1000);
+  });
+
+  render('');
+})();
+</script>
+</body>
+</html>
