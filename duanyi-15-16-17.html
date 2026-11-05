@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>斷疑・第十五分 第十六分 第十七分</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green:#2b4111; --green-d:#1b2a0a; --paper:#f5f8be; --crim:#710f12;
+    --paper-dim:rgba(245,248,190,.6); --paper-faint:rgba(245,248,190,.4);
+    --cjk:'Noto Serif TC',serif; --sans:'Noto Sans TC',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{background:var(--green);color:var(--paper);font-family:var(--cjk);overflow:hidden;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  .deck{position:fixed;inset:0}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:clamp(28px,6vw,72px);opacity:0;transition:opacity .5s ease}
+  .slide.on{display:flex;opacity:1}
+  /* backgrounds per type */
+  .slide{background:
+    radial-gradient(ellipse at 50% 34%, rgba(60,90,26,.55), rgba(27,42,10,0) 70%), var(--green)}
+  .slide.pale{background:var(--paper);color:var(--green)}
+  .slide.pale .kick{color:var(--crim)}
+  /* kicker */
+  .kick{font-family:var(--sans);font-size:clamp(11px,1.4vw,13px);letter-spacing:.42em;text-indent:.42em;
+    color:var(--crim);margin-bottom:22px}
+  .slide:not(.pale) .kick{color:#c9a24a}
+  /* cover */
+  .cover h1{font-size:clamp(46px,13vw,104px);font-weight:500;letter-spacing:.22em;text-indent:.22em;line-height:1.05}
+  .cover .sub{font-family:var(--sans);font-size:clamp(14px,2vw,18px);letter-spacing:.5em;text-indent:.5em;
+    color:var(--paper-dim);margin-top:34px}
+  .cover .fens{font-size:clamp(16px,2.4vw,22px);letter-spacing:.3em;color:var(--paper);margin-top:26px;line-height:2}
+  .cover .seal{margin-top:40px}
+  /* verse */
+  .verse p{font-size:clamp(24px,5vw,40px);font-weight:400;letter-spacing:.3em;text-indent:.3em;line-height:2.1}
+  .verse .cap{font-family:var(--sans);font-size:12px;letter-spacing:.4em;color:var(--paper-faint);margin-top:40px}
+  /* divider */
+  .divider .num{font-family:var(--sans);font-size:clamp(14px,2vw,18px);letter-spacing:.5em;text-indent:.5em;color:var(--crim);margin-bottom:28px}
+  .divider h2{font-size:clamp(54px,15vw,120px);font-weight:600;letter-spacing:.24em;text-indent:.24em;color:var(--green)}
+  .divider .en{font-family:var(--sans);font-size:13px;letter-spacing:.3em;color:rgba(43,65,17,.5);margin-top:24px}
+  /* passage */
+  .passage .body{font-size:clamp(19px,2.9vw,27px);line-height:2.15;letter-spacing:.03em;max-width:24em;color:var(--paper)}
+  .passage .body .em{color:#d8c25e}
+  /* question */
+  .q .seal{margin-bottom:20px}
+  .q .body{font-size:clamp(20px,3.1vw,29px);line-height:1.9;letter-spacing:.02em;max-width:22em;color:var(--paper)}
+  .q.big .body{font-size:clamp(23px,3.9vw,34px);line-height:1.8;max-width:19em;font-weight:500}
+  .q .body .em{color:#d8c25e}
+  .q .tag{font-family:var(--sans);font-size:11px;letter-spacing:.4em;color:var(--crim);margin-top:24px}
+  .q.big .tag{color:#d8c25e}
+  /* seal graphic */
+  .sealmark{display:inline-flex;align-items:center;justify-content:center;width:62px;height:62px;border-radius:50%;
+    background:var(--crim);color:var(--paper);font-size:26px;font-weight:500;letter-spacing:0;
+    box-shadow:0 6px 22px rgba(113,15,18,.4)}
+  .q.big .sealmark{width:76px;height:76px;font-size:32px}
+  .slide.pale .sealmark{box-shadow:0 6px 22px rgba(113,15,18,.25)}
+  /* end */
+  .end h2{font-size:clamp(40px,10vw,76px);font-weight:500;letter-spacing:.3em;text-indent:.3em}
+  .end .sub{font-family:var(--sans);font-size:13px;letter-spacing:.4em;color:var(--paper-dim);margin-top:30px}
+  /* chrome */
+  .counter{position:fixed;right:20px;bottom:16px;font-family:var(--sans);font-size:12px;letter-spacing:.2em;
+    color:var(--paper-faint);z-index:5}
+  .slide.pale ~ .counter{color:rgba(43,65,17,.4)}
+  .prog{position:fixed;left:0;top:0;height:3px;background:var(--crim);width:0;transition:width .4s ease;z-index:5}
+  .hintbar{position:fixed;left:20px;bottom:16px;font-family:var(--sans);font-size:11px;letter-spacing:.15em;
+    color:var(--paper-faint);z-index:5}
+  @media (max-width:560px){.hintbar{display:none}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck"></div>
+<div class="prog" id="prog"></div>
+<div class="counter" id="counter"></div>
+<div class="hintbar">← → 翻頁　‧　點左右兩側</div>
+
+<script>
+var SLIDES = [
+  {t:'cover'},
+  {t:'verse', lines:['無上甚深微妙法','百千萬劫難遭遇','我今見聞得受持','願解如來真實義']},
+
+  /* ===== 第十五分 ===== */
+  {t:'divider', num:'第 十 五 分', name:'持經功德', en:'THE MERIT OF UPHOLDING THIS SUTRA'},
+  {t:'passage', fen:'第十五分・持經功德', html:'須菩提，如果有善男子、善女人為求取福德，早晨以恆河沙一樣多的自身性命布施，中午又以恆河沙一樣多的自身性命布施，下午再以恆河沙一樣多的自身性命布施，這樣做了百千萬億劫；假如另有一個人聽到這部經典，便產生了貫通的領會，深信不疑，他的福德就比前面那個人還多——更何況抄寫、受持、讀誦，為別人加以解說。'},
+  {t:'passage', fen:'第十五分・持經功德', html:'須菩提，關鍵在於這部經有<span class="em">不可思議、不可稱量</span>的無邊功德。如來是為那些<span class="em">發菩提心</span>的人說的，為那些追求最終解脫的人說的。'},
+  {t:'passage', fen:'第十五分・持經功德', html:'如果有人能夠領會、受持、讀誦，以教育的熱忱向大家解說，如來都清楚地看見並了解這個人，他會得到不可稱量、無邊無際、不可思議的功德。這樣的人，就能像如來一樣具有無上正等正覺，就能<span class="em">荷擔</span>弘揚佛法的重任。'},
+  {t:'passage', fen:'第十五分・持經功德', html:'反之，如果一個人<span class="em">樂於外道小法</span>，就不免執著於「我、人、眾生、壽者實際存在」的<span class="em">見解</span>，他就不能信受奉持、讀誦此經，並向他人宣說了。'},
+  {t:'passage', fen:'第十五分・持經功德', html:'須菩提，無論何時何地，只要有這部經典存在，所有的天人、阿修羅等一切眾生，都自然應該供養它。因為有經就等於有佛同在，有經之處相當於佛身之塔——所以大家都應尊重恭敬，圍繞侍立，以花香供養。'},
+
+  {t:'q', big:true, fen:'第十五分', n:'一', tag:'大 疑',
+    html:'經一再說這部經、以及它的果報「不可思議」。但「不可思議」不是「不能被<span class="em">經歷</span>」——是「不能用<span class="em">頭腦</span>去想、去議論」。<br>那麼：一個你讀得到、抄得到、講得到的東西，為什麼一落進頭腦的思量，就不是它了？'},
+  {t:'q', fen:'第十五分', n:'二',
+    html:'前面這部經是對「善男子、善女人」——對<span class="em">每一個人</span>說的；怎麼到這裡，忽然只「為<span class="em">發大乘者</span>、發最上乘者說」？<br>是經在挑人，還是人把自己放小了？'},
+  {t:'q', fen:'第十五分', n:'三',
+    html:'經說持這部經的人，是在「<span class="em">荷擔</span>」如來的覺悟。可它同時又說這覺悟「<span class="em">不可稱、不可量</span>」——<br>一個稱不出、量不盡的東西，你扛得起來嗎？是你擔它，還是它擔你？'},
+  {t:'q', big:true, fen:'第十五分', n:'四', tag:'大 疑',
+    html:'這裡說「樂小法者，著我<span class="em">見</span>、人見、眾生見、壽者見」——前面一路講的是「我<span class="em">相</span>、人相……」。<br>相，是你認取的那個相狀；見，是你替它選了的立場。<br>從「相」到「見」，執著是更輕了，還是更深了？'},
+  {t:'q', fen:'第十五分', n:'五',
+    html:'經說著四見的人「於此經<span class="em">不能</span>聽受、讀誦、為人解說」。<br>我自認還帶著四執——可讀誦講說，身體上明明做得到，為什麼說「不能」？<br>那個「不能」，不能的到底是什麼？'},
+
+  /* ===== 第十六分 ===== */
+  {t:'divider', num:'第 十 六 分', name:'能淨業障', en:'THE PURIFICATION OF KARMIC OBSTRUCTION'},
+  {t:'passage', fen:'第十六分・能淨業障', html:'還有，須菩提，假如有善男子、善女人信受奉持並讀誦這部經典，但還是遭到別人的<span class="em">輕賤</span>——這說明這個人在過去罪業深重，本來應該墮入地獄、餓鬼、畜生三惡道；因為信奉這部經，過去的罪業得到消除，只是被人輕賤，從此也能證得無上正等正覺。'},
+  {t:'passage', fen:'第十六分・能淨業障', html:'須菩提，回想無量無數劫以前，我在燃燈佛前遇到了無量無數的佛，都一一供養，沒有錯過任何一個。假如有人在未來能夠信奉受持這部經，那他得到的功德，和我供養無量諸佛的功德相比——我的，還不及他的百分之一、千分之一、萬分之一，乃至無法以任何數目譬喻來說明。'},
+  {t:'passage', fen:'第十六分・能淨業障', html:'須菩提，假如有善男子、善女人在久遠的未來能夠受持讀誦這部經，他所獲得的功德，我一旦一一細說，<span class="em">或許有人聽到就會心裡狂亂、懷疑不信</span>。'},
+  {t:'passage', fen:'第十六分・能淨業障', html:'須菩提，你應當明白：這部經的義理<span class="em">不可思議</span>，受持讀誦這部經的<span class="em">果報</span>，也不可思議。'},
+
+  {t:'q', big:true, fen:'第十六分', n:'一', tag:'大 疑',
+    html:'持經，照說該有福報；經卻說，持經的人反而「<span class="em">為人輕賤</span>」——而且正是這被輕賤，把你本該墮惡道的宿業，提前消掉了。<br>被人看輕，竟成了一種贖罪？<br>那——你願意拿「被輕賤」，去換一次「消業」嗎？'},
+  {t:'q', fen:'第十六分', n:'二',
+    html:'經說這果報大到「我若具說，有人聞，<span class="em">心則狂亂、狐疑不信</span>」。<br>連「聽人講功德」都會心狂亂——<br>什麼樣的東西，大到連如實說出來，都承受不住？'},
+  {t:'q', fen:'第十六分', n:'三',
+    html:'這一分忽然重講「<span class="em">果報</span>」「不可思議」。<br>這會不會讓人以為：那就讀經吧，好換那個果、躲開那個「墮惡道」？<br>經在這裡，是不是也借了一點「交換」、一點「怕」，來推你一把？'},
+
+  /* ===== 第十七分 ===== */
+  {t:'divider', num:'第 十 七 分', name:'究竟無我', en:'ULTIMATELY, NO SELF'},
+  {t:'passage', fen:'第十七分・究竟無我', html:'這時，須菩提對佛說：「世尊，善男子、善女人發願成就無上正等正覺，應該把這顆心<span class="em">安住</span>在哪裡？又該如何<span class="em">降伏</span>它？」'},
+  {t:'passage', fen:'第十七分・究竟無我', html:'佛說：「發願成就無上正等正覺的人，應當這樣起念：我要度脫一切眾生；然而一切眾生都度盡了，卻<span class="em">沒有任何一個眾生，是真的被我度脫的</span>。為什麼呢？假如菩薩還有我相、人相、眾生相、壽者相，就不是菩薩。因為其實根本<span class="em">沒有一個實在的『發心者』</span>——沒有一個實在的我，在發這無上正等正覺的心。」'},
+  {t:'passage', fen:'第十七分・究竟無我', html:'「須菩提，如來當年在燃燈佛那裡，並沒有得到一個叫做『無上正等正覺』的實在之法。正因為實在沒有一個法可得，燃燈佛才為我授記：『你在來世當得作佛，號釋迦牟尼。』為什麼呢？所謂『如來』，就是<span class="em">一切法如其本然</span>（真如）的意思。」'},
+  {t:'passage', fen:'第十七分・究竟無我', html:'「如來所得的無上正等正覺，在這當中，<span class="em">既不是真實的，也不是虛假的</span>。所以如來說：<span class="em">一切法都是佛法</span>。須菩提，所謂一切法，即非一切法，所以才叫做一切法。——這就好比說『人的身形高大』，如來說人身高大，就不是真正的大身，只是假名叫做大身。」'},
+  {t:'passage', fen:'第十七分・究竟無我', html:'「須菩提，菩薩也是這樣。若有菩薩說『我要度脫無量眾生』，他就不是菩薩。因為<span class="em">根本沒有一個實在的東西，叫做『菩薩』</span>。所以佛說：一切法裡，沒有我、人、眾生、壽者。若有菩薩說『我要莊嚴佛土』，他也不算菩薩；因為如來說的莊嚴佛土，即非莊嚴，只是假名叫做莊嚴。須菩提，若菩薩<span class="em">通達『無我』之法</span>，如來才說他是真正的菩薩。」'},
+
+  {t:'q', big:true, fen:'第十七分', n:'一', tag:'大 疑',
+    html:'第2分一開頭問的「<span class="em">云何應住、云何降伏其心</span>」，走了整整一圈，到這裡<span class="em">一字不差又問一次</span>。<br>為什麼要再問一遍？<br>這一次答案該不一樣了——不一樣在哪？'},
+  {t:'q', fen:'第十七分', n:'二',
+    html:'前面已經說「得不到任何實法」；現在更進一步——連「<span class="em">發菩提心的那個我</span>／那件事」也沒有實法。<br>那是誰，在發心？'},
+  {t:'q', fen:'第十七分', n:'三',
+    html:'「如來」不是一個會來會去的人，是「<span class="em">諸法如其所是</span>」。<br>那「見如來」到底是見到什麼？<br>還是說，根本沒有「什麼」可見？'},
+  {t:'q', fen:'第十七分', n:'四',
+    html:'若「<span class="em">一切法皆是佛法</span>」，那連五濁惡世、連煩惱，也是佛法？<br>那還有哪一種「不是佛法」、需要你去揀、去捨？'},
+  {t:'q', big:true, fen:'第十七分', n:'五', tag:'大 疑',
+    html:'「實無有法，名為菩薩」——既然根本沒有一個實在的「菩薩」，<br>那何必還要補一句「<span class="em">是名菩薩</span>」？<br>拆空了，為什麼又把名字給回來？'},
+  {t:'q', fen:'第十七分', n:'六',
+    html:'最後說「通達<span class="em">無我法</span>者，如來說名真是菩薩」。<br>「無我法」——是「無我」這個法，還是「無我」地去行一切法？<br>通達它，跟「做到無我」，是不是兩回事？'},
+
+  {t:'end'}
+];
+
+function seal(txt){ return '<span class="sealmark">'+txt+'</span>'; }
+
+function render(s){
+  if(s.t==='cover'){
+    return '<section class="slide cover">'
+      +'<div class="kick">金 剛 經 · 斷 疑</div>'
+      +'<h1>斷　疑</h1>'
+      +'<div class="fens">第十五分　持經功德<br>第十六分　能淨業障<br>第十七分　究竟無我</div>'
+      +'<div class="seal">'+seal('問')+'</div>'
+      +'<div class="sub">只 問 · 不 答</div>'
+      +'</section>';
+  }
+  if(s.t==='verse'){
+    return '<section class="slide verse">'
+      +'<div class="kick">開 經 偈</div>'
+      + s.lines.map(function(l){return '<p>'+l+'</p>';}).join('')
+      +'<div class="cap">— 誦畢，入經 —</div>'
+      +'</section>';
+  }
+  if(s.t==='divider'){
+    return '<section class="slide pale divider">'
+      +'<div class="num">'+s.num+'</div>'
+      +'<h2>'+s.name+'</h2>'
+      +'<div class="en">'+(s.en||'')+'</div>'
+      +'</section>';
+  }
+  if(s.t==='passage'){
+    return '<section class="slide passage">'
+      +'<div class="kick">'+s.fen+'</div>'
+      +'<div class="body">'+s.html+'</div>'
+      +'</section>';
+  }
+  if(s.t==='q'){
+    return '<section class="slide q'+(s.big?' big':'')+'">'
+      +'<div class="kick">'+s.fen+'　疑</div>'
+      +'<div class="seal">'+seal(s.n)+'</div>'
+      +'<div class="body">'+s.html+'</div>'
+      + (s.tag?'<div class="tag">'+s.tag+'</div>':'')
+      +'</section>';
+  }
+  if(s.t==='end'){
+    return '<section class="slide end">'
+      +'<div class="kick">斷 疑 · 竟</div>'
+      +'<h2>只問，不答</h2>'
+      +'<div class="sub">答 案 ， 在 你 自 己 那 裡</div>'
+      +'</section>';
+  }
+  return '';
+}
+
+var deck=document.getElementById('deck');
+deck.innerHTML = SLIDES.map(render).join('');
+var slides=[].slice.call(document.querySelectorAll('.slide'));
+var i=0;
+var counter=document.getElementById('counter');
+var prog=document.getElementById('prog');
+function show(n){
+  i=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach(function(s,k){ s.classList.toggle('on',k===i); });
+  counter.textContent=(i+1)+' / '+slides.length;
+  prog.style.width=((i)/(slides.length-1)*100)+'%';
+  // counter colour on pale slides
+  var pale=slides[i].classList.contains('pale');
+  counter.style.color = pale? 'rgba(43,65,17,.45)' : 'rgba(245,248,190,.4)';
+}
+function next(){ if(i<slides.length-1) show(i+1); }
+function prev(){ if(i>0) show(i-1); }
+show(0);
+
+document.addEventListener('keydown',function(e){
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();next();}
+  else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();prev();}
+  else if(e.key==='Home'){show(0);} else if(e.key==='End'){show(slides.length-1);}
+});
+deck.addEventListener('click',function(e){
+  if(e.clientX > window.innerWidth*0.5) next(); else prev();
+});
+var tx=0;
+deck.addEventListener('touchstart',function(e){tx=e.changedTouches[0].clientX;},{passive:true});
+deck.addEventListener('touchend',function(e){
+  var dx=e.changedTouches[0].clientX-tx;
+  if(Math.abs(dx)>45){ if(dx<0) next(); else prev(); }
+},{passive:true});
+</script>
+</body>
+</html>
