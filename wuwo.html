@@ -327,8 +327,11 @@ function buildCard(){
   var l2='我是「'+(NOTANS||'—')+'」';
   ctx.font='600 '+(26*S)+'px "Noto Serif TC",serif';
   var L1=wrapLines(ctx,l1,contentW), L2=wrapLines(ctx,l2,contentW);
+  ctx.font='500 '+(12.5*S)+'px "Noto Serif TC",serif';
+  var sutra='若菩薩通達無我法者，如來說名真是菩薩。';
+  var SL=wrapLines(ctx,sutra,contentW);
   var top=96*S;
-  var H=top + L1.length*(40*S) + 30*S + L2.length*(42*S) + 128*S;
+  var H=top + L1.length*(40*S) + 30*S + L2.length*(42*S) + 160*S + SL.length*(22*S);
   cv.width=W*S; cv.height=Math.round(H);
   ctx.fillStyle=paper; ctx.fillRect(0,0,cv.width,cv.height);
   ctx.strokeStyle=line; ctx.lineWidth=1*S; ctx.strokeRect(10*S,10*S,cv.width-20*S,cv.height-20*S);
@@ -351,6 +354,9 @@ function buildCard(){
   yy+=26*S;
   ctx.fillStyle='#b7a28a'; ctx.font='400 '+(11*S)+'px "Noto Sans TC",sans-serif';
   ctx.fillText('金剛經體驗練習 · 你是？', cx, yy);
+  yy+=30*S;
+  ctx.fillStyle=ink; ctx.font='500 '+(12.5*S)+'px "Noto Serif TC",serif';
+  SL.forEach(function(l){ ctx.fillText(l, cx, yy); yy+=22*S; });
 }
 function downloadCard(){ var cv=document.getElementById('card'); var a=document.createElement('a');
   a.download='你是_'+(NAME||'')+'.png'; a.href=cv.toDataURL('image/png'); a.click(); }
