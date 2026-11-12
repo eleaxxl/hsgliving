@@ -39,7 +39,6 @@
   button.b.ghost:hover{color:var(--paper);border-color:var(--clay);opacity:1}
   .btnrow{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;align-items:center;margin-top:36px}
   .btnrow button.b{margin-top:0}
-  /* 靜心 selector */
   .setwrap{margin-top:34px;text-align:center}
   .setlabel{font-family:var(--sans);font-size:12px;letter-spacing:.3em;color:var(--faint);margin-bottom:16px}
   .chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
@@ -52,43 +51,38 @@
   .custom input:focus{outline:none;border-color:var(--clay)}
   .custom .u{font-family:var(--sans);font-size:13px;color:var(--faint);margin-left:6px}
   .nick{margin-top:22px;text-align:center}
-  .nick input{font-family:var(--cjk);font-size:15px;width:180px;text-align:center;color:var(--paper);
+  .nick input{font-family:var(--cjk);font-size:15px;width:200px;text-align:center;color:var(--paper);
     background:transparent;border:none;border-bottom:1px solid var(--line);padding:8px 4px}
   .nick input:focus{outline:none;border-color:var(--clay)}
-  /* chests */
   .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;max-width:400px;margin:6px auto 0}
   .chest{aspect-ratio:1;border:1px solid var(--line);border-radius:14px;background:linear-gradient(160deg,#241c15,#1a140f);
     cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
   .chest:hover{border-color:var(--clay);transform:translateY(-2px)}
+  .chest:active{transform:scale(.96)}
   .chest .seal{width:28px;height:28px;border:1.5px solid var(--clay);border-radius:6px;transform:rotate(45deg);opacity:.6;transition:all .2s}
   .chest:hover .seal{opacity:1;box-shadow:0 0 14px rgba(201,138,99,.4)}
-  .chest.done{opacity:.25;pointer-events:none}
   .ghint{font-family:var(--sans);font-size:13px;color:var(--faint);text-align:center;margin-top:30px;letter-spacing:.1em}
-  /* reveal */
   .word{font-size:clamp(84px,24vw,150px);font-weight:700;text-align:center;line-height:1.05;margin:2vh 0 2vh;
     text-shadow:0 0 40px rgba(217,180,113,.22);animation:pop .5s ease}
   @keyframes pop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
-  .ask{font-size:clamp(16.5px,4vw,20px);line-height:2.05;color:var(--paper);max-width:26em;margin:0 auto;text-align:left}
-  /* still */
+  .ask{font-size:clamp(18px,4.6vw,23px);line-height:2;color:var(--paper);text-align:center}
   .still .say{color:var(--soft)}
   .breath{width:14px;height:14px;border-radius:50%;background:var(--clay);margin:48px auto 0;
     box-shadow:0 0 26px rgba(201,138,99,.5);animation:breathe 9s ease-in-out infinite}
   @keyframes breathe{0%,100%{transform:scale(.7);opacity:.5}50%{transform:scale(1.5);opacity:1}}
   .cue{color:var(--soft);margin-top:30px;text-align:center}
-  /* write */
-  .wordsm{text-align:center;font-size:40px;color:var(--clay);margin-bottom:8px}
+  .wordsm{text-align:center;font-size:38px;color:var(--clay);margin-bottom:6px;font-weight:600}
+  .seclab{font-family:var(--sans);font-size:12px;letter-spacing:.5em;color:var(--gold);text-align:center;margin-bottom:18px}
   .qblock{max-width:28em;margin:0 auto}
-  .q{font-size:clamp(16px,2.4vw,18.5px);line-height:1.95;color:var(--paper);margin:26px 0 12px;letter-spacing:.03em;text-align:left}
-  .q .lab{font-family:var(--sans);font-size:11px;letter-spacing:.3em;color:var(--gold);margin-right:10px}
+  .q{font-size:clamp(16px,2.4vw,18.5px);line-height:1.95;color:var(--paper);margin:0 0 11px;letter-spacing:.03em;text-align:left}
+  .q.second{margin-top:26px}
   textarea{font-family:var(--cjk);font-size:16px;line-height:1.95;color:var(--paper);
     background:rgba(241,231,217,.04);border:1px solid var(--line);border-radius:12px;
-    width:100%;padding:13px 15px;resize:none;min-height:96px}
+    width:100%;padding:13px 15px;resize:none;min-height:80px}
   textarea:focus{outline:none;border-color:var(--clay-d);background:rgba(241,231,217,.06)}
-  /* report */
-  .wake{font-size:clamp(16px,2.5vw,19px);line-height:2.05;color:var(--soft);max-width:26em;margin:0 auto 6px;text-align:left}
+  .wake{font-size:clamp(17px,2.7vw,20px);line-height:2.1;color:var(--paper);max-width:26em;margin:0 auto 4px;text-align:left}
   #card{max-width:330px;margin:26px auto 0;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.4);display:block}
   .hint{font-family:var(--sans);font-size:12px;color:var(--faint);letter-spacing:.1em;margin-top:16px;text-align:center}
-  /* close */
   .close p{font-size:clamp(16.5px,4vw,20px);line-height:2.15;color:var(--paper);margin-bottom:1.05em;text-align:left;max-width:26em;margin-left:auto;margin-right:auto}
   .close .soft{color:var(--soft)}
   .close .big{font-size:clamp(23px,6vw,30px);font-weight:600;letter-spacing:.14em;color:var(--gold);text-align:center;margin-top:3vh}
@@ -101,8 +95,8 @@
   <div class="kicker">心 隨 境 轉</div>
   <h1>九 寶 箱</h1>
   <p class="say">九個寶箱，朝下擺著。挑一個，打開它。</p>
-  <p class="say">字出來了，問問自己——<span class="em">它，讓我想起什麼了嗎？</span></p>
-  <p class="say">有，就往下走；沒感覺，就再挑一個。</p>
+  <p class="say">字出來了，問問自己——<span class="em">它，讓我有感覺嗎？</span></p>
+  <p class="say">有，就往下走；沒有，就再挑一個。</p>
   <div class="setwrap">
     <div class="setlabel">待會每一次靜心，大約多久？</div>
     <div class="chips" id="chips">
@@ -125,7 +119,7 @@
 
 <section class="screen" id="reveal">
   <div class="word" id="word">？</div>
-  <p class="ask" id="ask"></p>
+  <p class="ask">這個字，你有感覺嗎？</p>
   <div class="btnrow">
     <button class="b" onclick="feel(true)">有感覺</button>
     <button class="b ghost" onclick="feel(false)">沒感覺，再挑一個</button>
@@ -134,28 +128,40 @@
 
 <section class="screen still" id="still">
   <p class="say center">閉上眼。</p>
-  <p class="say center">就和剛剛浮起來的那個，待在一起。<br>不推開，也不抓住。</p>
+  <p class="say center">細細品味，剛剛升起的那個感受。</p>
   <div class="breath"></div>
   <p class="cue">聽見磬響，再張開眼。</p>
 </section>
 
-<section class="screen" id="write">
-  <div class="wordsm" id="wordsm"></div>
+<section class="screen" id="ting">
+  <div class="wordsm" id="wordsm_t"></div>
+  <div class="seclab">停</div>
   <div class="qblock">
-    <p class="q"><span class="lab">停</span>剛剛浮上來的，是什麼？一個畫面、一個人、一股感覺？</p>
-    <p class="q"><span class="lab">看</span>它是燙的，還是冷的？你的心，是想靠近，還是想逃？</p>
-    <textarea id="ans" placeholder="寫下來——就現在，心裡的那個。"></textarea>
+    <p class="q">剛剛浮上來的，是什麼？一個畫面、一個人、一股感覺？</p>
+    <textarea id="t1" placeholder="寫下來……"></textarea>
+    <p class="q second" id="t2q"></p>
+    <textarea id="t2" placeholder="寫下來……"></textarea>
   </div>
-  <div class="center"><button class="b" onclick="submit()">送出</button></div>
+  <div class="center"><button class="b" onclick="toKan()">送出</button></div>
 </section>
 
-<section class="screen" id="report">
-  <p class="wake">可是——這只是一個字。一個墨點，一個聲音。它沒碰你，是你的心，自己跑過去的。</p>
+<section class="screen" id="kan">
+  <div class="wordsm" id="wordsm_k"></div>
+  <div class="seclab">看</div>
+  <div class="qblock">
+    <p class="q">它是燙的，還是冷的？你的心，是想靠近，還是想逃？</p>
+    <textarea id="k1" placeholder="寫下來……"></textarea>
+    <p class="q second">現在，你的心在哪裡？</p>
+    <textarea id="k2" placeholder="寫下來……"></textarea>
+  </div>
+  <div class="center"><button class="b" onclick="toFinal()">送出</button></div>
+</section>
+
+<section class="screen" id="final">
+  <p class="wake">可是——這只是一個字。一個墨點，一個聲音。它沒碰你，但你的心，又是怎麼黏過去的？</p>
   <canvas id="card"></canvas>
   <div class="hint">長按圖片可存，或按下方下載</div>
-  <div class="btnrow">
-    <button class="b" onclick="downloadCard()">存下這張卡片</button>
-  </div>
+  <div class="btnrow"><button class="b" onclick="downloadCard()">存下這張卡片</button></div>
   <div class="btnrow">
     <button class="b ghost" onclick="go('chests')">再開一個寶箱</button>
     <button class="b ghost" onclick="exitGame()">退出</button>
@@ -198,7 +204,7 @@ var POOL=[
  {w:"空",q:"看到「空」你鬆了口氣，還是又想「我要證到空」？——想抓住「空」的那隻手，本身就不空。"}
 ];
 var stillMs=30000, FAST=location.hash.indexOf('fast')>=0;
-var chestChars=[], moved=[], curWord=null;
+var moved=[], curWord=null, lastW=null;
 
 function applySetting(){
   var sel=document.querySelector('.chip.sel');
@@ -216,28 +222,38 @@ document.querySelectorAll('.chip').forEach(function(c){
 });
 
 function show(id){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on')});document.getElementById(id).classList.add('on');window.scrollTo(0,0);}
-function go(id){ show(id); if(id==='still') runStill(stillMs,'write'); }
-function runStill(ms,next){ var wait=Math.max(ms,600); setTimeout(function(){ ping(); setTimeout(function(){ show(next); if(next==='write'){document.getElementById('ans').focus();} },1500); },wait); }
+function go(id){ show(id); if(id==='still') runStill(stillMs,'ting'); }
+function runStill(ms,next){ var wait=Math.max(ms,600); setTimeout(function(){ ping(); setTimeout(function(){ show(next); var f=document.getElementById('t1'); if(next==='ting'&&f)f.focus(); },1500); },wait); }
 
-function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
 function buildChests(){
-  chestChars=shuffle(POOL).slice(0,9);
   var g=document.getElementById('grid'); g.innerHTML='';
-  chestChars.forEach(function(c){
+  for(var i=0;i<9;i++){
     var d=document.createElement('button'); d.className='chest'; d.innerHTML='<span class="seal"></span>';
-    d.onclick=function(){ if(d.classList.contains('done'))return; d.classList.add('done'); open(c); };
+    d.onclick=function(){ pick(); };
     g.appendChild(d);
-  });
+  }
 }
-function open(c){ curWord=c; ping(); document.getElementById('word').textContent=c.w; document.getElementById('ask').textContent=c.q; show('reveal'); }
-function feel(yes){ if(yes){ if(moved.indexOf(curWord.w)<0) moved.push(curWord.w);
-    document.getElementById('ans').value=''; document.getElementById('wordsm').textContent=curWord.w; go('still'); }
-  else { show('chests'); } }
-function submit(){ record(); buildCard(); show('report'); }
+function pick(){
+  var c; do { c=POOL[Math.floor(Math.random()*POOL.length)]; } while(POOL.length>1 && c===lastW);
+  lastW=c; curWord=c; ping();
+  document.getElementById('word').textContent=c.w;
+  show('reveal');
+}
+function feel(yes){
+  if(yes){
+    if(moved.indexOf(curWord.w)<0) moved.push(curWord.w);
+    ['t1','t2','k1','k2'].forEach(function(id){document.getElementById(id).value='';});
+    document.getElementById('t2q').textContent=curWord.q;
+    document.getElementById('wordsm_t').textContent=curWord.w;
+    document.getElementById('wordsm_k').textContent=curWord.w;
+    go('still');
+  } else { show('chests'); }
+}
+function toKan(){ show('kan'); var k=document.getElementById('k1'); if(k)k.focus(); }
+function toFinal(){ record(); buildCard(); show('final'); }
 function exitGame(){ document.getElementById('moved').textContent = moved.length? moved.join('　') : '（你一個也沒讓它停下——那也是一種答案）'; show('close'); }
-function restart(){ moved=[]; buildChests(); show('intro'); }
+function restart(){ moved=[]; lastW=null; buildChests(); show('intro'); }
 
-/* 磬 */
 var bowlAudio=null;
 try{ if(BOWL && BOWL.indexOf('__')!==0){ bowlAudio=new Audio('data:audio/mpeg;base64,'+BOWL); bowlAudio.preload='auto'; } }catch(e){}
 var actx=null;
@@ -248,12 +264,11 @@ function synthBowl(){ try{ actx=actx||new (window.AudioContext||window.webkitAud
    o.connect(g); g.connect(actx.destination); o.start(t); o.stop(t+5.1); }); }catch(e){} }
 function ping(){ if(bowlAudio){ try{ bowlAudio.currentTime=0; var pr=bowlAudio.play(); if(pr&&pr.catch) pr.catch(function(){synthBowl();}); return; }catch(e){} } synthBowl(); }
 
-/* record */
 function val(id){var e=document.getElementById(id);return e?e.value.trim():'';}
 function record(){ try{ fetch(ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},
-    body:JSON.stringify({story:STORY,nickname:val('nick'),word:curWord?curWord.w:'',answer:val('ans')})}).catch(function(){}); }catch(e){} }
+    body:JSON.stringify({story:STORY,nickname:val('nick'),word:curWord?curWord.w:'',
+      ting1:val('t1'),ting2:val('t2'),kan1:val('k1'),kan2:val('k2')})}).catch(function(){}); }catch(e){} }
 
-/* keepsake card */
 var NOSTART="，。、！？；：）」』】・…".split("");
 function wrapLines(ctx,text,maxW){ var out=[],line="";
   for(var i=0;i<text.length;i++){ var ch=text[i]; if(ch==="\n"){out.push(line);line="";continue;}
@@ -263,37 +278,39 @@ function buildCard(){
   var cv=document.getElementById('card'), ctx=cv.getContext('2d');
   var S=2, W=330, PADX=30;
   var paper='#f3ead8', ink='#2a211a', clay='#a86f5e', soft='#8a7b69', line='#ded0ba';
-  var ans=val('ans')||'—';
+  var blocks=[ {k:'浮上來的', v:val('t1')||'—'}, {k:'我的心，去了', v:val('k2')||'—'} ];
   var contentW=(W-PADX*2)*S;
-  cv.width=W*S;
-  ctx.font='500 '+(16*S)+'px "Noto Serif TC",serif';
-  var lines=wrapLines(ctx,ans,contentW);
-  var top=150, vH=lines.length*(28*S);
-  var H=top*S+vH+90*S;
-  cv.height=Math.round(H);
+  var top=150;
+  var segs=[], H=top*S;
+  ctx.font='500 '+(15*S)+'px "Noto Serif TC",serif';
+  blocks.forEach(function(b){ var ls=wrapLines(ctx,b.v,contentW); segs.push({k:b.k,lines:ls}); H+=18*S+ls.length*(26*S)+20*S; });
+  H+=74*S;
+  cv.width=W*S; cv.height=Math.round(H);
   ctx.fillStyle=paper; ctx.fillRect(0,0,cv.width,cv.height);
   ctx.strokeStyle=line; ctx.lineWidth=1*S; ctx.strokeRect(10*S,10*S,cv.width-20*S,cv.height-20*S);
   var cx=cv.width/2;
-  /* seal motif */
   ctx.strokeStyle=clay; ctx.lineWidth=1.5*S;
   ctx.save(); ctx.translate(cx,36*S); ctx.rotate(Math.PI/4); ctx.strokeRect(-9*S,-9*S,18*S,18*S); ctx.restore();
-  /* the word */
   ctx.textAlign='center'; ctx.fillStyle=ink;
-  ctx.font='700 '+(58*S)+'px "Noto Serif TC",serif';
-  ctx.fillText(curWord?curWord.w:'', cx, 118*S);
-  /* answer */
-  ctx.textAlign='left'; ctx.fillStyle=ink; ctx.font='500 '+(16*S)+'px "Noto Serif TC",serif';
+  ctx.font='700 '+(54*S)+'px "Noto Serif TC",serif';
+  ctx.fillText(curWord?curWord.w:'', cx, 112*S);
+  ctx.textAlign='left';
   var yy=top*S;
-  lines.forEach(function(l){ ctx.fillText(l, PADX*S, yy); yy+=28*S; });
-  /* footer */
-  yy+=18*S;
+  segs.forEach(function(s){
+    ctx.fillStyle=clay; ctx.font='600 '+(12*S)+'px "Noto Sans TC",sans-serif';
+    ctx.fillText(s.k, PADX*S, yy); yy+=18*S;
+    ctx.fillStyle=ink; ctx.font='500 '+(15*S)+'px "Noto Serif TC",serif';
+    s.lines.forEach(function(l){ ctx.fillText(l, PADX*S, yy+5*S); yy+=26*S; });
+    yy+=20*S;
+  });
   ctx.textAlign='center'; ctx.strokeStyle=line; ctx.lineWidth=1*S;
-  ctx.beginPath(); ctx.moveTo(PADX*S,yy-14*S); ctx.lineTo(cv.width-PADX*S,yy-14*S); ctx.stroke();
-  ctx.fillStyle=clay; ctx.font='500 '+(12*S)+'px "Noto Sans TC",sans-serif';
-  ctx.fillText('一個字，就牽動了這麼多', cx, yy);
+  ctx.beginPath(); ctx.moveTo(PADX*S,yy-6*S); ctx.lineTo(cv.width-PADX*S,yy-6*S); ctx.stroke();
+  yy+=20*S;
+  ctx.fillStyle=clay; ctx.font='500 '+(12.5*S)+'px "Noto Sans TC",sans-serif';
+  ctx.fillText('它沒碰你，你的心卻黏了過去', cx, yy);
   yy+=22*S;
   var nk=val('nick');
-  if(nk){ ctx.fillStyle=soft; ctx.font='400 '+(12*S)+'px "Noto Sans TC",sans-serif'; ctx.fillText('— '+nk+' —', cx, yy); yy+=20*S; }
+  if(nk){ ctx.fillStyle=soft; ctx.font='400 '+(12*S)+'px "Noto Sans TC",sans-serif'; ctx.fillText('— '+nk+' —', cx, yy); yy+=19*S; }
   ctx.fillStyle='#b7a28a'; ctx.font='400 '+(11*S)+'px "Noto Sans TC",sans-serif';
   ctx.fillText('金剛經體驗練習 · 九寶箱', cx, yy);
 }
