@@ -308,9 +308,11 @@ function synthBowl(){ try{ actx=actx||new (window.AudioContext||window.webkitAud
 function ping(){ if(bowlAudio){ try{ bowlAudio.currentTime=0; var pr=bowlAudio.play(); if(pr&&pr.catch) pr.catch(function(){synthBowl();}); return; }catch(e){} } synthBowl(); }
 
 /* 記錄 */
-function record(){ try{ fetch(ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},
-    body:JSON.stringify({story:STORY,nickname:NAME,age:AGE,gender:GENDER,parent:PARENT,
-      so1:SO[0]||'',so2:SO[1]||'',so3:SO[2]||'',so4:S4,notans:NOTANS})}).catch(function(){}); }catch(e){} }
+function record(){ try{
+  var choice=(AGE||'')+'・'+(GENDER||'')+'・'+(TIER||'')+'・'+(PARENT||'')+'的孩子';
+  var reason='所以你是：'+(SO[0]||'')+' ｜ '+(SO[1]||'')+' ｜ '+(SO[2]||'')+' ｜ 都不是之後：'+(S4||'')+' ｜ 所以你不是：'+(NOTANS||'');
+  fetch(ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body:JSON.stringify({story:STORY,nickname:NAME,choice:choice,reason:reason})}).catch(function(){}); }catch(e){} }
 
 /* 留念卡 */
 var NOSTART="，。、！？；：）」』】・…".split("");
