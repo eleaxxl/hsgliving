@@ -9,10 +9,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    /* 配色：桜（底）・憲法染（字）・薄柿（線與點綴） */
-    --sakura:#FEDFE1; --kenpo:#43341B; --usugaki:#ECB88A;
-    --bg:var(--sakura); --paper:#FFF4F4; --ink:var(--kenpo); --ink-soft:#7B6756;
-    --line:var(--usugaki); --accent:var(--usugaki); --err:var(--kenpo);
+    /* 配色：薄柿（底）・憲法染（字、按鈕）・菜種油（線與點綴） */
+    --usugaki:#ECB88A; --kenpo:#43341B; --natane:#A28C37;
+    --bg:var(--usugaki); --paper:#F6DDC4; --ink:var(--kenpo); --ink-soft:#674E33;
+    --line:var(--natane); --accent:var(--natane); --err:var(--kenpo);
   }
   *{box-sizing:border-box}
   html{-webkit-text-size-adjust:100%}
@@ -27,6 +27,8 @@
   .info{display:grid;grid-template-columns:5.5em 1fr;gap:10px 16px;margin:0}
   .info dt{color:var(--ink-soft);font-family:"Noto Sans TC",sans-serif;font-size:14px;padding-top:3px}
   .info dd{margin:0}
+  .about p{margin:0 0 20px}
+  .about h3{font-size:16px;font-weight:600;margin:32px 0 10px;color:var(--ink-soft);letter-spacing:.06em}
   .note{color:var(--ink-soft);font-size:15px}
 
   /* 期程表 */
@@ -63,12 +65,12 @@
   .consent{display:flex;gap:10px;align-items:flex-start;background:var(--paper);border:1px solid var(--line);padding:16px;font-size:15px;color:var(--ink-soft)}
   .consent input{margin-top:6px;flex:none}
   .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
-  button{font:inherit;font-size:17px;letter-spacing:.2em;background:var(--kenpo);color:var(--sakura);
+  button{font:inherit;font-size:17px;letter-spacing:.2em;background:var(--kenpo);color:#F6DDC4;
     border:0;border-radius:2px;padding:14px 40px;cursor:pointer;transition:opacity .2s}
   button:hover{opacity:.85}
   button:disabled{opacity:.45;cursor:default}
   .msg{margin-top:20px;font-size:15px;min-height:1.5em}
-  .msg.err{color:var(--err);border-left:3px solid var(--usugaki);padding-left:12px}
+  .msg.err{color:var(--err);border-left:3px solid var(--natane);padding-left:12px}
   .done{display:none;background:var(--paper);border:1px solid var(--line);padding:36px 28px}
   .done p{margin:0 0 12px}
   .done .quiet{color:var(--ink-soft)}
@@ -90,6 +92,13 @@
     <dt>形式</dt>
     <dd>內容解析＋練習</dd>
   </dl>
+
+  <h2>關於這本書</h2>
+  <div class="about">
+    <p>罪咎（罪惡感）往往藏在所有創傷、誤解與失落的背後，是一切負面情緒的根源。本書透過多則生動且真實的諮商案例，帶領讀者看見小我如何透過補償、投射與否認來滋長罪咎。作者指出，人若要真正快樂，必須明白「沒有誰是壞人」；唯有療癒內心的罪咎、對自己的純真做出承諾，才能卸下自我懲罰的枷鎖，找回心靈的安寧與愛的本質。</p>
+    <h3>關於作者</h3>
+    <p>恰克．史匹桑諾博士（Chuck Spezzano）是國際知名的關係心理專家、美國聖地牙哥國際大學諮商心理學博士，也是「知見心理學」（Psychology of Vision，又譯願景心理學）的共同創辦人。他擁有數十年的諮商與工作坊帶領經驗，擅長將心理學與靈性智慧結合，開發出獨特的療癒模式。其著作豐富並翻譯成多種語言，代表作包括《會痛的不是愛》、《沒有誰是壞人你也不是！》等，致力於協助人們化解內心衝突、改善人際與親密關係。</p>
+  </div>
 
   <h2>期程</h2>
   <ol class="sched" id="sched"></ol>
