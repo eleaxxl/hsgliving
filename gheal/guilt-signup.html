@@ -9,8 +9,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#f3f0e9; --paper:#faf8f3; --ink:#2e2b27; --ink-soft:#6b655c;
-    --line:#d9d3c7; --accent:#7b6b57; --accent-soft:#e6dfd2; --err:#9a4a3c;
+    /* 配色：桜（底）・憲法染（字）・薄柿（線與點綴） */
+    --sakura:#FEDFE1; --kenpo:#43341B; --usugaki:#ECB88A;
+    --bg:var(--sakura); --paper:#FFF4F4; --ink:var(--kenpo); --ink-soft:#7B6756;
+    --line:var(--usugaki); --accent:var(--usugaki); --err:var(--kenpo);
   }
   *{box-sizing:border-box}
   html{-webkit-text-size-adjust:100%}
@@ -21,7 +23,7 @@
   h1{font-size:34px;font-weight:600;line-height:1.4;margin:0 0 12px;letter-spacing:.04em}
   .sub{color:var(--ink-soft);margin:0 0 56px}
   h2{font-size:20px;font-weight:600;margin:72px 0 20px;letter-spacing:.06em}
-  h2::before{content:"";display:block;width:28px;height:1px;background:var(--accent);margin-bottom:18px}
+  h2::before{content:"";display:block;width:32px;height:2px;background:var(--accent);margin-bottom:18px}
   .info{display:grid;grid-template-columns:5.5em 1fr;gap:10px 16px;margin:0}
   .info dt{color:var(--ink-soft);font-family:"Noto Sans TC",sans-serif;font-size:14px;padding-top:3px}
   .info dd{margin:0}
@@ -48,7 +50,7 @@
   form{margin-top:8px}
   .field{margin:0 0 28px}
   label,.legend{display:block;font-size:16px;margin-bottom:8px}
-  .req{color:var(--accent);font-size:13px;font-family:"Noto Sans TC",sans-serif;margin-left:6px}
+  .req{color:var(--ink-soft);font-size:13px;font-family:"Noto Sans TC",sans-serif;margin-left:6px}
   .hint{display:block;color:var(--ink-soft);font-size:14px;margin:-4px 0 8px}
   input[type=text],input[type=email],input[type=tel],textarea,select{
     width:100%;font:inherit;font-size:16px;color:var(--ink);background:var(--paper);
@@ -57,16 +59,16 @@
   input:focus,textarea:focus,select:focus{border-color:var(--accent)}
   .choices{display:flex;flex-wrap:wrap;gap:10px 24px}
   .choices label{display:flex;align-items:center;gap:8px;margin:0;cursor:pointer}
-  input[type=radio],input[type=checkbox]{accent-color:var(--accent);width:17px;height:17px;margin:0}
+  input[type=radio],input[type=checkbox]{accent-color:var(--kenpo);width:17px;height:17px;margin:0}
   .consent{display:flex;gap:10px;align-items:flex-start;background:var(--paper);border:1px solid var(--line);padding:16px;font-size:15px;color:var(--ink-soft)}
   .consent input{margin-top:6px;flex:none}
   .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
-  button{font:inherit;font-size:17px;letter-spacing:.2em;background:var(--ink);color:var(--paper);
+  button{font:inherit;font-size:17px;letter-spacing:.2em;background:var(--kenpo);color:var(--sakura);
     border:0;border-radius:2px;padding:14px 40px;cursor:pointer;transition:opacity .2s}
   button:hover{opacity:.85}
   button:disabled{opacity:.45;cursor:default}
   .msg{margin-top:20px;font-size:15px;min-height:1.5em}
-  .msg.err{color:var(--err)}
+  .msg.err{color:var(--err);border-left:3px solid var(--usugaki);padding-left:12px}
   .done{display:none;background:var(--paper);border:1px solid var(--line);padding:36px 28px}
   .done p{margin:0 0 12px}
   .done .quiet{color:var(--ink-soft)}
