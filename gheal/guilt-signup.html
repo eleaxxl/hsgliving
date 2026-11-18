@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>報名｜不只讀書的讀書會・療癒罪咎</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f3f0e9; --paper:#faf8f3; --ink:#2e2b27; --ink-soft:#6b655c;
+    --line:#d9d3c7; --accent:#7b6b57; --accent-soft:#e6dfd2; --err:#9a4a3c;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Noto Serif TC",serif;line-height:1.9;font-size:17px;text-align:left}
+  .wrap{max-width:720px;margin:0 auto;padding:72px 24px 96px}
+  .eyebrow{font-family:"Noto Sans TC",sans-serif;font-size:13px;letter-spacing:.18em;color:var(--ink-soft);margin:0 0 20px}
+  h1{font-size:34px;font-weight:600;line-height:1.4;margin:0 0 12px;letter-spacing:.04em}
+  .sub{color:var(--ink-soft);margin:0 0 56px}
+  h2{font-size:20px;font-weight:600;margin:72px 0 20px;letter-spacing:.06em}
+  h2::before{content:"";display:block;width:28px;height:1px;background:var(--accent);margin-bottom:18px}
+  .info{display:grid;grid-template-columns:5.5em 1fr;gap:10px 16px;margin:0}
+  .info dt{color:var(--ink-soft);font-family:"Noto Sans TC",sans-serif;font-size:14px;padding-top:3px}
+  .info dd{margin:0}
+  .note{color:var(--ink-soft);font-size:15px}
+
+  /* 期程表 */
+  .sched{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+  .sched li{display:grid;grid-template-columns:3.2em 6.2em 1fr;gap:0 14px;padding:18px 0;border-bottom:1px solid var(--line)}
+  .sched .wk{font-family:"Noto Sans TC",sans-serif;font-size:13px;color:var(--ink-soft);padding-top:4px}
+  .sched .dt{font-family:"Noto Sans TC",sans-serif;font-size:15px;padding-top:2px}
+  .sched .dt small{display:block;color:var(--ink-soft);font-size:12px}
+  .sched .tp{font-weight:600}
+  .sched .ol{display:block;color:var(--ink-soft);font-size:15px;line-height:1.8;margin-top:4px}
+  .sched li.break{grid-template-columns:1fr;padding:12px 0;color:var(--ink-soft);font-size:14px;
+    font-family:"Noto Sans TC",sans-serif;background:transparent}
+  @media (max-width:520px){
+    .sched li{grid-template-columns:1fr;gap:2px}
+    .sched .wk,.sched .dt{display:inline}
+    .info{grid-template-columns:1fr;gap:2px}
+    .info dd{margin-bottom:12px}
+  }
+
+  /* 表單 */
+  form{margin-top:8px}
+  .field{margin:0 0 28px}
+  label,.legend{display:block;font-size:16px;margin-bottom:8px}
+  .req{color:var(--accent);font-size:13px;font-family:"Noto Sans TC",sans-serif;margin-left:6px}
+  .hint{display:block;color:var(--ink-soft);font-size:14px;margin:-4px 0 8px}
+  input[type=text],input[type=email],input[type=tel],textarea,select{
+    width:100%;font:inherit;font-size:16px;color:var(--ink);background:var(--paper);
+    border:1px solid var(--line);border-radius:2px;padding:12px 14px;outline:none;transition:border-color .2s}
+  textarea{min-height:120px;resize:vertical}
+  input:focus,textarea:focus,select:focus{border-color:var(--accent)}
+  .choices{display:flex;flex-wrap:wrap;gap:10px 24px}
+  .choices label{display:flex;align-items:center;gap:8px;margin:0;cursor:pointer}
+  input[type=radio],input[type=checkbox]{accent-color:var(--accent);width:17px;height:17px;margin:0}
+  .consent{display:flex;gap:10px;align-items:flex-start;background:var(--paper);border:1px solid var(--line);padding:16px;font-size:15px;color:var(--ink-soft)}
+  .consent input{margin-top:6px;flex:none}
+  .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+  button{font:inherit;font-size:17px;letter-spacing:.2em;background:var(--ink);color:var(--paper);
+    border:0;border-radius:2px;padding:14px 40px;cursor:pointer;transition:opacity .2s}
+  button:hover{opacity:.85}
+  button:disabled{opacity:.45;cursor:default}
+  .msg{margin-top:20px;font-size:15px;min-height:1.5em}
+  .msg.err{color:var(--err)}
+  .done{display:none;background:var(--paper);border:1px solid var(--line);padding:36px 28px}
+  .done p{margin:0 0 12px}
+  .done .quiet{color:var(--ink-soft)}
+  footer{margin-top:96px;color:var(--ink-soft);font-size:14px}
+</style>
+</head>
+<body>
+<main class="wrap">
+
+  <p class="eyebrow">不只讀書的讀書會</p>
+  <h1>療癒罪咎</h1>
+  <p class="sub">沒有誰是壞人，你也不是。</p>
+
+  <dl class="info">
+    <dt>時間</dt>
+    <dd>每週五晚上 20:00–22:30<br>2026/11/27 起，共 16 週</dd>
+    <dt>停課</dt>
+    <dd>12/25、1/1，以及 2 月整月（3/5 恢復）</dd>
+    <dt>形式</dt>
+    <dd>內容解析＋練習</dd>
+  </dl>
+
+  <h2>期程</h2>
+  <ol class="sched" id="sched"></ol>
+
+  <h2>報名</h2>
+
+  <form id="form" novalidate>
+    <div class="field">
+      <label for="name">姓名<span class="req">必填</span></label>
+      <input type="text" id="name" name="name" autocomplete="name" required>
+    </div>
+    <div class="field">
+      <label for="nickname">課堂上希望被怎麼稱呼</label>
+      <input type="text" id="nickname" name="nickname">
+    </div>
+    <div class="field">
+      <label for="email">Email<span class="req">必填</span></label>
+      <span class="hint">確認信與上課資訊會寄到這裡</span>
+      <input type="email" id="email" name="email" autocomplete="email" required>
+    </div>
+    <div class="field">
+      <label for="phone">手機<span class="req">必填</span></label>
+      <input type="tel" id="phone" name="phone" autocomplete="tel" required>
+    </div>
+    <div class="field">
+      <label for="line">LINE ID</label>
+      <input type="text" id="line" name="line">
+    </div>
+    <div class="field">
+      <span class="legend">以前參加過「不只讀書的讀書會」嗎？</span>
+      <div class="choices">
+        <label><input type="radio" name="returning" value="參加過"> 參加過</label>
+        <label><input type="radio" name="returning" value="第一次"> 第一次</label>
+      </div>
+    </div>
+    <div class="field">
+      <label for="source">從哪裡知道這次讀書會</label>
+      <input type="text" id="source" name="source">
+    </div>
+    <div class="field">
+      <label for="message">想對我們說的話</label>
+      <span class="hint">為什麼想讀這本書，或任何想讓我們先知道的事</span>
+      <textarea id="message" name="message"></textarea>
+    </div>
+    <div class="field">
+      <label class="consent">
+        <input type="checkbox" id="consent" name="consent" value="已了解">
+        <span>我了解課程會錄影；影片剪輯後可能公開，會剪除學員的姓名。</span>
+      </label>
+    </div>
+    <div class="hp" aria-hidden="true">
+      <label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+    </div>
+    <button type="submit" id="submit">送出報名</button>
+    <p class="msg" id="msg" role="status"></p>
+  </form>
+
+  <div class="done" id="done">
+    <p>已收到你的報名。</p>
+    <p class="quiet">確認信已寄到你的信箱；上課連結會在開課前另行通知。</p>
+    <p class="quiet">11/27，星期五晚上八點見。</p>
+  </div>
+
+  <footer>不只讀書的讀書會</footer>
+</main>
+
+<script>
+/* ===== 部署 Apps Script 後，把網頁應用程式網址貼在這裡 ===== */
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwH0BT7zONnGqtaI-O3ikEygEVR3kr75k6mkqDL5YKXh4VH-Lo2MnohEgyWbIoAmE39qA/exec';
+
+const SCHEDULE = [
+  [1,'2026/11/27','導論：第一篇、第二篇','罪咎是錯誤，不是罪；沒有誰是壞人；罪咎與攻擊的惡性循環；罪咎是防衛，掩藏我們對下一步的恐懼；投射；罪咎的層次'],
+  [2,'2026/12/4','第三篇 扭轉受害人生（上）','你的生命故事；鍋蓋罩頂的人生；受害的各階段；罪咎與受害者；對受害者的回應'],
+  [3,'2026/12/11','第三篇 扭轉受害人生（下）','罪咎與壞人；罪咎與全責性原則；要當受害者？還是要自由？；延伸閱讀：罪咎與責任（第二篇）'],
+  [4,'2026/12/18','第四篇 掙脫過往的陰謀（上）','遺棄與罪咎；源於家庭的罪咎與陰謀；補償與角色；延伸閱讀：罪咎的源起（第二篇）'],
+  ['break','12/25、1/1 停課'],
+  [5,'2027/1/8','第四篇 掙脫過往的陰謀（下）','罪咎與犧牲；罪咎與對自己嚴苛；罪惡感與匱乏'],
+  [6,'2027/1/15','第五篇 罪與咎的糾結（上）','宗教的罪咎與罪人意識；去除罪咎的層級'],
+  [7,'2027/1/22','第五篇 罪與咎的糾結（下）','偶像與受難；罪咎的偶像；隱藏罪咎的伎倆；罪咎與心魔'],
+  [8,'2027/1/29','第六篇 永難滿足的需求（上）','罪咎與人生的最大過錯；因拿取而有的罪咎；罪咎與核心需求'],
+  ['break','2 月整月停課'],
+  [9,'2027/3/5','第六篇 永難滿足的需求（下）','罪咎與情緒成熟；罪咎與特殊關係'],
+  [10,'2027/3/12','第七篇 我們打造了眼中的世界（上）','賭場上的高手；十字路口；小我對罪咎所設的常見計畫；延伸閱讀：罪咎的謬誤和目的（第二篇）'],
+  [11,'2027/3/19','第七篇 我們打造了眼中的世界（下）','評斷與誣陷上天；罪咎、死亡與地獄；小我之路通向地獄；高層心靈與進化'],
+  [12,'2027/3/26','第八篇 罪咎的黑暗效應（上）','罪咎的核心人格；罪咎的防護群'],
+  [13,'2027/4/2','第八篇 罪咎的黑暗效應（下）','罪咎、否認與解離；人生宛如電玩遊戲；罪咎與疾病'],
+  [14,'2027/4/9','第九篇 分裂的自我心靈（上）','分裂與罪咎；罪咎與自憐的循環；伊底帕斯罪咎'],
+  [15,'2027/4/16','第九篇 分裂的自我心靈（下）','以罪咎為基石的黏連；由罪咎滋養的時間；罪咎與叛逆；延伸閱讀：罪咎與你的生命目的（第二篇）'],
+  [16,'2027/4/23','第十篇 喚醒人生大夢＋重回第一篇','療癒罪咎的方法回顧；了悟人生即夢；結語；重讀「沒有誰是壞人的原則」'],
+];
+
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+document.getElementById('sched').innerHTML = SCHEDULE.map(r => r[0] === 'break'
+  ? `<li class="break">— ${esc(r[1])}</li>`
+  : `<li><span class="wk">第 ${r[0]} 週</span><span class="dt">${esc(r[1].replace(/^\d{4}\//,''))}<small>週五 20:00</small></span><span><span class="tp">${esc(r[2])}</span><span class="ol">${esc(r[3])}</span></span></li>`
+).join('');
+
+const form = document.getElementById('form');
+const msg = document.getElementById('msg');
+const btn = document.getElementById('submit');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  msg.className = 'msg'; msg.textContent = '';
+  const fd = new FormData(form);
+  const data = Object.fromEntries(fd.entries());
+  data.consent = form.consent.checked ? '已了解' : '';
+
+  const missing = [];
+  if (!data.name.trim()) missing.push('姓名');
+  if (!/^\S+@\S+\.\S+$/.test(data.email.trim())) missing.push('正確的 Email');
+  if (!data.phone.trim()) missing.push('手機');
+  if (missing.length) { msg.className = 'msg err'; msg.textContent = '請填寫' + missing.join('、') + '。'; return; }
+  if (!data.consent) { msg.className = 'msg err'; msg.textContent = '請勾選錄影說明。'; return; }
+
+  btn.disabled = true; btn.textContent = '送出中…';
+  try {
+    const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(data) });
+    const out = await res.json();
+    if (!out.ok) throw new Error(out.error || '送出失敗');
+    form.style.display = 'none';
+    document.getElementById('done').style.display = 'block';
+    document.getElementById('done').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  } catch (err) {
+    msg.className = 'msg err';
+    msg.textContent = '送出沒有成功，請稍後再試一次。（' + err.message + '）';
+    btn.disabled = false; btn.textContent = '送出報名';
+  }
+});
+</script>
+</body>
+</html>
