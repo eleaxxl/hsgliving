@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>誰有罪？｜不只讀書的讀書會</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e9dfce;--paper:#f8f4eb;--ink:#433b30;--muted:#7b7467;--accent:#938b67;--line:#cec7b5;--sage:#758575;--shadow:0 17px 48px rgba(55,50,35,.075)}*{box-sizing:border-box}
+html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:'Noto Serif TC','Songti TC',serif;line-height:2;font-size:17px}
+body:before{content:'';pointer-events:none;position:fixed;inset:0;opacity:.13;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E")}
+.shell{width:min(860px,100%);margin:auto;padding:35px 22px 90px;position:relative}.brand{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line);padding:0 0 21px;margin-bottom:32px}.brand small{font:500 12px 'Noto Sans TC',sans-serif;letter-spacing:.24em;color:var(--muted)}.brand .mark{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)}.mark:before{content:'◌';font-size:26px;color:var(--sage)}
+.progress{display:flex;gap:6px;align-items:center;margin:0 0 30px}.seg{height:3px;flex:1;background:var(--line);transition:background .3s}.seg.on{background:var(--sage)}.page{display:none;animation:appear .5s ease}.page.active{display:block}@keyframes appear{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+.sheet{background:var(--paper);border:1px solid #d9d1bf;box-shadow:var(--shadow);padding:clamp(27px,7vw,67px);min-height:440px}.eyebrow{font:500 12px 'Noto Sans TC',sans-serif;letter-spacing:.23em;color:var(--sage);margin:0 0 22px}.page h1{font-weight:500;font-size:clamp(30px,5vw,45px);line-height:1.55;letter-spacing:.05em;margin:0 0 24px}.page h2{font-weight:500;font-size:clamp(23px,3.5vw,30px);line-height:1.65;margin:0 0 22px}.lead{font-size:18px;line-height:2.1}.muted{color:var(--muted)}.small{font:400 13px/1.8 'Noto Sans TC',sans-serif;color:var(--muted)}.rule{height:1px;background:var(--line);margin:30px 0}.nav{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-top:35px}.btn{border:1px solid var(--ink);background:var(--ink);color:#faf6eb;font:500 15px 'Noto Sans TC',sans-serif;letter-spacing:.1em;padding:13px 25px;cursor:pointer;min-height:48px;transition:.2s}.btn:hover{background:#605540}.btn:disabled{opacity:.35;cursor:default}.btn.ghost{color:var(--ink);background:transparent;border-color:var(--line)}.btn.ghost:hover{border-color:var(--ink)}.btn.smallbtn{padding:8px 15px;min-height:36px;font-size:13px}.notice{font-size:14px;color:#76634c;min-height:22px;margin-top:9px}
+.meditation{text-align:center;min-height:490px;display:flex;flex-direction:column;align-items:center;justify-content:center}.ring{width:104px;height:104px;border-radius:50%;border:1px solid #9aa58f;display:grid;place-items:center;margin:10px auto 27px;position:relative}.ring:after{content:'';position:absolute;inset:9px;border:1px solid #d7d7c6;border-radius:50%}.ring span{height:9px;width:9px;background:var(--sage);border-radius:50%}.ring.breathe{animation:breathe 6s ease-in-out infinite}@keyframes breathe{50%{transform:scale(1.065)}}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:25px 0 12px}.chip{background:transparent;border:1px solid var(--line);color:var(--ink);padding:6px 13px;font:14px 'Noto Sans TC',sans-serif;cursor:pointer}.chip.selected{border-color:var(--sage);background:#e5e9dd}.custom{width:95px;background:transparent;border:0;border-bottom:1px solid var(--accent);text-align:center;color:var(--ink);font:15px 'Noto Sans TC',sans-serif;padding:8px}.story{font-size:16.5px;line-height:2.15}.story h3{font-size:18px;margin:32px 0 11px;font-weight:600}.story p{margin:0 0 16px}.story .meta{margin-bottom:31px}.storyhead{border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:29px}.storyhead h1{font-size:clamp(26px,4.5vw,37px);margin-bottom:5px}.storyhead .sub{font-size:14px;color:var(--muted)}
+.q{padding:19px 0 27px;border-bottom:1px solid var(--line)}.q:last-of-type{border:0}.q-title{font-size:19px;font-weight:500;line-height:1.7;margin:0 0 20px}.q-note{font:13px/1.8 'Noto Sans TC',sans-serif;color:var(--muted);margin:-12px 0 17px}.options{display:grid;gap:9px}.option{display:flex;align-items:flex-start;gap:13px;text-align:left;width:100%;border:1px solid var(--line);padding:13px 16px;background:rgba(255,255,255,.25);cursor:pointer;font:16px/1.8 'Noto Serif TC',serif;color:var(--ink);transition:background .18s,border-color .18s}.option.selected{background:#e6e8de;border-color:var(--sage)}.dot{width:18px;height:18px;border-radius:50%;border:1px solid #9e9989;flex:0 0 18px;margin-top:5px;display:grid;place-items:center}.option.selected .dot:before{content:'';width:9px;height:9px;border-radius:50%;background:var(--sage)}.text-label{display:block;font-size:15px;margin:17px 0 7px}.field{width:100%;min-height:110px;resize:vertical;background:#fdfbf5;border:1px solid var(--line);padding:13px 15px;color:var(--ink);font:16px/1.9 'Noto Serif TC',serif;outline-color:var(--sage)}.field:focus{border-color:var(--sage)}.optional{font-size:12px;color:var(--muted);font-family:'Noto Sans TC',sans-serif}.inline-note{background:#eee9dd;border-left:2px solid var(--sage);padding:15px 19px;font-size:14px;color:#625b4d;line-height:1.9}.answer-result{margin-top:21px;padding:20px;background:#ecebdf}.answer-result h3{margin:0 0 10px;font-weight:500}.summary-row{padding:12px 0;border-bottom:1px solid var(--line)}.summary-row:last-child{border:0}.summary-row strong{font-weight:500}.summary-row p{white-space:pre-wrap;margin:5px 0 0}.closing{text-align:center;padding:60px 0 30px}.closing .closing-line{font-size:23px;line-height:2;margin:44px auto;max-width:540px}.hide{display:none!important}@media(max-width:550px){.shell{padding:22px 14px 45px}.sheet{padding:27px 23px}.brand small{letter-spacing:.1em}.btn{padding:13px 14px;font-size:13px}.nav{gap:9px}.option{font-size:15px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+
+.nickname{display:block;max-width:350px;margin:24px auto 8px;text-align:left}.nickname label{display:block;font:14px 'Noto Sans TC',sans-serif;color:var(--muted);margin-bottom:7px}.nickname input{width:100%;background:#fcfaf4;border:1px solid var(--line);border-radius:3px;padding:12px 14px;color:var(--ink);font:17px 'Noto Serif TC',serif;outline-color:var(--sage)}
+.finish-wrap{min-height:540px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}.finish-card{background:#fbfcfa;border:1px solid #cddbd6;border-radius:18px;width:100%;max-width:570px;padding:38px 23px 44px;margin:20px auto 45px}.finish-card .quote{font-size:21px;line-height:2.2;letter-spacing:.03em;margin:22px auto 14px}.finish-card .source{font-size:13px;color:var(--muted)}.finish-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}.finish-actions .btn{border-radius:30px}.finish-thanks{font-size:16px;margin:16px auto 0;color:var(--muted)}.download-note{font-size:13px;text-align:center;color:var(--muted);margin:19px 0}.upload-status{color:var(--muted);font:13px/1.8 'Noto Sans TC',sans-serif;min-height:20px;text-align:center;margin:15px 0}.finish-prompt{margin-top:36px;color:#8d9696;letter-spacing:.24em;font:12px/2 'Noto Serif TC',serif}
+@media(max-width:550px){.finish-card{padding:28px 18px}.finish-card .quote{font-size:18px}.finish-actions{flex-direction:column;width:100%}.finish-actions button{width:100%}}
+</style>
+</head><body><div class="shell">
+<header class="brand"><small>不只讀書的讀書會 <span aria-hidden="true">／</span> 療癒罪咎</small><span class="mark">第一週・閱讀體驗</span></header>
+<div class="progress" id="progress" aria-label="流程進度"></div><main class="sheet" id="main">
+<section class="page active" data-page="0"><p class="eyebrow">READING EXPERIENCE · 01</p><h1>誰有罪？</h1><p class="lead">從一段真實發生過的歷史事件開始。<br>依照自己的理解閱讀，回答問題，留意自己在過程中出現的想法。</p><div class="rule"></div><p class="small">練習包含三段提問與兩次靜心。沒有標準答案，也不必向其他人交代私人經驗。接上試算表後，填答與暱稱將在練習完成時傳送給帶領者。</p><div class="nav"><span></span><button class="btn" onclick="go(1)">進入練習　→</button></div></section>
+<section class="page" data-page="1"><div class="meditation"><p class="eyebrow">靜心 · 一</p><div class="ring" id="ring1"><span></span></div><h2>回到當下</h2><p class="muted" id="medText1">先讓自己安靜下來。<br>無需做出任何改變，只是留意呼吸。</p><div class="nickname"><label for="nickname">你的暱稱</label><input id="nickname" type="text" maxlength="40" autocomplete="nickname" placeholder="想讓我們如何稱呼你？" required></div><div id="medOptions1"><div class="chips" id="chips1"></div><label class="small">自訂秒數 <input type="number" id="custom1" class="custom" min="-99" max="3600" placeholder="秒" inputmode="numeric"></label><p class="small">靜心結束時會響起一聲磬音。沒有畫面倒數。</p></div><button class="btn" id="medBtn1" onclick="meditate(1)">開始靜心</button><p class="notice" id="medNotice1" aria-live="polite"></p></div></section>
+<section class="page" data-page="2"><p class="eyebrow">歷史閱讀 · 1692—1693</p><div class="storyhead"><h1>1692 年塞勒姆女巫審判</h1><div class="sub">一場由指控、供詞與司法程序構成的歷史事件</div></div><article class="story">
+<h3>一、事件的起源</h3><p>1692 年，美洲麻薩諸塞灣殖民地的塞勒姆村，發生了一連串被認為與巫術有關的事件。</p><p>當時居民多信奉清教徒傳統，相信上帝與魔鬼的存在，也相信人可能藉由巫術傷害他人。依照當時的法律，巫術可以構成死罪。</p><p>年初，牧師塞繆爾・帕里斯（Samuel Parris）的女兒與姪女出現尖叫、抽搐及身體扭曲等異常行為。醫師未能提出令人滿意的解釋，部分居民開始懷疑有人施行巫術。</p><p>2 月底，三名女性遭到指控：生活貧困的莎拉・古德（Sarah Good）、長期患病的莎拉・奧斯本（Sarah Osborne），以及帕里斯家中被奴役的蒂圖芭（Tituba）。</p>
+<h3>二、不同的供詞</h3><p>3 月 1 日，三名女性接受審問。</p><p>莎拉・古德與莎拉・奧斯本均否認使用巫術。</p><p>蒂圖芭最初也否認，但後來承認自己受到魔鬼引誘，並指稱另外兩名女性同樣涉及巫術。</p><p>歷史資料記載，帕里斯牧師曾毆打蒂圖芭，迫使她認罪。</p><p>蒂圖芭的供詞使調查範圍擴大。更多居民遭到指控，包括受到鄰居尊敬的瑞貝卡・納斯（Rebecca Nurse）。</p><p>5 月 10 日，莎拉・奧斯本在正式受審前死於監獄。</p>
+<h3>三、罪名如何成立</h3><p>5 月 27 日，殖民地政府設立特別法庭，專門審理巫術案件。</p><p>法庭採納一種稱為「幽靈證據」的證詞。指控者可以聲稱看見被告的幽靈或幻影前來攻擊自己。</p><p>因此，即使被告能證明自己當時不在現場，也未必能推翻指控，因為被認為施加傷害的是其靈體，而非肉身。</p><p>此外，鄰居間過往的爭執、疾病、不幸事件，以及被告身上的痣與疤痕，都可能成為調查材料。</p><p>6 月 10 日，布莉姬・畢夏普（Bridget Bishop）被判犯有巫術罪，遭處絞刑，成為第一名被處決者。</p>
+<h3>四、承認有罪，或堅持無罪</h3><p>隨著審判擴大，一個特殊現象逐漸出現。</p><p>部分被告承認自己使用巫術，有些人進一步指認其他涉案者。這些人雖然繼續受到拘押或調查，卻沒有在主要處決期間被絞死。</p><p>另一方面，多名堅持無罪的人遭到判刑。</p><p>莎拉・古德始終否認指控，於 7 月 19 日遭處決。瑞貝卡・納斯雖然得到部分居民支持，也在同一天被處死。</p><p>蒂圖芭則一直被關押，直到 1693 年才獲釋。</p><p>另一名被告吉爾斯・柯里（Giles Corey）拒絕向法庭正式答辯。當局為迫使他回答，使用重物壓迫其身體。他於 9 月 19 日死亡，並未經過正式的有罪判決。</p><p>三天後，又有八名被告遭處決。</p>
+<h3>五、審判的終止與後續</h3><p>隨著案件增加，部分宗教人士與官員開始質疑幽靈證據的可靠性。</p><p>如果魔鬼可以假冒無辜者的形象，那麼看見某人的幽靈，是否足以證明那個人有罪？</p><p>10 月 29 日，總督解散特別法庭。後續成立的法庭改變證據採認方式，多名被告因此獲釋。</p><p>整起事件中，超過兩百人遭到指控；十九人被絞死，一人死於重物壓迫，另有至少五人死於獄中。</p><p>1697 年，曾參與審判的法官塞繆爾・休厄爾（Samuel Sewall）公開承認自己的責任。</p><p>1711 年，殖民地政府撤銷部分判決，並向部分受害家庭提供賠償。</p><p>然而，平反工作並未一次完成。直到 2022 年，最後一名尚未正式平反的被告伊莉莎白・強生二世（Elizabeth Johnson Jr.）才獲得平反。</p><p>距離最初的審判，已過去三百三十年。</p>
+</article><div class="rule"></div><p class="small">本文依歷史審訊紀錄及後世研究整理。人物的內在想法未有充分史料記載者，不作推測。</p><div class="nav"><button class="btn ghost" onclick="go(1)">← 返回靜心</button><button class="btn" onclick="go(3)">閱讀完畢　→</button></div></section>
+<section class="page" data-page="3"><p class="eyebrow">問題 A 組 · 閱讀後的判斷</p><h2>閱讀之後</h2><p class="small">依照你現在的直覺作答。沒有標準答案。</p>
+<div class="q"><p class="q-title">在這個故事裡，誰有罪？</p><div class="options" data-name="a1"></div></div>
+<div class="q"><p class="q-title">在這個故事裡，誰受到了懲罰？</p><div class="options" data-name="a2"></div></div>
+<div class="q"><p class="q-title">讀完這個故事，選擇下列方向，說一下你的感想：</p><div class="options" data-name="a3"></div><label class="text-label" for="a3text">你的感想</label><textarea class="field" id="a3text" placeholder="寫下你的想法……"></textarea><button class="btn smallbtn" id="aSubmit" onclick="submitA()">送出感想</button><p class="notice" id="aSent" aria-live="polite"></p></div>
+<div class="nav"><button class="btn ghost" onclick="go(2)">← 回到閱讀</button><button class="btn" onclick="nextA()">繼續　→</button></div><p class="notice" id="aNotice" aria-live="polite"></p></section>
+<section class="page" data-page="4"><p class="eyebrow">問題 B 組 · 生活中的選擇</p><h2>如果是你</h2><div class="q"><p class="q-title">在我們的人生故事裡，偶爾也會遇到被誣陷、冤枉、誤解，讓人感到委屈的時候。</p><p>遇到這種情形，我們是要力證自己的清白，還是「清者自清，濁者自濁」？</p><div class="options" data-name="b1"></div><label class="text-label" for="b1text">你想補充的原因 <span class="optional">（選填）</span></label><textarea class="field" id="b1text" placeholder="也可以寫下其他做法……"></textarea><button class="btn smallbtn" onclick="submitB(1)">送出</button><p class="notice" id="bSent1" aria-live="polite"></p></div>
+<div class="q"><p class="q-title">在我們的人生故事裡，偶爾也會遇到誤判情勢、誤信他人，以至於誤會某些人，張冠李戴，導致他人受到委屈的時候。</p><p>遇到這種情形，我們是要「就算知道自己錯了，但還是堅持己見」，還是要「承認自己的錯誤，向當事人誠摯道歉」？</p><div class="options" data-name="b2"></div><label class="text-label" for="b2text">你想補充的原因 <span class="optional">（選填）</span></label><textarea class="field" id="b2text" placeholder="也可以寫下其他做法……"></textarea><button class="btn smallbtn" onclick="submitB(2)">送出</button><p class="notice" id="bSent2" aria-live="polite"></p></div>
+<div class="nav"><button class="btn ghost" onclick="go(3)">← 上一組</button><button class="btn" onclick="nextB()">繼續　→</button></div><p class="notice" id="bNotice" aria-live="polite"></p></section>
+<section class="page" data-page="5"><div class="meditation"><p class="eyebrow">靜心 · 二</p><div class="ring" id="ring2"><span></span></div><h2>回到自己的經驗</h2><p class="muted" id="medText2">把剛才的故事和答案暫時放下。<br>只是安靜地，回到自己。</p><p class="small" id="medReuse">沿用第一次選擇的靜心時間。</p><button class="btn" id="medBtn2" onclick="meditate(2)">開始靜心</button><p class="notice" id="medNotice2" aria-live="polite"></p></div></section>
+<section class="page" data-page="6"><p class="eyebrow">問題 C 組 · 回到自己</p><h2>你的生命故事</h2><p class="small">不必分享事件細節，只寫你願意留下的部分。</p><div class="q"><p class="q-title">在你的人生故事裡，當你遇到被誣陷、冤枉、誤解，讓你感到委屈的時候，你選擇成為「否認者」，還是「承認者」？還是看情況？</p><textarea id="c1" class="field" rows="6" placeholder="你的回答……"></textarea><button class="btn smallbtn" onclick="submitC(1)">送出</button><p class="notice" id="cSent1" aria-live="polite"></p></div><div class="q"><p class="q-title">在你的人生故事裡，當你遇到誤判情勢、誤信謠言，以至於誤會某些人，張冠李戴，導致他人受到委屈，你選擇以哪種方式來處理？</p><textarea id="c2" class="field" rows="6" placeholder="你的回答……"></textarea><button class="btn smallbtn" onclick="submitC(2)">送出</button><p class="notice" id="cSent2" aria-live="polite"></p></div><div class="nav"><button class="btn ghost" onclick="go(5)">← 返回靜心</button><button class="btn" onclick="nextC()">完成練習　→</button></div><p class="notice" id="cNotice" aria-live="polite"></p></section>
+<section class="page" data-page="7"><div class="finish-wrap">
+<p class="eyebrow">閱讀體驗 · 完結</p>
+<h2 id="thanksName" style="font-size:23px;margin:2px 0 0">謝謝你的認真填答</h2>
+<p class="finish-thanks">謝謝你花時間閱讀，也願意誠實地回看自己的經驗。</p>
+<div class="finish-card"><p class="eyebrow">帶走一句</p><p class="quote">在他身上，你若不是找到自己，<br>就是失落自己。</p><p class="source">《奇蹟課程》中文版（正文）</p></div>
+<div class="finish-actions"><button class="btn ghost" onclick="downloadRecord()">下載這次的紀錄（.md）</button><button class="btn" onclick="restart()">再玩一次</button></div>
+<p class="download-note">你的填答會整理成一份可以保存的文字紀錄。</p>
+<p id="uploadStatus" class="upload-status" aria-live="polite"></p>
+<p class="finish-prompt">在他身上　你看見了什麼？</p>
+</div></section>
+</main><footer style="text-align:center;color:var(--muted);font:12px/1.8 'Noto Sans TC',sans-serif;margin-top:25px;letter-spacing:.12em">不只讀書的讀書會 · 體驗，不是說教</footer></div>
+<script>
+'use strict';
+const fast=location.hash==='#fast';
+// Google Apps Script 接收端；更換部署時更新此網址。
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbzJDMJhBm8LvfZeGn4ao4DccCOFAG5sNjt6FyizLO0KLyi1R3Pa0qgwoAbnMmzoP7Lp/exec';
+let submissionStarted=false;let current=0;let timer=null;const medDur={1:30,2:30}, medDone={1:false,2:false};const ans={};const sent={};const answers={a1:['否認者（以莎拉・古德（Sarah Good）為代表）','承認者（以蒂圖芭（Tituba）為代表）','受難者（出現尖叫、抽搐及身體扭曲的女孩）','審判者（法官塞繆爾・休厄爾（Samuel Sewall））'],a2:['否認者（以莎拉・古德（Sarah Good）為代表）','承認者（以蒂圖芭（Tituba）為代表）','指控者（出現尖叫、抽搐及身體扭曲的女孩）','審判者（法官塞繆爾・休厄爾（Samuel Sewall））'],a3:['善有善報，惡有惡報','人性的本質既殘酷又瘋狂','無辜的受難者值得同情','錯誤的審判應負起最大責任','自訂'],b1:['力證自己的清白','清者自清，濁者自濁'],b2:['就算知道自己錯了，但還是堅持己見','承認自己的錯誤，向當事人誠摯道歉']};
+function init(){document.querySelectorAll('.options').forEach(el=>{const name=el.dataset.name;answers[name].forEach((option,i)=>{let b=document.createElement('button');b.type='button';b.className='option';b.innerHTML='<span class="dot" aria-hidden="true"></span><span></span>';b.lastChild.textContent=option;b.onclick=()=>{ans[name]=option;el.querySelectorAll('button').forEach(x=>{x.classList.remove('selected');x.setAttribute('aria-pressed','false')});b.classList.add('selected');b.setAttribute('aria-pressed','true');if(name==='a3')sent.a3=false;if(name.startsWith('b'))sent[name]=false};b.setAttribute('aria-pressed','false');el.appendChild(b)})});for(let n of [1]){let box=document.getElementById('chips'+n);[30,45,60,90].forEach(v=>{const b=document.createElement('button');b.className='chip'+(v===30?' selected':'');b.textContent=v+' 秒';b.type='button';b.onclick=()=>{medDur[n]=v;document.getElementById('custom'+n).value='';box.querySelectorAll('button').forEach(e=>e.classList.remove('selected'));b.classList.add('selected')};box.appendChild(b)});document.getElementById('custom'+n).oninput=e=>{const v=Number(e.target.value);if(e.target.value.trim()!==''){medDur[n]=v;box.querySelectorAll('button').forEach(x=>x.classList.remove('selected'))}}}if(fast){medDur[1]=-99;medDur[2]=-99;document.getElementById('custom1').value=-99}paint()}
+function paint(){let el=document.getElementById('progress');el.innerHTML='';for(let i=0;i<8;i++){let b=document.createElement('span');b.className='seg'+(i<=Math.min(current,7)?' on':'');el.appendChild(b)}}
+function go(n){if(timer){clearTimeout(timer);timer=null;document.querySelectorAll('.ring').forEach(x=>x.classList.remove('breathe'))}current=n;document.querySelectorAll('.page').forEach((p,i)=>p.classList.toggle('active',i===n));paint();window.scrollTo({top:0,behavior:'instant'});if(n===5){medDur[2]=medDur[1];document.getElementById('medReuse').textContent='沿用第一次選擇的靜心時間：'+(medDur[2]===-99?'測試略過':medDur[2]+' 秒')+'。'}if(n===1||n===5){const m=n===1?1:2;if(medDone[m]){document.getElementById('medBtn'+m).textContent='繼續　→';document.getElementById('medText'+m).innerHTML='靜心已完成。<br>準備好了，便往下一步。'}}}
+let ctx;function bowl(){try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;ctx=ctx||new C();ctx.resume();const t=ctx.currentTime;[440,660,885].forEach((hz,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.setValueAtTime(hz,t);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime((.08/(i+1)),t+.035);g.gain.exponentialRampToValueAtTime(.0001,t+4.8);o.connect(g);g.connect(ctx.destination);o.start(t);o.stop(t+5)})}catch(e){}}
+function meditate(n){if(n===1){const nick=document.getElementById('nickname').value.trim();if(!nick){document.getElementById('medNotice1').textContent='請先填寫暱稱。';document.getElementById('nickname').focus();return}ans.nickname=nick;medDur[2]=medDur[1]}if(n===2)medDur[2]=medDur[1];if(medDone[n]){go(n===1?2:6);return}if(timer)return;let d=medDur[n];if(!Number.isFinite(d)||d>3600||(d<1&&d!==-99)){document.getElementById('medNotice'+n).textContent='請選擇有效的秒數（或 -99 略過）。';return}const btn=document.getElementById('medBtn'+n), notice=document.getElementById('medNotice'+n), ring=document.getElementById('ring'+n);if(n===1)document.getElementById('medOptions1').classList.add('hide');btn.classList.add('hide');notice.textContent='';ring.classList.add('breathe');document.getElementById('medText'+n).innerHTML=n===1?'輕輕閉上眼睛。<br>只是留意此刻的呼吸。':'讓故事暫時停在這裡。<br>回到呼吸，回到自己。';let done=()=>{timer=null;ring.classList.remove('breathe');if(d!==-99)bowl();medDone[n]=true;btn.classList.remove('hide');btn.textContent='繼續　→';document.getElementById('medText'+n).innerHTML='靜心已完成。<br>準備好了，便往下一步。'};if(d===-99){done()}else timer=setTimeout(done,d*1000)}
+function submitA(){const t=document.getElementById('a3text').value.trim();if(!ans.a3){document.getElementById('aSent').textContent='請先選擇感想方向。';return}if(!t){document.getElementById('aSent').textContent='請寫下感想，再按送出。';return}ans.a3text=t;sent.a3=true;document.getElementById('aSent').textContent='已記下你的感想。'}
+function nextA(){if(!ans.a1||!ans.a2||!sent.a3){document.getElementById('aNotice').textContent='請完成兩題選擇，以及第三題感想並送出。';return}go(4)}
+function submitB(n){let k='b'+n;if(!ans[k]){document.getElementById('bSent'+n).textContent='請先選擇一個方向。';return}ans[k+'text']=document.getElementById(k+'text').value.trim();sent[k]=true;document.getElementById('bSent'+n).textContent='已記下你的回答。'}
+function nextB(){
+  // B 組的兩個主題為選擇題；選項一經選取即有效，毋須再按各題「送出」。
+  // 有填寫的補充原因也一併保留，避免明明已作答卻無法前進。
+  const missing=[];
+  for(let n of [1,2]){
+    const k='b'+n;
+    if(!ans[k]){missing.push(n);continue}
+    ans[k+'text']=document.getElementById(k+'text').value.trim();
+    sent[k]=true;
+    document.getElementById('bSent'+n).textContent='已記下你的回答。';
+  }
+  if(missing.length){
+    const notice=document.getElementById('bNotice');
+    notice.textContent='請先完成第 '+missing.join('、')+' 題的選擇。';
+    document.querySelector('[data-name="b'+missing[0]+'"]').scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  document.getElementById('bNotice').textContent='';
+  go(5);
+}
+function submitC(n){let t=document.getElementById('c'+n).value.trim();if(!t){document.getElementById('cSent'+n).textContent='請先寫下你的回答。';return}ans['c'+n]=t;sent['c'+n]=true;document.getElementById('cSent'+n).textContent='已記下你的回答。'}
+function nextC(){for(let n of [1,2]){const t=document.getElementById('c'+n).value.trim();if(t){ans['c'+n]=t;sent['c'+n]=true}}if(!sent.c1||!sent.c2){document.getElementById('cNotice').textContent='請完成並送出兩題後再繼續。';return}go(7);finish()}
+const labels={a1:'在這個故事裡，誰有罪？',a2:'在這個故事裡，誰受到了懲罰？',a3:'讀完故事的感想方向',a3text:'我的感想',b1:'被誤解時的選擇',b1text:'選擇原因',b2:'誤會別人時的選擇',b2text:'選擇原因',c1:'我遇到冤枉時的處理方式',c2:'我誤會別人時的處理方式'};
+function summaryText(){return '# 誰有罪？｜不只讀書的讀書會\n\n暱稱：'+(ans.nickname||'')+'\n\n'+Object.keys(labels).filter(k=>ans[k]).map(k=>labels[k]+'\n'+ans[k]).join('\n\n')+'\n\n---\n\n> 在他身上，你若不是找到自己，就是失落自己。\n> 《奇蹟課程》中文版（正文）\n\n謝謝你的認真填答。'}
+
+async function copySummary(){const v=summaryText();try{await navigator.clipboard.writeText(v);alert('已複製文字')}catch(e){const t=document.createElement('textarea');t.value=v;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();alert('已複製文字')}}
+
+function finish(){
+  const nick=(ans.nickname||'').trim();
+  document.getElementById('thanksName').textContent=nick?nick+'，謝謝你的認真填答':'謝謝你的認真填答';
+  if(!submissionStarted){submissionStarted=true;submitToSheet()}
+}
+async function submitToSheet(){
+  const status=document.getElementById('uploadStatus');
+  if(!SCRIPT_URL){status.textContent='目前為測試版：尚未設定試算表接收網址，填答沒有上傳。';return}
+  const payload={story:'1692 年塞勒姆女巫審判',nickname:ans.nickname||'',choice:ans.a1||'',reason:ans.a3text||'',answers:{...ans},clientTime:new Date().toISOString()};
+  try{
+    // Apps Script 的跨來源 redirect 通常無法讀取確認訊息；no-cors 只表示傳送嘗試完成，不能保證寫入成功。
+    await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
+    status.textContent='已送出填答資料；由於 Google Apps Script 的跨網域限制，網頁無法確認是否寫入，請由帶領者核對試算表。';
+  }catch(e){status.textContent='資料傳送未完成。請先下載紀錄保存，再通知帶領者。'}
+}
+function downloadRecord(){
+ const blob=new Blob([summaryText()],{type:'text/markdown;charset=utf-8'});
+ const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;
+ const safe=(ans.nickname||'學員').replace(/[\\/:*?"<>|\x00-\x1f]/g,'_').slice(0,35);
+ a.download='誰有罪_閱讀紀錄_'+safe+'.md';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),5000);
+}
+function restart(){location.reload()}
+
+init();
+</script></body></html>
