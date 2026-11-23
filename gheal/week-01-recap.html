@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>療癒罪咎｜第一週講義</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f4efe6;
+      --paper:#fbf8f2;
+      --paper-2:#f7f2e9;
+      --ink:#40382f;
+      --muted:#7e7467;
+      --line:#d8cebf;
+      --sage:#7c8b78;
+      --sage-2:#93a090;
+      --gold:#b59659;
+      --rose:#b38477;
+      --shadow:0 14px 40px rgba(60,48,34,.06);
+      --radius:24px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      background:
+        radial-gradient(circle at top left, rgba(181,150,89,.08), transparent 26%),
+        radial-gradient(circle at bottom right, rgba(124,139,120,.09), transparent 26%),
+        var(--bg);
+      color:var(--ink);
+      font-family:"Noto Serif TC","PingFang TC","Microsoft JhengHei",serif;
+      line-height:1.9;
+      letter-spacing:.01em;
+    }
+    a{color:inherit}
+    .shell{
+      width:min(1240px,calc(100% - 32px));
+      margin:0 auto;
+      padding:28px 0 80px;
+      display:grid;
+      grid-template-columns: 280px minmax(0,1fr);
+      gap:28px;
+    }
+    .sidebar{
+      position:sticky;
+      top:20px;
+      align-self:start;
+      background:rgba(251,248,242,.9);
+      backdrop-filter: blur(10px);
+      border:1px solid rgba(216,206,191,.9);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      padding:26px 22px;
+    }
+    .eyebrow{
+      font:600 12px/1.6 "Noto Sans TC",sans-serif;
+      color:var(--sage);
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      margin-bottom:10px;
+    }
+    .sidebar h1{
+      font-size:24px;
+      line-height:1.5;
+      margin:0 0 12px;
+      font-weight:600;
+    }
+    .sidebar .sub{
+      color:var(--muted);
+      font-size:14px;
+      margin-bottom:18px;
+    }
+    .nav{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      margin-top:18px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+    }
+    .nav a{
+      text-decoration:none;
+      padding:10px 12px;
+      border-radius:14px;
+      color:var(--muted);
+      transition:.2s ease;
+      font-size:14px;
+    }
+    .nav a:hover{background:var(--paper-2); color:var(--ink)}
+    .sidebar .foot{
+      margin-top:20px;
+      padding-top:16px;
+      border-top:1px solid var(--line);
+      color:var(--muted);
+      font-size:13px;
+    }
+    .content{display:flex; flex-direction:column; gap:24px}
+    .hero,
+    .section,
+    .callout,
+    .quote,
+    .mini-card{
+      background:var(--paper);
+      border:1px solid rgba(216,206,191,.92);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+    .hero{
+      padding:42px 40px 34px;
+      overflow:hidden;
+      position:relative;
+    }
+    .hero:before{
+      content:"";
+      position:absolute;
+      right:-90px; top:-80px;
+      width:260px; height:260px;
+      background:radial-gradient(circle, rgba(181,150,89,.18), transparent 70%);
+      pointer-events:none;
+    }
+    .hero h2{
+      margin:0 0 14px;
+      font-size:clamp(30px,4vw,48px);
+      line-height:1.35;
+      font-weight:600;
+    }
+    .hero p{
+      margin:0;
+      font-size:17px;
+      color:#594f42;
+      max-width:860px;
+    }
+    .hero-grid{
+      margin-top:28px;
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:16px;
+    }
+    .mini-card{padding:18px 18px 16px}
+    .mini-card .k{
+      font:600 12px/1.5 "Noto Sans TC",sans-serif;
+      color:var(--gold);
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      margin-bottom:8px;
+    }
+    .mini-card strong{
+      display:block;
+      margin-bottom:6px;
+      font-size:17px;
+      font-weight:600;
+    }
+    .mini-card p{margin:0; color:var(--muted); font-size:14px}
+    .section{padding:34px 34px 28px}
+    .section h3{
+      margin:0 0 8px;
+      font-size:28px;
+      line-height:1.45;
+      font-weight:600;
+    }
+    .section .lead{
+      color:#5e5346;
+      margin:0 0 18px;
+      font-size:16px;
+    }
+    .two-col{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:20px;
+      align-items:start;
+    }
+    .callout{
+      padding:22px 22px 18px;
+      background:linear-gradient(180deg,#fffdfa,#f9f4ea);
+    }
+    .callout h4,
+    .quote h4,
+    .block h4{
+      margin:0 0 8px;
+      font-size:18px;
+      font-weight:600;
+    }
+    .callout p,
+    .quote p,
+    .block p{margin:0 0 8px}
+    .quote{
+      padding:26px 24px;
+      border-left:5px solid var(--gold);
+      background:linear-gradient(180deg,#fffdfa,#f7f1e6);
+    }
+    .quote p{
+      font-size:19px;
+      line-height:1.95;
+      margin:0 0 12px;
+    }
+    .quote .src{color:var(--muted); font-size:14px}
+    .grid-2,
+    .grid-3{display:grid; gap:16px}
+    .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .block{
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:20px 18px;
+      background:linear-gradient(180deg,#fffefd,#f7f3ea);
+    }
+    .block ul,
+    .section ul,
+    .section ol{margin:8px 0 0 0; padding-left:1.25em}
+    .block li,
+    .section li{margin:.25em 0}
+    .flow{
+      display:grid;
+      grid-template-columns: repeat(5,minmax(0,1fr));
+      gap:10px;
+      margin-top:16px;
+    }
+    .node{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:16px 14px;
+      min-height:118px;
+      position:relative;
+    }
+    .node .tag{
+      display:inline-block;
+      margin-bottom:8px;
+      font:600 12px/1.4 "Noto Sans TC",sans-serif;
+      color:#fff;
+      background:var(--sage);
+      padding:4px 10px;
+      border-radius:999px;
+    }
+    .node strong{display:block; margin-bottom:6px; font-size:17px}
+    .node p{margin:0; font-size:14px; color:var(--muted); line-height:1.75}
+    .node.arrow:after{
+      content:"→";
+      position:absolute;
+      right:-16px; top:50%; transform:translateY(-50%);
+      color:var(--gold);
+      font-size:22px;
+      font-family:"Noto Sans TC",sans-serif;
+    }
+    .table-wrap{
+      overflow:auto;
+      border-radius:18px;
+      border:1px solid var(--line);
+      background:#fff;
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:720px;
+    }
+    th,td{padding:14px 16px; vertical-align:top; border-bottom:1px solid var(--line)}
+    th{
+      background:#f7f2e8;
+      text-align:left;
+      font-weight:600;
+      font-size:15px;
+    }
+    td{font-size:15px}
+    tr:last-child td{border-bottom:none}
+    .pill-list{display:flex; flex-wrap:wrap; gap:10px; margin-top:10px}
+    .pill{
+      padding:8px 12px;
+      border-radius:999px;
+      background:#f4efe4;
+      border:1px solid var(--line);
+      color:#5d5347;
+      font-size:14px;
+    }
+    .accent{color:var(--sage)}
+    .danger{color:var(--rose)}
+    .gold{color:var(--gold)}
+    .section .micro{
+      font:500 13px/1.7 "Noto Sans TC",sans-serif;
+      color:var(--muted);
+      margin-top:12px;
+    }
+    .footer-note{
+      text-align:center;
+      color:var(--muted);
+      font-size:13px;
+      padding:8px 0 26px;
+    }
+    @media (max-width: 1024px){
+      .shell{grid-template-columns:1fr}
+      .sidebar{position:relative; top:0}
+      .two-col,.grid-2,.grid-3,.hero-grid,.flow{grid-template-columns:1fr}
+      .node.arrow:after{display:none}
+    }
+    @media print{
+      body{background:#fff}
+      .shell{width:100%; margin:0; padding:0; grid-template-columns:1fr}
+      .sidebar{display:none}
+      .hero,.section,.callout,.quote,.mini-card,.block{box-shadow:none}
+      .section,.hero{break-inside:avoid}
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="eyebrow">Guilt Healing · Week 1</div>
+      <h1>《療癒罪咎》<br>第一週講義</h1>
+      <div class="sub">第一篇與第二篇的進入方式<br>網頁講義草案</div>
+      <nav class="nav">
+        <a href="#overview">本週主軸</a>
+        <a href="#weekmap">本週閱讀地圖</a>
+        <a href="#part1">第一篇怎麼讀</a>
+        <a href="#tool">整合練習</a>
+        <a href="#part2">第二篇主軸</a>
+        <a href="#model">核心模型</a>
+        <a href="#errors">罪咎的謬誤與目的</a>
+        <a href="#responsibility">罪咎與責任</a>
+        <a href="#cycle">罪咎的惡性循環</a>
+        <a href="#reread">回頭再讀</a>
+      </nav>
+      <div class="foot">
+        不只讀書的讀書會 . 療癒罪咎：沒有誰是壞人，你也不是！
+      </div>
+    </aside>
+
+    <main class="content">
+      <section class="hero" id="overview">
+        <div class="eyebrow">Week One Handout</div>
+        <h2>沒有誰是壞人，<br>包括你自己。</h2>
+        <p>
+          第一週不是要把整本《療癒罪咎》講懂，而是先帶大家走進一條比較清楚的路：<br>
+          從第一篇的定調出發，透過體驗與整理，摸到罪惡感如何運作，再回頭讀第一、二篇，文字就會開始變得能夠落地。
+        </p>
+        <div class="hero-grid">
+          <article class="mini-card">
+            <div class="k">核心破題</div>
+            <strong>沒有誰是壞人，你也不是</strong>
+            <p>這是整本書的基本視角。第一週先把這句話立起來，不急著講透。</p>
+          </article>
+          <article class="mini-card">
+            <div class="k">本週重點</div>
+            <strong>罪惡感不是你以為的罪惡感</strong>
+            <p>它不只是內疚、自責，更可能以攻擊、防衛、切斷連結與補償的形式出現。</p>
+          </article>
+          <article class="mini-card">
+            <div class="k">學習方式</div>
+            <strong>先走一趟，再回頭讀</strong>
+            <p>不是先把書讀懂才做練習，而是讓體驗先走在前面，文字再慢慢跟上。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="weekmap">
+        <h3>本週閱讀地圖</h3>
+        <p class="lead">第一週的安排，不是平均處理第一、二篇，而是<strong>以第一篇開門，以第二篇為主體</strong>。</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:22%">篇章／主題</th>
+                <th style="width:38%">本週怎麼處理</th>
+                <th>先不展開的部分</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>第一篇｜願你破繭而出</strong></td>
+                <td>用來定調：<span class="accent">沒有誰是壞人，你也不是</span>。帶入整合練習，並說明第一篇後半與 24 點原則，會在全書走完之後回頭再看。</td>
+                <td>24 點原則、簽署無罪條款、超越善惡、何謂純真。</td>
+              </tr>
+              <tr>
+                <td><strong>第二篇｜重新認識罪咎</strong></td>
+                <td>作為本週教學主體：重新理解罪咎如何連到攻擊、防衛、責任、惡性循環，以及它如何隱藏更深的恐懼。</td>
+                <td>源起、生命目的、超越善惡與解脫之道，留待後面幾篇展開。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" id="part1">
+        <h3>第一篇怎麼讀</h3>
+        <p class="lead">第一篇像是整本書的<strong>形上學定調</strong>，也是之後回頭再讀時，最容易突然讀懂的一篇。</p>
+        <div class="grid-2">
+          <article class="block">
+            <h4>先提出，但不急著講透的內容</h4>
+            <ul>
+              <li><strong>沒有誰是壞人，你也不是</strong></li>
+              <li><strong>污泥來了！快從河裡跳出來啊！</strong> —— 罪惡感在我們身上的影響，比我們以為的大得多。</li>
+              <li><strong>無罪無咎</strong> —— 面對罪惡感的出路，會指向寬恕與純真。</li>
+              <li><strong>別對自己那樣</strong> —— 先埋下兩條線：罪咎會形成惡性循環；世間的人事物反映我們對自己的想法，因此我們必須對世界負責任。</li>
+            </ul>
+          </article>
+          <article class="block">
+            <h4>刻意留到後面再談的內容</h4>
+            <ul>
+              <li>簽署無罪條款</li>
+              <li>何謂純真</li>
+              <li>超越善惡</li>
+              <li>24 點原則</li>
+            </ul>
+            <p class="micro">這些內容未來會整理成一條比較完整的專題線：<strong>「破繭而出，重獲自由」</strong>。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="tool">
+        <h3>整合練習：第一篇提供的工具</h3>
+        <p class="lead">「整合練習」不是第一週專屬活動，而是<strong>整本書都可以反覆使用的工具</strong>。它可以放在課程最前面，也可以放在破題之後立刻給出。</p>
+        <div class="two-col">
+          <div class="callout">
+            <h4>這個工具在第一週的角色</h4>
+            <p>它不是用來把第一篇講懂，而是先讓學員有一個能夠回到自己身上的方式。</p>
+            <p>當書中開始談罪惡感、信念、防衛與整合時，學員不是只在腦中理解，而是知道自己可以如何實際進入。</p>
+          </div>
+          <div class="quote">
+            <h4>帶領方向</h4>
+            <p>先給工具，再讓整本書慢慢替這個工具提供語言與視角。</p>
+            <div class="src">第一週不急著說明所有原理，先讓人知道：這是一本可以被練習、可以被經驗的書。</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="part2">
+        <h3>第二篇：第一週的主體</h3>
+        <p class="lead">第二篇真正要處理的是：<strong>罪惡感究竟如何運作？它如何影響我們的情緒、關係與人生方向？</strong></p>
+        <div class="grid-3">
+          <article class="block">
+            <h4>1. 小我、罪咎與攻擊</h4>
+            <p>這一段要先看見：罪惡感會連到懲罰，而懲罰的邏輯，正是攻擊的根源。只要與「懲罰」或「攻擊」有關的情緒與想法，背後都可能藏著罪咎。</p>
+          </article>
+          <article class="block">
+            <h4>2. 罪咎在防衛什麼？</h4>
+            <p>關鍵字是<span class="danger">隱藏</span>。它被用來當作防衛，掩蓋我們對前進的恐懼：害怕下一步、害怕成功、害怕夥伴關係，也害怕活出自己的生命使命。</p>
+          </article>
+          <article class="block">
+            <h4>3. 罪咎的反面</h4>
+            <p>純真意謂我們停止懲罰自己和他人；連結感則是回到完整之路。不過這部分在第一週先作為方向，放在課程最後收束，不急著完整展開。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="model">
+        <h3>第一週要建立的核心模型</h3>
+        <p class="lead">為了讓 Chuck 原本較跳躍的敘事變得清楚，第一週可先抓住這條主線：</p>
+        <div class="flow">
+          <article class="node arrow">
+            <span class="tag">起點</span>
+            <strong>罪惡感</strong>
+            <p>不只是內疚，也可能是一種更深的「我有問題」「我不好」的底層信念。</p>
+          </article>
+          <article class="node arrow">
+            <span class="tag">連結</span>
+            <strong>有罪，就該受罰</strong>
+            <p>罪咎會自動連上懲罰，這是後面一切防衛的重要前提。</p>
+          </article>
+          <article class="node arrow">
+            <span class="tag">方向一</span>
+            <strong>攻擊</strong>
+            <p>把懲罰轉給別人：責怪、譴責、定罪、報復、成為受害者。</p>
+          </article>
+          <article class="node arrow">
+            <span class="tag">方向二</span>
+            <strong>補償</strong>
+            <p>把懲罰留給自己：切斷連結、犧牲、假性的負責任、救贖。</p>
+          </article>
+          <article class="node">
+            <span class="tag">結果</span>
+            <strong>惡性循環</strong>
+            <p>無論攻擊或補償，都可能回頭強化罪咎，讓整個循環愈轉愈深。</p>
+          </article>
+        </div>
+        <div class="pill-list">
+          <span class="pill">攻擊他人</span>
+          <span class="pill">自我責罰</span>
+          <span class="pill">切斷連結</span>
+          <span class="pill">犧牲與補償</span>
+          <span class="pill">不配得感</span>
+          <span class="pill">受害者位置</span>
+        </div>
+      </section>
+
+      <section class="section" id="errors">
+        <h3>罪咎的謬誤和目的</h3>
+        <p class="lead">從這裡開始，後面各篇的主題其實都已經種下種子。第一週先把輪廓整理出來。</p>
+        <div class="grid-2">
+          <article class="block">
+            <h4>罪咎相關的謬誤</h4>
+            <ol>
+              <li>小我的糧食</li>
+              <li>給自己「不前進」的藉口：逃避面對、不配得感</li>
+              <li>黑暗魅惑力：特殊性、透過執著來補償</li>
+              <li>強化自我概念、報復</li>
+              <li>競爭</li>
+              <li>控制</li>
+              <li>叛逆</li>
+            </ol>
+          </article>
+          <article class="block">
+            <h4>把這些綜合起來看</h4>
+            <p>這些不同形式，最後都會回到同一個深層主題：</p>
+            <ul>
+              <li>害怕下一步</li>
+              <li>害怕成功</li>
+              <li>害怕真正的夥伴關係</li>
+              <li>害怕活出自己的人生使命</li>
+            </ul>
+            <p class="micro">而罪咎更深的目的，則是：<strong>延續與老天的權力鬥爭</strong>。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="responsibility">
+        <h3>罪咎與責任</h3>
+        <p class="lead">這一段若不先說明，Chuck 的文字很容易被讀成道德勸說。但他這裡談的責任，重點不在「扛下多少」，而在於：<strong>你有沒有能力對情境做出適切回應。</strong></p>
+        <div class="two-col">
+          <div class="callout">
+            <h4>Responsibility 的閱讀方式</h4>
+            <p><strong>Response</strong>：回應</p>
+            <p><strong>Ability</strong>：能力</p>
+            <p>因此，這裡的 responsibility 可理解為：<strong>回應的能力</strong>，也就是面對情境時，能否做出適切的心理回應。</p>
+          </div>
+          <div class="quote">
+            <p>罪咎讓我們在面對問題情境時感到無助；我們若不是反應過度，就是未做出應有的反應，全都是因為罪咎而對情境做不出真的心理回應。</p>
+            <div class="src">第一週重點：罪惡感使人失去適切回應的能力。</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="cycle">
+        <h3>罪咎的惡性循環</h3>
+        <p class="lead">這裡可以看見攻擊的兩面性：攻擊別人，同時也在攻擊自己；而自我攻擊，又會回頭引發更多對外的攻擊。</p>
+        <div class="grid-3">
+          <article class="block">
+            <h4>對外</h4>
+            <p>責怪、譴責、報復、定罪，或進入「都是因為他」的受害者位置。</p>
+          </article>
+          <article class="block">
+            <h4>對內</h4>
+            <p>自責、羞愧、內在攻擊、切斷連結，覺得自己更糟、更不配、更沒有出路。</p>
+          </article>
+          <article class="block">
+            <h4>循環</h4>
+            <p>感覺更糟 → 罪惡感更深 → 更需要攻擊或補償 → 情況更糟。<br>而「罪咎會與其他負面情緒結黨合作」這條線，會在第八篇有更多發展。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <h3>第一週體驗活動的位置</h3>
+        <p class="lead">第一週的設計，不只是閱讀導讀，而是讓學員先經驗，再理解。</p>
+        <div class="grid-2">
+          <article class="block">
+            <h4>體驗一｜〈誰有罪？〉</h4>
+            <p>透過塞勒姆女巫審判的歷史故事，先讓人自然地定罪、判斷、選邊與反應，再回過頭來，看見自己如何參與「罪與懲罰」的敘事。</p>
+          </article>
+          <article class="block">
+            <h4>體驗二｜雙手整合</h4>
+            <p>不是要立刻把罪咎講懂，而是讓學員先有一個可回到自己身上的工具。它可以作為第一篇給出的起始工具，也可以在後續閱讀中反覆使用。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="reread">
+        <h3>走完這一趟，再回頭讀</h3>
+        <p class="lead">第一週最重要的，不是一次理解完所有概念，而是帶著經驗，重新閱讀第一、二篇。</p>
+        <div class="quote">
+          <p>帶著今天的經驗，重新閱讀第一篇與第二篇。<br>
+          不必急著理解所有內容，也不需要同意作者的每一個觀點。<br>
+          只是留意：<strong>有哪些句子，現在讀起來和第一次不同？</strong></p>
+          <div class="src">第一週的閱讀邀請</div>
+        </div>
+        <div class="callout" style="margin-top:18px">
+          <h4>先留在心裡的三個問題</h4>
+          <ul>
+            <li>我一直在努力證明自己沒有罪嗎？</li>
+            <li>當我責怪、譴責、補償或切斷連結時，底下是否隱藏著一種「我不想受罰」的內在機制？</li>
+            <li>如果罪咎真的比我想像中更深，那麼「純真」對我而言究竟意味著什麼？</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer-note">網頁講義草案｜供第一週課程使用｜後續可依課堂節奏再調整</div>
+    </main>
+  </div>
+</body>
+</html>
