@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-Hant">
+<html lang="zh-Hant" class="locked">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -17,9 +17,44 @@ a.entry{display:flex;align-items:center;justify-content:space-between;gap:15px;t
 a.entry:hover,a.entry:focus-visible{border-color:var(--sage);transform:translateY(-2px);outline:none}
 a.entry strong{display:block;font-size:19px;font-weight:500;margin-bottom:4px}a.entry span{color:var(--muted);font:13px/1.7 'Noto Sans TC',sans-serif}a.entry .arrow{font-size:22px;color:var(--sage);flex:none}
 .note{font:13px/1.9 'Noto Sans TC',sans-serif;color:var(--muted);margin-top:34px}footer{padding-top:45px;color:var(--muted);font:12px/1.8 'Noto Sans TC',sans-serif}
+
+/* GHeal menu-only convenience gate; individual pages remain public on GitHub Pages. */
+html.locked main{display:none}
+html.locked #access{display:flex}
+html.unlocked #access{display:none}
+#access{min-height:100svh;padding:24px;align-items:center;justify-content:center}
+.access-panel{width:min(100%,470px);padding:clamp(28px,6vw,58px) clamp(24px,5vw,48px);background:var(--paper);border:1px solid var(--line);border-radius:20px;text-align:center}
+.access-symbol{width:76px;height:76px;border:1px solid var(--sage);border-radius:50%;margin:0 auto 24px;display:grid;place-items:center;color:var(--sage)}
+.access-symbol svg{width:28px;height:28px}
+#access h2{font-size:clamp(25px,4vw,31px);margin:12px 0 12px;line-height:1.5}
+#access .hint{font-size:14px;color:var(--muted);margin:8px 0 25px}
+#access label{display:block;text-align:left;font-size:14px;margin-bottom:8px}
+#access input{display:block;width:100%;padding:13px 16px;border:1px solid var(--line);background:white;color:var(--ink);font:17px/1.5 'Noto Sans TC',sans-serif;border-radius:8px;outline-offset:3px}
+#access input:focus{outline:2px solid var(--sage)}
+#access button{margin-top:18px;width:100%;padding:13px 20px;background:var(--sage);color:white;border:1px solid var(--sage);border-radius:8px;font:15px/1.5 'Noto Sans TC',sans-serif;cursor:pointer}
+#access button:disabled{opacity:.65;cursor:wait}
+#access .error{min-height:27px;margin:12px 0 0;color:#9a5a50;font:13px/1.7 'Noto Sans TC',sans-serif}
+#access .footnote{margin:14px 0 0;font:12px/1.8 'Noto Sans TC',sans-serif;color:var(--muted)}
+.access-footer{margin:28px 0 0;color:var(--muted);font:12px/1.8 'Noto Sans TC',sans-serif}
 </style>
 </head>
-<body><main>
+<body>
+<section id="access" aria-labelledby="access-title">
+  <div class="access-panel">
+    <div class="kicker">GHEAL · PRACTICE INDEX</div>
+    <div class="access-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="11" rx="2.4"/><path d="M7.8 10.5V7a4.2 4.2 0 0 1 8.4 0v3.5"/></svg></div>
+    <h2 id="access-title">GHeal 練習選單</h2>
+    <p class="hint">請輸入密碼以開啟課程與練習連結。</p>
+    <form id="gate-form" autocomplete="off">
+      <label for="gate-password">進入密碼</label>
+      <input id="gate-password" type="password" placeholder="請輸入密碼" required autocomplete="off" spellcheck="false" autofocus>
+      <button type="submit" id="gate-button">進入選單</button>
+      <p class="error" id="gate-error" role="status" aria-live="polite"></p>
+    </form>
+    <div class="access-footer">不只讀書的讀書會 . 療癒罪咎：沒有誰是壞人，你也不是！</div>
+  </div>
+</section>
+<main id="menu">
 <header><div class="kicker">GHEAL · PRACTICE INDEX</div><h1>不只讀書的讀書會</h1><p class="sub">《療癒罪咎》練習與網頁選單</p></header>
 <h2>體驗練習</h2>
 <a class="entry" href="./who-is-guilty.html" target="_blank" rel="noopener noreferrer"><div><strong>第一週｜誰有罪？</strong><span>塞勒姆女巫審判 · 歷史閱讀與三組提問</span></div><div class="arrow" aria-hidden="true">↗</div></a>
@@ -30,4 +65,49 @@ a.entry strong{display:block;font-size:19px;font-weight:500;margin-bottom:4px}a.
 <a class="entry" href="./guilt-signup.html" target="_blank" rel="noopener noreferrer"><div><strong>《療癒罪咎》讀書會報名頁</strong><span>課程簡介 · 十六週進度 · 報名</span></div><div class="arrow" aria-hidden="true">↗</div></a>
 <p class="note">每個頁面都會在新分頁開啟。未來新增的練習與測試網頁，可持續加入此選單。</p>
 <footer>不只讀書的讀書會 . 療癒罪咎：沒有誰是壞人，你也不是！</footer>
-</main></body></html>
+</main>
+<script>
+(function(){
+'use strict';
+// Convenience gate only. HTML source and linked pages remain publicly retrievable.
+const SALT='1a3d3663d359c30c14a6eabf1a4299a7';
+const EXPECTED='e7885ee93cc5fc67de23044baaef6d4028fa7159f547edb9d7fc569a8a60ec31';
+const KEY='gheal_menu_unlocked_v1';
+const gate=document.getElementById('gate-form');
+const input=document.getElementById('gate-password');
+const error=document.getElementById('gate-error');
+const btn=document.getElementById('gate-button');
+function unlock(){
+ document.documentElement.classList.remove('locked');
+ document.documentElement.classList.add('unlocked');
+ input.value='';
+ window.scrollTo(0,0);
+}
+async function digest(s){
+ const raw=new TextEncoder().encode(s);
+ const hash=await crypto.subtle.digest('SHA-256',raw);
+ return Array.from(new Uint8Array(hash),x=>x.toString(16).padStart(2,'0')).join('');
+}
+async function check(password){
+ return (await digest(SALT+password))===EXPECTED;
+}
+if(sessionStorage.getItem(KEY)===EXPECTED){unlock();}
+else document.documentElement.classList.add('locked');
+gate.addEventListener('submit',async function(e){
+ e.preventDefault();
+ btn.disabled=true;error.textContent='';
+ try{
+  if(await check(input.value)){
+   sessionStorage.setItem(KEY,EXPECTED);
+   unlock();
+  } else {
+   error.textContent='密碼不正確，請再試一次。';
+   input.focus();input.select();
+  }
+ }catch(_){
+  error.textContent='無法驗證密碼，請確認網頁已透過 HTTPS 開啟。';
+ }finally{btn.disabled=false}
+});
+})();
+</script>
+</body></html>
