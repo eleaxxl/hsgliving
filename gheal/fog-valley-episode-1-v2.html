@@ -160,11 +160,67 @@ function write(){try{localStorage.setItem(ROOT,JSON.stringify(state))}catch(e){}
 function load(){try{const v=JSON.parse(localStorage.getItem(ROOT));if(v&&v.node&&N[v.node]&&Array.isArray(v.history))return Object.assign(defaultState(),v)}catch(e){}return defaultState()}
 function transition(choice){const current=N[state.node];const index=choice.index??-1;const fx=choice.fx||{};for(const k of ['mayor','eli','mira','keeper','crowd','clues'])state[k]+=(fx[k]||0);if(choice.tag)state.flags.push(choice.tag);state.history.push({node:state.node,chapter:current.chapter,selected:index,label:choice.t||'繼續',to:choice.to});state.node=choice.to;if(state.node==='finish')state.done=true;write();render();}
 function render(){window.scrollTo({top:0,behavior:'instant'});const node=N[state.node];if(!node){state=defaultState();write();return render()}const step=state.history.length;pageCount.textContent=node.end?'第一集 · 完成':`${String(step+1).padStart(2,'0')} / 約 23 節`;const progress=Math.min(100,Math.max(1,step/23*100));let html=`<div class="bar"><div class="fill" style="width:${progress}%"></div></div>`;if(state.node==='opening'&&!state.history.length){html+=`<div class="landing"><div class="sigil"></div><p class="kicker">FOG VALLEY · EPISODE ONE</p><h1 class="title">霧谷紀事</h1><p class="sub">第一集｜十一分鐘</p><div class="intro"><p>雨下到第四天。</p><p>這一夜，霧谷的鐘聲會響三次。</p></div><div class="actions"><button class="continue" id="startGame">進入故事 →</button></div><p class="tiny" style="margin-top:38px">憑直覺做選擇 · 不知道如何選時，可擲情緒骰子 · 進度自動儲存</p></div>`;app.innerHTML=html;document.querySelector('#startGame').onclick=()=>{app.innerHTML=`<div class="bar"><div class="fill" style="width:1%"></div></div>`;renderScene()};return}renderScene(html)}
-function renderScene(prefix){const n=N[state.node];let html=prefix||`<div class="bar"><div class="fill" style="width:${Math.min(100,state.history.length/23*100)}%"></div></div>`;html+=`<div class="ch">${esc(n.chapter||'')}</div><h1 class="title">${esc(n.title)}</h1><div class="prose">${paras(n.text).map((p,i,a)=>`<p${i===a.length-1&&n.choices?' class="last"':''}>${esc(p)}</p>`).join('')}</div>`;if(n.end){html+=`<div class="endpaper"><div class="rule"></div><p class="kicker">故事未完 · 續集待續</p><p>第一集的路到這裡。你走過的選擇，會跟著你走進下一場雨。</p><div class="codebox"><strong style="font-size:15px">冒險承接碼</strong><p class="tiny">可複製保存，供第二集承接人物關係與選擇；不要把它當作登入密碼。</p><textarea readonly id="carryCode"></textarea><div class="endactions"><button class="secondary" id="copyCode">複製承接碼</button><button class="secondary" id="saveMD">下載冒險紀錄 .md</button><button class="secondary" id="restartEnd">重新開始</button></div></div></div>`;app.innerHTML=html;document.querySelector('#carryCode').value=exportCode();document.querySelector('#copyCode').onclick=()=>navigator.clipboard?.writeText(exportCode()).then(()=>alert('已複製承接碼')).catch(()=>{const a=document.querySelector('#carryCode');a.select();document.execCommand('copy')});document.querySelector('#saveMD').onclick=downloadRecord;document.querySelector('#restartEnd').onclick=restartConfirm;return}if(n.choices){html+=`<div class="rule"></div><p class="kicker">你會怎麼做？</p><div class="choices">${n.choices.map((c,i)=>`<button class="choice" data-choice="${i}" type="button"><span class="num">${String(i+1).padStart(2,'0')}</span>${esc(c.t)}</button>`).join('')}</div>${emotionDiceUI(state.node)}`}else html+=`<div class="rule"></div><button type="button" class="continue" id="nextScene">繼續閱讀 →</button>`;app.innerHTML=html;if(n.choices)initEmotionDice(state.node);if(n.choices)app.querySelectorAll('[data-choice]').forEach(b=>b.onclick=()=>{const ix=Number(b.dataset.choice);transition({...n.choices[ix],index:ix})});else document.querySelector('#nextScene').onclick=()=>transition({to:n.next,t:'繼續',index:-1});}
+function renderScene(prefix){const n=N[state.node];let html=prefix||`<div class="bar"><div class="fill" style="width:${Math.min(100,state.history.length/23*100)}%"></div></div>`;html+=`<div class="ch">${esc(n.chapter||'')}</div><h1 class="title">${esc(n.title)}</h1><div class="prose">${paras(n.text).map((p,i,a)=>`<p${i===a.length-1&&n.choices?' class="last"':''}>${esc(p)}</p>`).join('')}</div>`;if(n.end){html+=`<div class="endpaper"><div class="rule"></div><p class="kicker">故事未完 · 續集待續</p><p>第一集的路到這裡。你走過的選擇，會跟著你走進下一場雨。</p><div class="codebox"><strong style="font-size:15px">冒險承接碼</strong><p class="tiny">只要記下這組短碼，第二集就能承接你的選擇；它不是登入密碼。</p><input readonly id="carryCode" aria-label="冒險承接碼" style="width:100%;font:600 24px/1.5 monospace;letter-spacing:.13em;text-align:center;padding:12px;background:var(--paper);border:1px solid var(--line);color:var(--ink);border-radius:4px"><div class="endactions"><button class="secondary" id="copyCode">複製承接碼</button><button class="secondary" id="saveMD">下載冒險紀錄 .md</button><button class="secondary" id="restartEnd">重新開始</button></div></div></div>`;app.innerHTML=html;document.querySelector('#carryCode').value=exportCode();document.querySelector('#copyCode').onclick=()=>navigator.clipboard?.writeText(exportCode()).then(()=>alert('已複製承接碼')).catch(()=>{const a=document.querySelector('#carryCode');a.select();document.execCommand('copy')});document.querySelector('#saveMD').onclick=downloadRecord;document.querySelector('#restartEnd').onclick=restartConfirm;return}if(n.choices){html+=`<div class="rule"></div><p class="kicker">你會怎麼做？</p><div class="choices">${n.choices.map((c,i)=>`<button class="choice" data-choice="${i}" type="button"><span class="num">${String(i+1).padStart(2,'0')}</span>${esc(c.t)}</button>`).join('')}</div>${emotionDiceUI(state.node)}`}else html+=`<div class="rule"></div><button type="button" class="continue" id="nextScene">繼續閱讀 →</button>`;app.innerHTML=html;if(n.choices)initEmotionDice(state.node);if(n.choices)app.querySelectorAll('[data-choice]').forEach(b=>b.onclick=()=>{const ix=Number(b.dataset.choice);transition({...n.choices[ix],index:ix})});else document.querySelector('#nextScene').onclick=()=>transition({to:n.next,t:'繼續',index:-1});}
 function exportPayload(){return {kind:'FogValleyCarry',version:VERSION,episode:1,at:state.node,history:state.history.map(h=>[h.node,h.selected]),stats:Object.fromEntries(['mayor','eli','mira','keeper','crowd','clues'].map(k=>[k,state[k]])),flags:state.flags,complete:state.done}}
-function exportCode(){const json=JSON.stringify(exportPayload());return 'FV1-'+btoa(Array.from(new TextEncoder().encode(json),c=>String.fromCharCode(c)).join('')).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
-function decodeCode(code){const v=code.trim().replace(/^FV1-/,'').replace(/-/g,'+').replace(/_/g,'/');const data=JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(v),c=>c.charCodeAt(0))));if(data.kind!=='FogValleyCarry'||data.version!==VERSION||!Array.isArray(data.history)||data.history.length>100)throw Error('承接碼格式不符');return data}
-function replay(data){let next=defaultState();for(const h of data.history){const [id,index]=h;if(next.node!==id||!N[id])throw Error('選擇順序不符');const n=N[id];let c=index>=0?n.choices?.[index]:n.next?{to:n.next,t:'繼續'}:null;if(!c||!N[c.to])throw Error('承接碼中有無效的選擇');for(const k of ['mayor','eli','mira','keeper','crowd','clues'])next[k]+=(c.fx?.[k]||0);if(c.tag)next.flags.push(c.tag);next.history.push({node:id,chapter:n.chapter,selected:index,label:c.t||'繼續',to:c.to});next.node=c.to}next.done=next.node==='finish';return next}
+
+// The 11 player choices are four-way decisions. Pack each as two bits.
+// A checksum catches mistyped codes; this is not a password or encryption.
+const CHOICE_COUNT=11;
+function checksum(n){return ((n*73+421) % 1296).toString(36).toUpperCase().padStart(2,'0')}
+function exportCode(){
+ const picks=state.history.filter(h=>h.selected>=0).map(h=>h.selected);
+ if(picks.length!==CHOICE_COUNT||picks.some(x=>x<0||x>3))return '尚未完成第一集';
+ let n=0;for(const x of picks)n=n*4+x;
+ return 'FV2-'+n.toString(36).toUpperCase().padStart(5,'0')+checksum(n);
+}
+function decodeCode(code){
+ const cleaned=code.trim().toUpperCase().replace(/\\s+/g,'');
+ const match=cleaned.match(/^FV2-?([0-9A-Z]{5})([0-9A-Z]{2})$/);
+ if(match){
+  const n=parseInt(match[1],36);
+  if(n>=4**CHOICE_COUNT||checksum(n)!==match[2])throw Error('承接碼有誤，請檢查字元');
+  const picks=[];let v=n;
+  for(let i=0;i<CHOICE_COUNT;i++){picks.unshift(v%4);v=Math.floor(v/4)}
+  return {kind:'FogValleyCompact',picks};
+ }
+ // Backward compatibility with original long FV1 codes.
+ const v=code.trim().replace(/^FV1-/i,'').replace(/-/g,'+').replace(/_/g,'/');
+ const data=JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(v),c=>c.charCodeAt(0))));
+ if(data.kind!=='FogValleyCarry'||data.version!==VERSION||!Array.isArray(data.history)||data.history.length>100)throw Error('承接碼格式不符');
+ return data;
+}
+function replay(data){
+ let seq;
+ if(data.kind==='FogValleyCompact'){
+  seq=[];let id='opening',choiceNumber=0;
+  for(let steps=0;steps<120&&id!=='finish';steps++){
+   const node=N[id];if(!node)throw Error('故事節點不存在');
+   if(node.choices){
+    if(choiceNumber>=data.picks.length)throw Error('選擇數量不足');
+    const index=data.picks[choiceNumber++];
+    if(!node.choices[index])throw Error('無效的遊戲選項');
+    seq.push([id,index]);id=node.choices[index].to;
+   }else{
+    if(!node.next)throw Error('故事尚未到終點');
+    seq.push([id,-1]);id=node.next;
+   }
+  }
+  if(id!=='finish'||choiceNumber!==CHOICE_COUNT)throw Error('選擇碼與故事版本不符');
+ }else seq=data.history;
+ let next=defaultState();
+ for(const h of seq){
+  const [id,index]=h;if(next.node!==id||!N[id])throw Error('選擇順序不符');
+  const n=N[id];
+  let c=index>=0?n.choices?.[index]:n.next?{to:n.next,t:'繼續'}:null;
+  if(!c||!N[c.to])throw Error('承接碼中有無效的選擇');
+  for(const k of ['mayor','eli','mira','keeper','crowd','clues'])next[k]+=(c.fx?.[k]||0);
+  if(c.tag)next.flags.push(c.tag);
+  next.history.push({node:id,chapter:n.chapter,selected:index,label:c.t||'繼續',to:c.to});
+  next.node=c.to;
+ }
+ next.done=next.node==='finish';
+ return next;
+}
 function downloadRecord(){const rows=['# 霧谷紀事｜第一集冒險紀錄','','本次路線：',''];for(const [i,h] of state.history.entries())if(h.selected>=0)rows.push(`${i+1}. **${h.chapter}**：${h.label}`);rows.push('','## 第一集承接碼','',exportCode(),'','> 第二集可用此碼接續；此碼包含選擇紀錄，不含姓名。');const b=new Blob([rows.join('\n')],{type:'text/markdown;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='霧谷紀事_第一集冒險紀錄.md';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
 function restartConfirm(){if(confirm('確定要從頭開始？目前的進度會被覆蓋。建議先保存承接碼。')){state=defaultState();write();render()}}
 const modal=document.querySelector('#dialog');document.querySelector('#toolsBtn').onclick=()=>{modal.hidden=false;document.querySelector('#importError').textContent=''};document.querySelector('#closeModal').onclick=()=>modal.hidden=true;document.querySelector('#resumeBtn').onclick=()=>modal.hidden=true;document.querySelector('#restartBtn').onclick=()=>{modal.hidden=true;restartConfirm()};document.querySelector('#importBtn').onclick=()=>{try{state=replay(decodeCode(document.querySelector('#importCode').value));write();modal.hidden=true;render()}catch(e){document.querySelector('#importError').textContent='無法讀取這組紀錄碼：'+e.message}};document.addEventListener('keydown',e=>{if(e.key==='Escape')modal.hidden=true});
