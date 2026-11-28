@@ -1,3 +1,4 @@
+> **2026-11-28 更新：** 霧谷第一集已由使用者與 Claude 全面重寫定稿，見 [FOG_VALLEY_HANDOFF.md](FOG_VALLEY_HANDOFF.md) 最上方「2026-11-28 Claude 修訂快照」與全文對照檔 [fog-valley-episode-1-fulltext.md](fog-valley-episode-1-fulltext.md)；編劇定稿在 [fog-valley-story-map-20261128-editor-v3.html](fog-valley-story-map-20261128-editor-v3.html)。
 > **2026-11-27 新增：霧谷紀事專案已另建立最新跨 AI 交接文件。** 請優先閱讀 [FOG_VALLEY_HANDOFF.md](FOG_VALLEY_HANDOFF.md)：第一集 58 節互動編劇地圖、已填正文／待創作節點、角色性格分支、劇情真相、技術現況與下一步。互動編輯器為 [fog-valley-story-map.html](fog-valley-story-map.html)，可玩版為 [fog-valley-episode-1-v2.html](fog-valley-episode-1-v2.html)。**本檔其餘 11/23 等舊快照並非霧谷目前進度。**
 
 # 《療癒罪咎》讀書會｜跨 AI 協作備忘錄
